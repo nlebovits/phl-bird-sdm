@@ -60,3 +60,6 @@
 # hillshade (shaded relief or insolation)
 # this is a cool visualization tool--probably the basis for rayshader package
 #for all of these, check raster GIS class notes
+
+###
+# remember to distinguish between abudance vs. richness. I'm studying the latter.
