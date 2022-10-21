@@ -63,3 +63,5 @@
 
 ###
 # remember to distinguish between abudance vs. richness. I'm studying the latter.
+
+# following Pilkey's arguements, I should simply make a *qualitative* model: indicate whether species richness (occupany) is likely to increase, decrease, or not change in a given area as a result of sea level rise
