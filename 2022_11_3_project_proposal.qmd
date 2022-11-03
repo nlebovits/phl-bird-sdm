@@ -1,0 +1,46 @@
+---
+title: "ENVS 6611 Final Project Proposal"
+author: "Nissim Lebovits"
+date: today
+format: 
+  html:
+    theme: flatly
+editor: visual
+---
+
+## Summary
+
+Using data from eBird, NOAA, and other relevant sources, this project will attempt to evaluate the possible impact of sea level rise on the spatial distribution of avifauna in the Philadelphia region.
+
+## Background
+
+1.	Conversations around floodplains and sea level rise tend to be anthropocentric, focusing mostly on damage to property and the threat to human life
+2.	However, sea level rise will also significantly impact non-human species. (Need citation)
+a.	Discuss scientific lit on this issue
+b.	Obviously this is not a publicly-discussed issue, but it’s really important given the massive species loss in the last half century (cite that 69% study)
+
+4.	Major stakeholders:
+a.	Birds, obviously,
+b.	But also ecosystems
+c.	And more qualitative human benefits, like health and happiness
+
+
+## Project Goals
+
+5.	This report will combine NOAA sea level rise projections with eBird citizen science data on bird species presence to evaluate how Philadelphia’s endemic birds might be affected by future sea level rise.
+a.	The problem is not unique to Philadelphia, and both can and should be applied in other areas. (See the recent 
+b.	Value of citizen science data for bird conservation prioritization
+i.	https://phys.org/news/2021-12-satellite-citizen-precise-range-at-risk.html 
+
+6.	This report will consider endemic, ICU red list species of concern, etc.
+
+## Project Constraints
+
+3.	Because of the time frame of this assignment and my own limitations, this report will focus exclusively on sea level rise. It’s worth noting, though, that Audubon lists other floodplain-related threats to bird life, including coastal modification, coastal disturbance, surface water management, water pollution, and increasingly frequent flooding. https://explorer.audubon.org/explore/conservation-challenges?zoom=3&x=1306099.1620122588&y=2810864.562197212 
+
+7.	Following Pilkey (2007), this report will avoid quantitative predictions and instead focus on an initial qualitative evaluation of the potential impact of sea level rise on Philadelphia’s avian population
+8.	Again, following Pilkey, allowing management to idea suitable areas for conservation prioritization
+9.	Goal here is to communicate risk & help inform management
+
+
+## Citations
