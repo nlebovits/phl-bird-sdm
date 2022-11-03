@@ -14,33 +14,42 @@ Using data from eBird, NOAA, and other relevant sources, this project will attem
 
 ## Background
 
-1.	Conversations around floodplains and sea level rise tend to be anthropocentric, focusing mostly on damage to property and the threat to human life
-2.	However, sea level rise will also significantly impact non-human species. (Need citation)
-a.	Discuss scientific lit on this issue
-b.	Obviously this is not a publicly-discussed issue, but it’s really important given the massive species loss in the last half century (cite that 69% study)
+### Study Area
+Philadelphia sits at the boundary between the Atlantic Coastal Plain and Piedmont ecoregions. The area was historically covered with hardwood forests, but much of its natural vegetation has been removed for urbanization and cultivation.^[ https://www.epa.gov/sites/default/files/2019-03/documents/phipa_final.pdf] Built as a port along the Delaware River, the city was constructed on top of historic wetlands and mudflats. Due to infill and development, 95% of the region’s freshwater tidal wetlands have been lost. As a result of Philadelphia’s location and development patterns, SLR projections estimate that much of the area adjacent to the Delaware will be under water within the next century.^[ https://watercenter.sas.upenn.edu/philadelphia-urban-ecology-and-the-balance-of-human-and-ecological-communities/]
 
-4.	Major stakeholders:
-a.	Birds, obviously,
-b.	But also ecosystems
-c.	And more qualitative human benefits, like health and happiness
+The city of Philadelphia is also a major hotspot for bird biodiversity in North America. A key migratory stopover location on the [Atlantic Flyway](https://www.audubon.org/atlantic-flyway), Philadelphia sees more than 200 species of migratory birds pass through it each year.^[ https://pa.audubon.org/chapters-centers/discovery-center] The city hosts a number of regional bird hotspots, especially Pennypack on the Delaware (266 species), John Heinz National Wildlife Reserve (281 species), and FDR Park (313 species).^[https://ebird.org/hotspots] Given their proximity to the Schuylkill and Delaware rivers, all three of these sites are likely to be significantly impacted by SLR. From a management perspective, it is therefore important to understand the possible impact of SLR on Philadelphia's avian biodiversity.
 
+![Bird Biodiversity Hotspots in the Philadelphia Region](C:\\Users\\Nissim\\Desktop\\Fall 2022\\Floodplain Management\\Final Project Data\\2022_11_03_ebird_phl_hotspots_screenshot.png){fig-align="right"}
+
+### Birds as Indicator Species
+Birds are a popular subject for biodiversity monitoring because "compared to other vertebrates, birds are easily monitored by skilled observers and provide a mechanism to explore urban effects and responses to different urban designs."^[Chace and Walsh, 1]
+
+"Bird populations are sensitive to many
+types of environmental change and, because
+they occupy a position at or near the top of
+the food chain, give indications of overall
+ecosystem functioning."^[Wilby and Perry, 78]
+
+
+### Existing Research
+
+Research is lacking on the impacts of SLR on urban biodiversity in North America. While there is some literature on the impacts of SLR on tropical island biodiversity or on global extinction, there has not been much work done specifically on the impact of SLR on avifauna distributions, least of all in North American coastal cities.^[include citations] Generally speaking, however, a few general trends have been found.
+First, research suggests that species with limited ranges will be most impacted.^[*Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities*, Elmqvist et al., 2013, 496]. In particular, species reliant on rare and/or vulnerable coastal habitats will be most threatened.^[Wilby and Perry (2006), 73] 
+
+Freshwater wetlands and intertidal habitats face especially high risk. Threats include increased levels of inundation and storm flooding; accelerated coastal erosion; sea water intrusion into freshwater tributaries; changes to the tidal prism, tidal range, sediment supply and rates of accretion; changes in air temperature and rainfall affecting the growth of salt marsh plants with secondary effects on sedimentation (Adam, 2002; Kennish, 2002; Moore, 1999; Nicholls et al., 1999; Reed, 1990).^[From Wilby and Perry 76] The effects of these inputs are unpredictable. For example, depending on a variety of factors, marshes could either contract or expand.^[ Wilby and Perry 76-78]
+
+Sea level rise will cause shifts in fl ooding potential on the urban coastal wetlands and beach zones, which will alter the habitat quality of these locations at rates signifi cantly above natural baseline conditions. The amount of sea level rise could have potential large-scale impacts on the areal extent and ecosystem health of the urban coastal wetlands, including permanent inundation, accelerated inland wetland migration (if the wetlands are not blocked by bulkheads or similar structures), and shifts in salinity gradients. (Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities*, Elmqvist et al., 2013, 497)
 
 ## Project Goals
+This report will combine NOAA sea level rise projections with eBird citizen science data on bird species presence to evaluate how Philadelphia’s endemic birds might be affected by future sea level rise. It will use a presence-only maximum entropy model, break species down by [preferred habitat](https://science.ebird.org/en/status-and-trends/habitat-regional-charts), and focus on endemic species listed by the IUCN as [species of concern or higher](https://www.iucnredlist.org/).
 
-5.	This report will combine NOAA sea level rise projections with eBird citizen science data on bird species presence to evaluate how Philadelphia’s endemic birds might be affected by future sea level rise.
-a.	The problem is not unique to Philadelphia, and both can and should be applied in other areas. (See the recent 
-b.	Value of citizen science data for bird conservation prioritization
-i.	https://phys.org/news/2021-12-satellite-citizen-precise-range-at-risk.html 
+## Data
+This project will draw on 3 key data sources:
 
-6.	This report will consider endemic, ICU red list species of concern, etc.
+1) Bird observations recorded by [eBird](https://ebird.org/home), a project of the [Cornell Lab of Ornithology](https://www.birds.cornell.edu/home/). CLO has published a [guide to using eBird's citizen science data for species distribution modeling](https://cornelllabofornithology.github.io/ebird-best-practices/), which I will be using extensively.
+2) The National Oceanic and Atmospheric Administration's data on [current sea levels and projected sea level rise](https://coast.noaa.gov/slrdata/).
+3) Various predictive factors assembled based on background reading and availability, such as habitat patch size, connectivity, degree of urbanization, road density, tree canopy cover, impervious surface cover, population density, land use, distance to fresh water, distance to salt water, etc.^[*Ecology and Conservation of Birds in Urban Environments*, Murgui and Hedblom eds., 2017] These layers will be assembled from [ESRI](https://livingatlas.arcgis.com/en/home/), [PASDA](https://www.pasda.psu.edu/), and [OpenDataPhilly](https://www.opendataphilly.org/), among other possible sources.
 
-## Project Constraints
+## Challenges and Limitations
+Because of the time frame of this assignment and my own limitations, this report will focus exclusively on sea level rise. Crucially, however, *this is not an accurate representation of ecosystem function in the real world.* It is impossible to divorce the impact of sea level rise alone on biodiversity from other confounding factors like [coastal modification, saltwater intrusion, increased rainfall, and water pollution,](https://explorer.audubon.org/explore/conservation-challenges?zoom=3&x=1306099.1620122588&y=2810864.562197212) let alone less proximate factors like changes in human population density and land use or the arrival of invasive species. Furthermore, as Pilkey and Pilkey point out, even if the scale of such impacts could be measured, it is difficult to account for ordering complexity: the unpredictable differences in impact depending on the order in which events occur.^[*Useless Arithmetic*, 2007] As Jimenez-Valverde et al., explain, prediction via species distribution modeling only works "if correlation structures are stable and consistent across different landscapes and time periods".^[Jimenez-Valverde et al., 2009] As a result, this project is more of an intellectual exercise than a genuine management tool. I will follow Pilkey and Pilkey, furthermore, in making only *qualitative* predictions based on my model (e.g., "the range of Species X will likely decrease", or "species richness at FDR Park will likely decline") rather than precise quantitative projections for species numbers or ranges.
 
-3.	Because of the time frame of this assignment and my own limitations, this report will focus exclusively on sea level rise. It’s worth noting, though, that Audubon lists other floodplain-related threats to bird life, including coastal modification, coastal disturbance, surface water management, water pollution, and increasingly frequent flooding. https://explorer.audubon.org/explore/conservation-challenges?zoom=3&x=1306099.1620122588&y=2810864.562197212 
-
-7.	Following Pilkey (2007), this report will avoid quantitative predictions and instead focus on an initial qualitative evaluation of the potential impact of sea level rise on Philadelphia’s avian population
-8.	Again, following Pilkey, allowing management to idea suitable areas for conservation prioritization
-9.	Goal here is to communicate risk & help inform management
-
-
-## Citations
