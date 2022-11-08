@@ -53,3 +53,17 @@ This project will draw on 3 key data sources:
 ## Challenges and Limitations
 Because of the time frame of this assignment and my own limitations, this report will focus exclusively on sea level rise. Crucially, however, *this is not an accurate representation of ecosystem function in the real world.* It is impossible to divorce the impact of sea level rise alone on biodiversity from other confounding factors like [coastal modification, saltwater intrusion, increased rainfall, and water pollution,](https://explorer.audubon.org/explore/conservation-challenges?zoom=3&x=1306099.1620122588&y=2810864.562197212) let alone less proximate factors like changes in human population density and land use or the arrival of invasive species. Furthermore, as Pilkey and Pilkey point out, even if the scale of such impacts could be measured, it is difficult to account for ordering complexity: the unpredictable differences in impact depending on the order in which events occur.^[*Useless Arithmetic*, 2007] As Jimenez-Valverde et al., explain, prediction via species distribution modeling only works "if correlation structures are stable and consistent across different landscapes and time periods".^[Jimenez-Valverde et al., 2009] As a result, this project is more of an intellectual exercise than a genuine management tool. I will follow Pilkey and Pilkey, furthermore, in making only *qualitative* predictions based on my model (e.g., "the range of Species X will likely decrease", or "species richness at FDR Park will likely decline") rather than precise quantitative projections for species numbers or ranges.
 
+
+
+
+# Data Exploration and Cleaning
+
+1) Explain where eBird data come from and what the limitations are
+2) Explain that we are following dest practices based on the eBird book
+3) Explain what that entails:
+
+"Based on our experience working with these data, we suggest restricting checklists to less than 5 hours long and 5 km in length, and with 10 or fewer observers. Furthermore, we’ll only consider data from the past 10 years (2010-2019)."
+
+"The chance of an observer detecting a bird when present can be highly dependent on time of day. For example, many species exhibit a peak in detection early in the morning during dawn chorus and a secondary peak early in the evening. With this in mind, the first predictor of detection that we’ll explore is the time of day at which a checklist was started. We’ll summarize the data in 1 hour intervals, then plot them. Since estimates of detection frequency are unreliable when only a small number of checklists are available, we’ll only plot hours for which at least 100 checklists are present."
+
+"In later chapters, we’ll make predictions at the peak time of day for detecatibility to limit the effect of this variation. The majority of checklist submissions also occurs in the morning; however, there are reasonable numbers of checklists between 5am and 9pm. It’s in this region that our model estimates will be most reliable."
