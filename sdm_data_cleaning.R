@@ -90,6 +90,31 @@ countXyear = ebird_sf |>
 ggplot(countXyear) +
   geom_col(aes(x = year, y = n))
 
+# count by scientific name
+countXspecies = ebird_sf |>
+  group_by(scientific_name) |>
+  tally() |>
+  st_drop_geometry()
+
+countXspecies = countXspecies[order(-countXspecies$n), ]
+
+ggplot(countXspecies[1:20,]) +
+  geom_col(aes(x = scientific_name, y = n)) + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+
+
+# count by common name
+countXcommon_name = ebird_sf |>
+  group_by(common_name) |>
+  tally() |>
+  st_drop_geometry()
+
+countXcommon_name = countXcommon_name[order(-countXcommon_name$n), ]
+
+ggplot(countXcommon_name[1:20,]) +
+  geom_col(aes(x = common_name, y = n)) + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+
 
                     
 
@@ -123,14 +148,90 @@ phl_grid <- phl_bounds %>%
 
 phl_grid = phl_grid[phl_bounds,]
 
+
+ebird_sf_2021 = ebird_sf |>
+                  filter(year == "2021")
+
+ebird_sf_2020 = ebird_sf |>
+                  filter(year == "2020")
+
+ebird_sf_2019= ebird_sf |>
+                  filter(year == "2019")
+
+ebird_sf_2018 = ebird_sf |>
+                  filter(year == "2018")
+
+ebird_sf_2017 = ebird_sf |>
+                  filter(year == "2017")
+
+
+
+
+
 phl_birds_hex = phl_grid |>
-                    mutate(counts = lengths(st_intersects(phl_grid, ebird_sf)))
+                    mutate(counts_2021 = lengths(st_intersects(phl_grid, ebird_sf_2021)),
+                           counts_2020 = lengths(st_intersects(phl_grid, ebird_sf_2020)),
+                           counts_2019 = lengths(st_intersects(phl_grid, ebird_sf_2019)),
+                           counts_2018 = lengths(st_intersects(phl_grid, ebird_sf_2018)),
+                           counts_2017 = lengths(st_intersects(phl_grid, ebird_sf_2017)))
 
 tmap_mode("view")
-tm_shape(phl_birds_hex) + 
-  tm_polygons(col = "counts", style = "jenks", palette = "plasma")
+
+hex_2021 = tm_shape(phl_birds_hex) + 
+                  tm_polygons(col = "counts_2021", 
+                              style = "jenks", 
+                              palette = "plasma", 
+                              alpha = 0.5, 
+                              id = "counts_2021") +
+                  tm_layout(title = "2021 Counts")
 
 
+hex_2020 = tm_shape(phl_birds_hex) + 
+                tm_polygons(col = "counts_2020", 
+                            style = "jenks", 
+                            palette = "plasma", 
+                            alpha = 0.5, 
+                            id = "counts_2020") +
+                tm_layout(title = "2020 Counts")
+
+
+hex_2019 = tm_shape(phl_birds_hex) + 
+                  tm_polygons(col = "counts_2019", 
+                              style = "jenks", 
+                              palette = "plasma", 
+                              alpha = 0.5, 
+                              id = "counts_2019") +
+                  tm_layout(title = "2019 Counts")
+
+
+hex_2018 = tm_shape(phl_birds_hex) + 
+                  tm_polygons(col = "counts_2018", 
+                              style = "jenks", 
+                              palette = "plasma", 
+                              alpha = 0.5, 
+                              id = "counts_218") +
+                  tm_layout(title = "2018 Counts")
+
+
+hex_2017 = tm_shape(phl_birds_hex) + 
+                tm_polygons(col = "counts_2017", 
+                            style = "jenks", 
+                            palette = "plasma", 
+                            alpha = 0.5, 
+                            id = "counts_2017") +
+                tm_layout(title = "2017 Counts")
+
+
+tmap_arrange(hex_2021,
+             hex_2020,
+             hex_2019,
+             hex_2018,
+             hex_2017)
+
+
+
+# would it be appropriate to now use local moran's i to find hotspots?
+# we can look at these year over year
 
 
 
