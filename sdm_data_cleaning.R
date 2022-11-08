@@ -235,15 +235,115 @@ tmap_arrange(hex_2021,
 
 
 
+library(sp)
+library(spdep)
+library(sfdep)
+
+# create our queen weight matrix
+
+# grab geometry
+phl_birds_hex = phl_birds_hex |>
+  mutate(nb_geom = st_geometry(phl_birds_hex), #geoms for poly2nb
+         nb = st_contiguity(nb_geom), # generate neighbors
+         weights = st_weights(nb)) # weight matrices from neighbors
+
+summary(phl_birds_hex$nb)
+
+
+birds_hex_lines = nb2lines(phl_birds_hex$nb, 
+                          coords = st_centroid(phl_birds_hex$geometry), 
+                          as_sf = TRUE)
+
+tm_shape(phl_birds_hex) + 
+  tm_borders(col = "grey", lwd = 0.5) + 
+  tm_shape(phl_birds_hex) +
+  tm_dots() +
+  tm_shape(birds_hex_lines) +
+  tm_lines(col = "red") +
+  tm_layout(frame = FALSE)
+
+
+# Local Moran's I
+
+# local Moran's I analysis with queen weight matrix; print results
+
+#2021
+
+lisa_2021 = local_moran(phl_birds_hex$counts_2021, phl_birds_hex$nb, phl_birds_hex$weights, nsim = 999)
+
+
+lisa_2021 = cbind(phl_birds_hex, 
+                     lisa_2021)
+
+pal = c("#2166AC",
+        "#92C5DE",
+        "#F4A582",
+        "#B2182B")
+
+lisa_21_map = tm_shape(lisa_2021) +
+  tm_fill(col = "mean", palette = pal, title = "LISA Clusters 2021")+
+  tm_borders(col = "white", lwd = 0.05) +
+  tm_layout(frame = FALSE, main.title = "LISA Clusters 2021")
+
+#2020
+
+lisa_2020 = local_moran(phl_birds_hex$counts_2020, phl_birds_hex$nb, phl_birds_hex$weights, nsim = 999)
+
+
+lisa_2020 = cbind(phl_birds_hex, 
+                  lisa_2020)
+
+
+lisa_20_map = tm_shape(lisa_2020) +
+  tm_fill(col = "mean", palette = pal, title = "LISA Clusters 2020")+
+  tm_borders(col = "white", lwd = 0.05) +
+  tm_layout(frame = FALSE, main.title = "LISA Clusters 2020")
+
+#2019
+
+lisa_2019 = local_moran(phl_birds_hex$counts_2019, phl_birds_hex$nb, phl_birds_hex$weights, nsim = 999)
+
+
+lisa_2019 = cbind(phl_birds_hex, 
+                  lisa_2019)
+
+lisa_19_map = tm_shape(lisa_2019) +
+  tm_fill(col = "mean", palette = pal, title = "LISA Clusters 2019")+
+  tm_borders(col = "white", lwd = 0.05) +
+  tm_layout(frame = FALSE, main.title = "LISA Clusters 2019")
+
+#2018
+
+lisa_2018 = local_moran(phl_birds_hex$counts_2018, phl_birds_hex$nb, phl_birds_hex$weights, nsim = 999)
+
+
+lisa_2018 = cbind(phl_birds_hex, 
+                  lisa_2018)
+
+lisa_18_map = tm_shape(lisa_2018) +
+  tm_fill(col = "mean", palette = pal, title = "LISA Clusters 2018")+
+  tm_borders(col = "white", lwd = 0.05) +
+  tm_layout(frame = FALSE, main.title = "LISA Clusters 2018")
+
+#2017
+
+lisa_2017 = local_moran(phl_birds_hex$counts_2017, phl_birds_hex$nb, phl_birds_hex$weights, nsim = 999)
+
+
+lisa_2017 = cbind(phl_birds_hex, 
+                  lisa_2017)
+
+lisa_17_map = tm_shape(lisa_2017) +
+  tm_fill(col = "mean", palette = pal, title = "LISA Clusters 2017")+
+  tm_borders(col = "white", lwd = 0.05) +
+  tm_layout(frame = FALSE, main.title = "LISA Clusters 2017")
 
 
 
-
-
-
-
-
-
-
+tmap_arrange(lisa_21_map,
+             lisa_20_map,
+             lisa_19_map,
+             lisa_18_map,
+             lisa_17_map)
 # https://geocompr.robinlovelace.net/raster-vector.html?q=rasterize#rasterization
                     
