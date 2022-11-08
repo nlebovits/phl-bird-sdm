@@ -345,5 +345,12 @@ tmap_arrange(lisa_21_map,
              lisa_19_map,
              lisa_18_map,
              lisa_17_map)
+
+
+#### if I cbind() stuff together and include a column for year, I can use tmap_animate() and set facet = year, which will allow me to create
+# an animated map.
+# I could then even try going back to 2012 or whatever to show change in hotspots over time.
+    # to do this, I would have to subset the lisa stats, change colnames to mean_XXXX, and then cbind() them all in to a new dataframe
+
 # https://geocompr.robinlovelace.net/raster-vector.html?q=rasterize#rasterization
                     

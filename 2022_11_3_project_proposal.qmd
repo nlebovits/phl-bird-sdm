@@ -67,3 +67,37 @@ Because of the time frame of this assignment and my own limitations, this report
 "The chance of an observer detecting a bird when present can be highly dependent on time of day. For example, many species exhibit a peak in detection early in the morning during dawn chorus and a secondary peak early in the evening. With this in mind, the first predictor of detection that we’ll explore is the time of day at which a checklist was started. We’ll summarize the data in 1 hour intervals, then plot them. Since estimates of detection frequency are unreliable when only a small number of checklists are available, we’ll only plot hours for which at least 100 checklists are present."
 
 "In later chapters, we’ll make predictions at the peak time of day for detecatibility to limit the effect of this variation. The majority of checklist submissions also occurs in the morning; however, there are reasonable numbers of checklists between 5am and 9pm. It’s in this region that our model estimates will be most reliable."
+
+From IUCN: "The IUCN Red List Categories and Criteria are intended to be an easily and widely understood system for classifying species at high risk of global extinction. It divides species into nine categories: Not Evaluated, Data Deficient, Least Concern, Near Threatened, Vulnerable, Endangered, Critically Endangered, Extinct in the Wild and Extinct." https://www.iucnredlist.org/
+
+
+
+Note: need to account for impact of pandemic birders.
+
+## Sourcing Data
+
+## Cleaning Data
+
+## Exploring Data
+
+### Observations by Year
+
+### Number of Species
+
+### Observation Hotspots by Year
+
+### Hypothesis
+
+Let's identify hotposts based on the clustering maps!
+
+## Preparing for SDM
+
+### Selecting Species
+
+### Preparing Rasters
+
+## Executing SDM
+
+## Findings
+
+## Conclusions
