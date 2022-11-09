@@ -306,6 +306,37 @@ tm_shape(phl_birds_hex) +
   tm_lines(col = "red") +
   tm_layout(frame = FALSE)
 
+hist(phl_birds_hex$counts_2017)
+
+# let's check out pct observations?
+
+phl_birds_hex = phl_birds_hex |>
+                    mutate(pct_counts_2021 = counts_2021 / sum(counts_2021)*100,
+                            pct_counts_2020 = counts_2020 / sum(counts_2020)*100,
+                            pct_counts_2019 = counts_2019 / sum(counts_2019)*100,
+                            pct_counts_2018 = counts_2018 / sum(counts_2018)*100,
+                            pct_counts_2017 = counts_2017 / sum(counts_2017)*100)
+
+pct_count_2021 = tm_shape(phl_birds_hex) +
+                    tm_fill(col = "pct_counts_2021", palette = "plasma", style = "jenks")
+
+pct_count_2020 = tm_shape(phl_birds_hex) +
+                    tm_fill(col = "pct_counts_2020", palette = "plasma", style = "jenks")
+
+pct_count_2019 = tm_shape(phl_birds_hex) +
+                    tm_fill(col = "pct_counts_2019", palette = "plasma", style = "jenks")
+
+pct_count_2018 = tm_shape(phl_birds_hex) +
+                    tm_fill(col = "pct_counts_2018", palette = "plasma", style = "jenks")
+
+pct_count_2017 = tm_shape(phl_birds_hex) +
+                  tm_fill(col = "pct_counts_2017", palette = "plasma", style = "jenks")
+
+tmap_arrange(pct_count_2021,
+             pct_count_2020,
+             pct_count_2019,
+             pct_count_2018,
+             pct_count_2017)
 
 # Local Moran's I
 
@@ -317,7 +348,14 @@ lisa_2021 = local_moran(phl_birds_hex$counts_2021, phl_birds_hex$nb, phl_birds_h
 
 
 lisa_2021 = cbind(phl_birds_hex, 
-                     lisa_2021)
+                     lisa_2021) |>
+                      mutate(
+                        mean = as.character(mean),
+                        lisa_map = case_when(
+                          p_ii < 0.05 ~ mean,
+                          TRUE ~ "Insignificant"
+                        )
+                      )
 
 pal = c("#2166AC",
         "#92C5DE",
@@ -325,7 +363,7 @@ pal = c("#2166AC",
         "#B2182B")
 
 lisa_21_map = tm_shape(lisa_2021) +
-  tm_fill(col = "mean", palette = pal, title = "LISA Clusters 2021")+
+  tm_fill(col = "lisa_map", palette = pal_i, title = "LISA Clusters 2021")+
   tm_borders(col = "white", lwd = 0.05) +
   tm_layout(frame = FALSE, main.title = "LISA Clusters 2021")
 
@@ -395,6 +433,100 @@ tmap_arrange(lisa_21_map,
 # an animated map.
 # I could then even try going back to 2012 or whatever to show change in hotspots over time.
     # to do this, I would have to subset the lisa stats, change colnames to mean_XXXX, and then cbind() them all in to a new dataframe
+
+
+
+## so here's a big issue... p-values here are well above 0.05
+
+
+#### let's try mapping LISA statistics for pct_counts, not just raw counts
+
+#2021
+
+pal_i = c("#2166AC",
+        "#92C5DE",
+        "lightgrey",
+        "#F4A582",
+        "#B2182B")
+
+lisa_pct_2021 = local_moran(phl_birds_hex$pct_counts_2021, phl_birds_hex$nb, phl_birds_hex$weights, nsim = 999)
+
+
+lisa_pct_2021 = cbind(phl_birds_hex, 
+                  lisa_pct_2021) |>
+                  mutate(
+                    mean = as.character(mean),
+                    lisa_map = case_when(
+                      p_ii < 0.05 ~ mean,
+                      TRUE ~ "Insignificant"
+                    )
+                  )
+
+lisa_pct_21_map = tm_shape(lisa_pct_2021) +
+  tm_fill(col = "lisa_map", palette = pal_i, title = "LISA Pct Clusters 2021")+
+  tm_borders(col = "white", lwd = 0.05) +
+  tm_layout(frame = FALSE, main.title = "LISA Pct Clusters 2021")
+
+#2020
+
+lisa_pct_2020 = local_moran(phl_birds_hex$pct_counts_2020, phl_birds_hex$nb, phl_birds_hex$weights, nsim = 999)
+
+
+lisa_pct_2020 = cbind(phl_birds_hex, 
+                  lisa_pct_2020)
+
+
+lisa_pct_20_map = tm_shape(lisa_pct_2020) +
+  tm_fill(col = "mean", palette = pal, title = "LISA Pct Clusters 2020")+
+  tm_borders(col = "white", lwd = 0.05) +
+  tm_layout(frame = FALSE, main.title = "LISA Pct Clusters 2020")
+
+#2019
+
+lisa_pct_2019 = local_moran(phl_birds_hex$pct_counts_2019, phl_birds_hex$nb, phl_birds_hex$weights, nsim = 999)
+
+
+lisa_pct_2019 = cbind(phl_birds_hex, 
+                  lisa_pct_2019)
+
+lisa_pct_19_map = tm_shape(lisa_pct_2019) +
+  tm_fill(col = "mean", palette = pal, title = "LISA Pct Clusters 2019")+
+  tm_borders(col = "white", lwd = 0.05) +
+  tm_layout(frame = FALSE, main.title = "LISA Pct Clusters 2019")
+
+#2018
+
+lisa_pct_2018 = local_moran(phl_birds_hex$pct_counts_2018, phl_birds_hex$nb, phl_birds_hex$weights, nsim = 999)
+
+
+lisa_pct_2018 = cbind(phl_birds_hex, 
+                  lisa_pct_2018)
+
+lisa_pct_18_map = tm_shape(lisa_pct_2018) +
+  tm_fill(col = "mean", palette = pal, title = "LISA Pct Clusters 2018")+
+  tm_borders(col = "white", lwd = 0.05) +
+  tm_layout(frame = FALSE, main.title = "LISA Pct Clusters 2018")
+
+#2017
+
+lisa_pct_2017 = local_moran(phl_birds_hex$pct_counts_2017, phl_birds_hex$nb, phl_birds_hex$weights, nsim = 999)
+
+
+lisa_pct_2017 = cbind(phl_birds_hex, 
+                  lisa_pct_2017)
+
+lisa_pct_17_map = tm_shape(lisa_pct_2017) +
+  tm_fill(col = "mean", palette = pal, title = "LISA Pct Clusters 2017")+
+  tm_borders(col = "white", lwd = 0.05) +
+  tm_layout(frame = FALSE, main.title = "LISA Pct Clusters 2017")
+
+
+
+tmap_arrange(lisa_pct_21_map,
+             lisa_pct_20_map,
+             lisa_pct_19_map,
+             lisa_pct_18_map,
+             lisa_pct_17_map)
 
 # https://geocompr.robinlovelace.net/raster-vector.html?q=rasterize#rasterization
                     

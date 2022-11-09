@@ -11,9 +11,11 @@ format:
 editor: visual
 ---
 
-## Summary
+# Summary
 
 Using data from eBird, NOAA, and other relevant sources, this project will attempt to evaluate the possible impact of sea level rise on the spatial distribution of avifauna in the Philadelphia region.
+
+# Introduction
 
 ## Background
 
@@ -74,6 +76,7 @@ library(mapview)
 library(janitor)
 library(plotly)
 library(ggthemr)
+library(auk)
 
 ggthemr("pale") #set global ggplot theme
 ```
@@ -86,7 +89,9 @@ ebird = read.table("C:/Users/Nissim/Desktop/Fall 2022/Floodplain Management/Fina
            sep = "\t", 
            header = TRUE,
            fill = TRUE) |>
-           clean_names()
+           clean_names()|>
+           filter(protocol_type %in% c("Stationary", "Traveling")) |> # restrict to the standard traveling and stationary count protocols 
+           auk_unique() #filter for only unique checklists to avoid duplicates created by groups
 ```
 
 
@@ -173,7 +178,7 @@ Now that we've cleaned up and supplemented our eBird data, we'll explore it.
 
 
 ### Observations by Year
-First, we need to look at our raw number of observations year by year. This element is crucial because of the influence of pandemic birding. The extraordinary and unprecedented rise in citizen science data collection during the pandemic has been a boon for ecological data. However, it also complicates the interpretation of these data. As Sara Harrison explains in *Wired*, "Scientists can't always tell whether changes in the data are due to animal behavior or just an increase in the amount of information available. Furthermore, "It's not just that *more* people are observing---it's also a matter of where* they are observing." Observations in urban areas have increased, while observations in rural areas have decreased, suggesting likely undersampling in less-accessible habitats.^[Sara Harrison, “Pandemic Bird-Watching Created a Data Boom-and a Conundrum,” Wired (Conde Nast, September 30, 2021), https://www.wired.com/story/pandemic-bird-watching-created-a-data-boom-and-a-conundrum/.]
+First, we need to look at our raw number of observations year by year. This element is crucial because of the influence of pandemic birding. The extraordinary and unprecedented rise in citizen science data collection during the pandemic has been a boon for ecological data. However, it also complicates the interpretation of these data. As Sara Harrison explains in *Wired*, "Scientists can't always tell whether changes in the data are due to animal behavior or just an increase in the amount of information available. Furthermore, "It's not just that *more* people are observing---it's also a matter of *where* they are observing." Observations in urban areas have increased, while observations in rural areas have decreased, suggesting likely undersampling in less-accessible habitats.^[Sara Harrison, “Pandemic Bird-Watching Created a Data Boom-and a Conundrum,” Wired (Conde Nast, September 30, 2021), https://www.wired.com/story/pandemic-bird-watching-created-a-data-boom-and-a-conundrum/.]
 
 As we can see in Philadelphia, the number of observations in 2021 is substantially larger than any of the previous nine years. Although observations per year were already trending up over the previous decade, 2021 represented an [r avg]%  increase in bird observations from 2020 and was [r avg]% higher than the average number of observations per year in the previous nine years.
 ```{r annual observations tally}
@@ -220,11 +225,34 @@ ggplotly(ggplot(countXyearXspecies) +
        y = "Total Unique Species"))
 ```
 
+### Spatial Bias
+According to the Cornell Lab of Ornithology's guide to using eBird data, spatial bias is a major issue in working with these data.
+
+>Spatial bias: most participants in citizen science surveys sample near their homes (Luck et al. 2004), in easily accessible areas such as roadsides (Kadmon, Farber, and Danin 2004), or in areas and habitats of known high biodiversity (Prendergast et al. 1993). A simple method to reduce the spatial bias that we describe is to create an equal area grid over the region of interest, and sample a given number of checklists from within each grid cell.
+
+In the maps below, we compare the raw number of checklists per hexagon per year.
+
+Using the same approach, we can also map *unique species per checklist*. This allows us to approximate species richness relative to the amount of effort spent looking for species. In this way, we can at least partially correct for over/under-sampling and hone in on areas of real biodiversity.
+
+
 ### Observation Hotspots by Year
+To identify hotspots of avian biodiversity in Philadelphia, we will explore spatial distribution of species richness through two approaches: binning and kernel density estimate.
+
+#### Binning
+Don't forget to mention MAUP
+
+#### Kernel Density Estimate
+
+#### Five-Year Means
+In both cases, we can look at the average species richness per location. With the hexagon bins, we join the layers together and create a new layer that is the mean. Similarly, with the kernel density estimate raster, we can use cell statistics to accomplish the same thing. The resultant maps are compared here side by side and indicate that [are the hotspots the same? different?].
+
+#### Visual Comparison
 
 ### Hypothesis
 
 Let's identify hotposts based on the clustering maps!
+
+# Distribution Modeling
 
 ## Preparing for SDM
 
@@ -234,6 +262,6 @@ Let's identify hotposts based on the clustering maps!
 
 ## Executing SDM
 
-## Findings
+# Findings
 
-## Conclusions
+# Conclusions
