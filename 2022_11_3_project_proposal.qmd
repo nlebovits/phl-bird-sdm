@@ -4,7 +4,10 @@ author: "Nissim Lebovits"
 date: today
 format: 
   html:
+    toc: true
     theme: flatly
+    code-fold: true
+    code-summary: "Show the code"
 editor: visual
 ---
 
@@ -38,7 +41,7 @@ First, research suggests that species with limited ranges will be most impacted.
 
 Freshwater wetlands and intertidal habitats face especially high risk. Threats include increased levels of inundation and storm flooding; accelerated coastal erosion; sea water intrusion into freshwater tributaries; changes to the tidal prism, tidal range, sediment supply and rates of accretion; changes in air temperature and rainfall affecting the growth of salt marsh plants with secondary effects on sedimentation (Adam, 2002; Kennish, 2002; Moore, 1999; Nicholls et al., 1999; Reed, 1990).^[From Wilby and Perry 76] The effects of these inputs are unpredictable. For example, depending on a variety of factors, marshes could either contract or expand.^[ Wilby and Perry 76-78]
 
-Sea level rise will cause shifts in fl ooding potential on the urban coastal wetlands and beach zones, which will alter the habitat quality of these locations at rates signifi cantly above natural baseline conditions. The amount of sea level rise could have potential large-scale impacts on the areal extent and ecosystem health of the urban coastal wetlands, including permanent inundation, accelerated inland wetland migration (if the wetlands are not blocked by bulkheads or similar structures), and shifts in salinity gradients. (Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities*, Elmqvist et al., 2013, 497)
+Sea level rise will cause shifts in flooding potential on the urban coastal wetlands and beach zones, which will alter the habitat quality of these locations at rates signifi cantly above natural baseline conditions. The amount of sea level rise could have potential large-scale impacts on the areal extent and ecosystem health of the urban coastal wetlands, including permanent inundation, accelerated inland wetland migration (if the wetlands are not blocked by bulkheads or similar structures), and shifts in salinity gradients. (Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities*, Elmqvist et al., 2013, 497)
 
 ## Project Goals
 This report will combine NOAA sea level rise projections with eBird citizen science data on bird species presence to evaluate how Philadelphia’s endemic birds might be affected by future sea level rise. It will use a presence-only maximum entropy model, break species down by [preferred habitat](https://science.ebird.org/en/status-and-trends/habitat-regional-charts), and focus on endemic species listed by the IUCN as [species of concern or higher](https://www.iucnredlist.org/).
@@ -58,6 +61,38 @@ Because of the time frame of this assignment and my own limitations, this report
 
 # Data Exploration and Cleaning
 
+## Sourcing Data
+
+### R Setup
+```{r setup}
+library(tidyverse)
+library(sf)
+library(janitor)
+library(lubridate)
+library(tmap)
+library(mapview)
+library(janitor)
+library(plotly)
+library(ggthemr)
+
+ggthemr("pale") #set global ggplot theme
+```
+
+### Importing eBird and IUCN Data
+The primary dataset for this project comes from Cornell Ornithology Lab's [eBird](https://ebird.org/home). To avoid downloading the entire 200 GB global eBird dataset, I have manually downloaded a subset of the [eBird Basic Dataset](https://ebird.org/data/download/ebd) prepared specifically for Philadelphia, Pennsylvania beginning in 2011. Instructions for how to manually download these data rather than using eBird's `auk` package are [available here](https://cornelllabofornithology.github.io/ebird-best-practices/ebird.html#ebird-size).
+
+```{r ebird import}
+ebird = read.table("C:/Users/Nissim/Desktop/Fall 2022/Floodplain Management/Final Project Data/eBird/ebd_US-PA-101_relSep-2022.txt",
+           sep = "\t", 
+           header = TRUE,
+           fill = TRUE) |>
+           clean_names()
+```
+
+
+## Cleaning Data
+[Include explanation of how I cleaned these data.]
+
 1) Explain where eBird data come from and what the limitations are
 2) Explain that we are following dest practices based on the eBird book
 3) Explain what that entails:
@@ -69,20 +104,121 @@ Because of the time frame of this assignment and my own limitations, this report
 "In later chapters, we’ll make predictions at the peak time of day for detecatibility to limit the effect of this variation. The majority of checklist submissions also occurs in the morning; however, there are reasonable numbers of checklists between 5am and 9pm. It’s in this region that our model estimates will be most reliable."
 
 From IUCN: "The IUCN Red List Categories and Criteria are intended to be an easily and widely understood system for classifying species at high risk of global extinction. It divides species into nine categories: Not Evaluated, Data Deficient, Least Concern, Near Threatened, Vulnerable, Endangered, Critically Endangered, Extinct in the Wild and Extinct." https://www.iucnredlist.org/
+```{r ebird clean}
+ebird_i = ebird |>
+            dplyr::select(taxonomic_order,
+                          category,
+                          taxon_concept_id,
+                          common_name,
+                          scientific_name,
+                          exotic_code,
+                          observation_count,
+                          breeding_code,
+                          breeding_category,
+                          county_code,
+                          locality,
+                          locality_id,
+                          latitude,
+                          longitude,
+                          observation_date,
+                          time_observations_started,
+                          observer_id,
+                          approved,
+                          effort_distance_km,
+                          number_observers,
+                          protocol_type,
+                          duration_minutes,
+                          sampling_event_identifier) |>
+            dplyr::filter(approved == "1") # make sure R doesn't confuse dplyr::filter with stats::filter
 
+# function to convert time observation to hours since midnight
+# pulled directly from https://cornelllabofornithology.github.io/ebird-best-practices/ebird.html#ebird-zf
+time_to_decimal <- function(x) {
+  x <- hms(x, quiet = TRUE)
+  hour(x) + minute(x) / 60 + second(x) / 3600
+}
 
+ebird_i$observation_date = as_date(ebird_i$observation_date)
 
-Note: need to account for impact of pandemic birders.
+ebird_i = ebird_i |>
+            mutate(
+              # convert X to NA
+              observation_count = if_else(observation_count == "X", 
+                                          NA_character_, observation_count),
+              observation_count = as.integer(observation_count),
+              # effort_distance_km to 0 for non-travelling counts
+              effort_distance_km = if_else(protocol_type != "Traveling", 
+                                           "0", effort_distance_km),
+              # convert time to decimal hours since midnight
+              time_observations_started = time_to_decimal(time_observations_started),
+              # split date into year and day of year
+              year = year(observation_date),
+              day_of_year = yday(observation_date)
+            ) |>
+          filter(
+            # effort filters
+            duration_minutes <= 5 * 60,
+            effort_distance_km <= 5,
+            # last 10 years of data
+            year >= 2010,
+            # 10 or fewer observers
+            number_observers <= 10)
 
-## Sourcing Data
-
-## Cleaning Data
+ebird_last_decade = ebird_i |>
+                      filter(year >= 2012 & year <= 2021)
+```
 
 ## Exploring Data
+Now that we've cleaned up and supplemented our eBird data, we'll explore it.
+
 
 ### Observations by Year
+First, we need to look at our raw number of observations year by year. This element is crucial because of the influence of pandemic birding. The extraordinary and unprecedented rise in citizen science data collection during the pandemic has been a boon for ecological data. However, it also complicates the interpretation of these data. As Sara Harrison explains in *Wired*, "Scientists can't always tell whether changes in the data are due to animal behavior or just an increase in the amount of information available. Furthermore, "It's not just that *more* people are observing---it's also a matter of where* they are observing." Observations in urban areas have increased, while observations in rural areas have decreased, suggesting likely undersampling in less-accessible habitats.^[Sara Harrison, “Pandemic Bird-Watching Created a Data Boom-and a Conundrum,” Wired (Conde Nast, September 30, 2021), https://www.wired.com/story/pandemic-bird-watching-created-a-data-boom-and-a-conundrum/.]
+
+As we can see in Philadelphia, the number of observations in 2021 is substantially larger than any of the previous nine years. Although observations per year were already trending up over the previous decade, 2021 represented an [r avg]%  increase in bird observations from 2020 and was [r avg]% higher than the average number of observations per year in the previous nine years.
+```{r annual observations tally}
+countXyear = ebird_last_decade |>
+                group_by(year) |>
+                  tally() 
+
+ggplotly(ggplot(countXyear) +
+  geom_col(aes(x = year, y = n)) +
+  labs(title = "Raw Annual eBird Observations, 2012-21",
+       x = "Year",
+       y = "Total Observations"))
+```
+
+### Checklists by Year
+To understand the rise in the number of birders submitting observations during the pandemic, it helps to track how many checklists were submitted each year in the last decade. An eBird checklist represents a single observation event (a birding outing), and groups together sightings of multiple species from the same observation event.^[https://cornelllabofornithology.github.io/ebird-best-practices/intro.html#intro-intro] By counting the number of checklists submitted in each year, we have a proxy for birder activity, which will help us account for the rise in pandemic birding mentioned in the previous section.
+```{r annual checklists tally}
+countXyearXsei = aggregate(data = ebird_last_decade,                # Applying aggregate
+                          sampling_event_identifier ~ year,
+                          function(sampling_event_identifier) length(unique(sampling_event_identifier)))
+
+ggplotly(ggplot(countXyearXsei) +
+  geom_col(aes(x = year, y = sampling_event_identifier)) +
+  labs(title = "Annual Sampling Events, 2012-21",
+       x = "Year",
+       y = "Total Sampling Events"))
+```
+
 
 ### Number of Species
+The primary focus of our analysis here is *species richness*: the total number of species within our study region. To that end, it's helpful to visualize the total number of unique species observed in Philadelphia in each year. Unlike total observations or total checklists, we expect that the number of unique species observed each year has not changed due to the pandemic. [Need to give a clear explanation of why.]
+
+Indeed, the data confirm that there has been only a slight uptick in the number of unique species observed annually in Philadelphia since the start of the pandemic. [Will want to analyze this using normal distribution, mean, std, etc.]
+
+```{r annual species tally}
+countXyearXspecies = aggregate(data = ebird_last_decade,                # Applying aggregate
+                          scientific_name ~ year,
+                          function(scientific_name) length(unique(scientific_name)))
+
+ggplotly(ggplot(countXyearXspecies) +
+  geom_col(aes(x = year, y = scientific_name)) +
+  labs(title = "Unique Species Observed per Year, 2012-21",
+       x = "Year",
+       y = "Total Unique Species"))
+```
 
 ### Observation Hotspots by Year
 

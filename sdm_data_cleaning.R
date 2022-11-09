@@ -4,6 +4,7 @@ library(janitor)
 library(lubridate)
 library(tmap)
 library(mapview)
+library(janitor)
 
 
 # import eda package for EDA?
@@ -82,19 +83,17 @@ ebird_last_decade = ebird_i |>
 
 # count by year
 
-countXyear = ebird_sf |>
+countXyear = ebird_last_decade |>
                 group_by(year) |>
-                  tally() |>
-                  st_drop_geometry()
+                  tally() 
 
 ggplot(countXyear) +
   geom_col(aes(x = year, y = n))
 
 # count by scientific name
-countXspecies = ebird_sf |>
-  group_by(scientific_name) |>
-  tally() |>
-  st_drop_geometry()
+countXspecies = ebird_last_decade |>
+                    group_by(scientific_name) |>
+                    tally()
 
 countXspecies = countXspecies[order(-countXspecies$n), ]
 
@@ -104,10 +103,9 @@ ggplot(countXspecies[1:20,]) +
 
 
 # count by common name
-countXcommon_name = ebird_sf |>
-  group_by(common_name) |>
-  tally() |>
-  st_drop_geometry()
+countXcommon_name = ebird_last_decade|>
+                        group_by(common_name) |>
+                        tally()
 
 countXcommon_name = countXcommon_name[order(-countXcommon_name$n), ]
 
@@ -117,6 +115,52 @@ ggplot(countXcommon_name[1:20,]) +
 
 
                     
+# add IUCN data
+
+iucn_redlist = readxl::read_xlsx("C:/Users/Nissim/Desktop/Fall 2022/Floodplain Management/Final Project Data/Handbook of the Birds of the World and BirdLife International Digital Checklist of the Birds of the World_Version_6b.xlsx")
+
+
+colnames(iucn_redlist) = iucn_redlist[2, ] 
+
+iucn_redlist = iucn_redlist |>
+                clean_names() |>
+                as.data.frame() |>
+                filter(!is.na(family)) |>
+                dplyr::select(scientific_name,
+                              x2022_iucn_red_list_category)|>
+                dplyr::rename(iucn_redlist_cat = x2022_iucn_red_list_category)
+
+# filter for the IUCN categories that we want
+# full list here: http://datazone.birdlife.org/species/spcredcat
+# we need to include only recognized species with sufficient data
+# also exluding extinct species, etc.
+
+
+iucn_wanted = c("CR (PE)",
+                "CR",
+                "EN",
+                "VU",
+                "NT",
+                "LC")
+
+iucn_redlist = iucn_redlist |>
+                  filter(iucn_redlist_cat %in% iucn_wanted)
+
+ebird_last_decade = left_join(ebird_last_decade, iucn_redlist, by = "scientific_name")
+
+
+# count by iucn status
+countXiucn_cat = ebird_last_decade|>
+                        group_by(iucn_redlist_cat) |>
+                        tally()
+
+countXiucn_cat = countXiucn_cat[order(-countXiucn_cat$n), ]
+
+ggplot(countXiucn_cat[1:20,]) +
+  geom_col(aes(x = iucn_redlist_cat, y = log(n))) + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+
+
 
 ##### Let's make a quick map of PHL city limits and then create a hexagon over it
 
@@ -139,7 +183,7 @@ tm_shape(phl_bounds) +
   tm_borders() +
   tm_shape(ebird_sf) +
   tm_dots(col = "red", alpha = 0.1) + 
-  tm_facets(by = "year")
+  tm_facets(by = "iucn_redlist_cat")
 
 phl_grid <- phl_bounds %>%
   st_make_grid(st_bbox(.), square = FALSE, cellsize = 2640) %>% #currently using half mile cells
