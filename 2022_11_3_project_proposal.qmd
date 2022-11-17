@@ -103,6 +103,8 @@ library(ggpubr)
 library(ggrepel)
 
 ggthemr("pale") #set global ggplot theme
+
+options(scipen = 999) # turn off scientific notation
 ```
 
 ### Importing eBird and IUCN Data
@@ -414,6 +416,84 @@ Let's identify hotposts based on the clustering maps!
 Can I plot hexagon avg unique species vs. % SLR innundation for different SLR scenarios as a measure of severity? how to map that?
   - might be a good opportunity for a bivariate choropleth map--high biodiversity vs. high % innundation
 
+## NOAA Data
+Pulling in NOAA data here, visualizing
+
+
+From [NOAA](https://coast.noaa.gov/slr/#/layer/slr/2/-8377224.1536652865/4852001.7769825505/13/satellite/none/0.8/2050/interHigh/midAccretion):
+
+>Water levels are relative to local Mean Higher High Water Datum. Areas that are hydrologically connected to the ocean are shown in shades of blue (darker blue = greater depth).
+
+>Low-lying areas, displayed in green, are hydrologically "unconnected" areas that may also flood. They are determined solely by how well the elevation data captures the area’s drainage characteristics. The mapping may not accurately capture detailed hydrologic/hydraulic features such as canals, ditches, and stormwater infrastructure. A more detailed analysis, may be required to determine the area’s actual susceptibility to flooding.
+
+```{r slr import}
+# create object that has path to gdb
+gdb_path = 'C:/Users/Nissim/Desktop/Fall 2022/Floodplain Management/Final Project Data/NOAA/PA_slr_final_dist.gdb'
+
+# list all the layers (why its not a data frame idk)
+all_layers <- st_layers(gdb_path)
+
+# find all polygon fcs 
+poly_index <- which(stringr::str_detect(unlist(all_layers[["geomtype"]]), "Polygon"))
+
+
+all_polygons <- purrr::map(
+  all_layers[["name"]][poly_index],
+  ~st_read(gdb_path, layer = .x) |>
+  st_transform(crs = st_crs(ebird_sf)) |>
+  st_make_valid()
+)
+
+
+ calculate_overlap <- function(polygon, phl_bird_hex_means, id) {
+  # this function assumes that the hex_id and Shape Area 
+  # are always available in the respective sf object
+  # assign an id 
+    st_intersection(phl_bird_hex_means, polygon) |> 
+    as_tibble()|>
+    mutate(area = as.numeric(st_area(geometry))) |>
+    group_by(hex_id)|>
+    summarise(area = sum(area),
+              id = {{ id }})
+
+}
+
+
+# the id is the index of the iteration here (imap == index map)
+overlapping_areas <- purrr::imap(
+  all_polygons[1:length(all_polygons)],  ~calculate_overlap(.x, phl_bird_hex_means, .y)
+  )
+
+# squish them all together 
+areas_by_id <- bind_rows(overlapping_areas) |> 
+  # spread them so that each column is an id
+  # and the value is the area
+  tidyr::pivot_wider(names_from = "id",
+                     values_from = "area",
+                     names_prefix = "polygon_")
+
+# join back to the hexagons
+phl_bird_hex_means = left_join(phl_bird_hex_means, areas_by_id)
+
+# set vector of colnames
+
+### need to now compare the polygon_x column to the one from the method that I came up with
+  # can do this visually using tmap_arrange to see if they look the same
+
+
+
+## can also doublecheck by actually just overlayin gthe layer itself, rather than the hexes
+
+### pa low 0ft 
+
+
+ tm_shape(phl_bird_hex_means) +
+                 tm_polygons(col = 'polygon_1', palette = 'viridis', style = 'jenks') +
+             tm_shape(all_polygons[[1]][phl_bounds, ]) +
+                 tm_polygons(col = 'red')
+
+
+```
 
 # Distribution Modeling
 
