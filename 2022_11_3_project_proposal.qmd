@@ -329,6 +329,7 @@ tmap_mode('view')
 phl_bird_hex_means = phl_ebird_hex |>
                       group_by(hex_id) |>
                       summarize(avg_unique_species = mean(unique_species, na.rm = TRUE))
+                      
 
 phl_bird_hex_means$avg_unique_species[is.na(phl_bird_hex_means$avg_unique_species)] = 0
 
@@ -455,8 +456,7 @@ all_polygons <- purrr::map(
     group_by(hex_id)|>
     summarise(area = sum(area),
               id = {{ id }})
-
-}
+          }
 
 
 # the id is the index of the iteration here (imap == index map)
@@ -475,6 +475,12 @@ areas_by_id <- bind_rows(overlapping_areas) |>
 # join back to the hexagons
 phl_bird_hex_means = left_join(phl_bird_hex_means, areas_by_id)
 
+phl_bird_hex_means = phl_bird_hex_means |>
+                      mutate(hex_area = as.numeric(st_area(geometry)),
+                             pct_poly_1 = polygon_1 / hex_area * 100,
+                             pct_poly_9 = polygon_9 / hex_area * 100,
+                             pct_poly_19 = polygon_19 / hex_area * 100)
+
 # set vector of colnames
 
 ### need to now compare the polygon_x column to the one from the method that I came up with
@@ -486,13 +492,32 @@ phl_bird_hex_means = left_join(phl_bird_hex_means, areas_by_id)
 
 ### pa low 0ft 
 
+breaks = c(0, 10, 30, 70, 100)
+
+tmap_mode("view")
 
  tm_shape(phl_bird_hex_means) +
-                 tm_polygons(col = 'polygon_1', palette = 'viridis', style = 'jenks') +
-             tm_shape(all_polygons[[1]][phl_bounds, ]) +
-                 tm_polygons(col = 'red')
+                 tm_polygons(col = 'pct_poly_19', 
+                             palette = 'viridis', 
+                             style = 'fixed',
+                             breaks = breaks,
+                             alpha = 0.7) +
+             tm_shape(all_polygons[[9]][phl_bounds, ]) +
+                 tm_polygons(col = 'red', alpha = 0.5)
 
 
+ 
+ ggplot(phl_bird_hex_means) +
+   geom_point(aes(y = avg_unique_species, x = polygon_18))
+ 
+ 
+ # might want to now pivot these data into a new df for easy faceting & mapping
+ # need to do it by % total area of the hex
+ # and then standardize breaks according to eBird:
+  # 0 - 10% is low
+ # 11 to 30% is moderate
+ # 31 to 70% is high
+ #71 to 100% is very high
 ```
 
 # Distribution Modeling
