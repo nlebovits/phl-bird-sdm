@@ -269,6 +269,9 @@ Lastly, a further confirmation comes from checking the number of unique species 
 > Biologists often interpret species-survey data by examining the number of species found as a function of effort, plotted as a species-accumulation curves (SAC). The SAC plots the cumulative number of species recorded as a function of sampling effort (i.e. number of individuals collected or cumulative number of samples). At the start of a species survey, the total number of species found typically grows quickly with every unit of effort. After some time, however, effort expended yields more and more species that have already been found earlier in the survey—and the total number of species grows more slowly per unit of effort. A plot of species number vs effort will come to a plateau, and this saturation level is a common estimator for the number of species in an area.^[https://cities-urbanshift.s3.eu-west-3.amazonaws.com/baseline-indicators/biodiversity/reports/UrbanShift-Biodiversity-SanJose.html#change-in-number-of-native-species-sicb-4-sicb-5-sicb-6]
 
 I've approximated a real SAC here using a quadratic line of best fit. The asymptote appears to be around 290 species. Given the small sample size and the fact that the number of unique species observations in 2021 is a meaningful outlier (`r upc_2021_above_mean` standard deviations above the mean) it's hard to be extremely confident in the accuracy of our estimation. However, 
+
+NOTE THAT THIS SHOULD PROBABLY BE A LOGARITHMIC FUNCTION, NOT QUADRATIC. UPDATE TO FIT.
+
 ```{r unique per chklst plt}
 ggplot(unique_per_chklst, aes(x = sampling_event_identifier, y = scientific_name, label = year)) +
     geom_smooth(method = "lm", se = FALSE, formula = y ~ x + I(x^2), aes(col = "Quadratic")) +
@@ -461,7 +464,7 @@ all_polygons <- purrr::map(
 
 # the id is the index of the iteration here (imap == index map)
 overlapping_areas <- purrr::imap(
-  all_polygons[1:length(all_polygons)],  ~calculate_overlap(.x, phl_bird_hex_means, .y)
+  all_polygons[1:seq_along(all_polygons)],  ~calculate_overlap(.x, phl_bird_hex_means, .y) #changed from 1:length(all_polygons) to 1:seq_along(all_polygons) bc of https://twitter.com/data_question/status/1594669670531239938
   )
 
 # squish them all together 
