@@ -308,6 +308,9 @@ I've approximated a real SAC here using a quadratic line of best fit. The asympt
 
 NOTE THAT THIS SHOULD PROBABLY BE A LOGARITHMIC FUNCTION, NOT QUADRATIC. UPDATE TO FIT.
 
+<<<<<<< HEAD
+>>>>>>> 67b6afed26c88977ed95b5fe96cd545f4aa0b6c3
+=======
 >>>>>>> 67b6afed26c88977ed95b5fe96cd545f4aa0b6c3
 ```{r unique per chklst plt}
 
@@ -522,8 +525,11 @@ Need to select: 1) vulnerable species 2) species with sufficient observations
 ## Challenges for Management
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 -misalignment of data sources -difficult to get sufficient spatial resolution with citizen science data for mapping---observations are not consistently tied to specific enough points to be truly helpful for finely-tuned management
 
+=======
+>>>>>>> 67b6afed26c88977ed95b5fe96cd545f4aa0b6c3
 =======
 >>>>>>> 67b6afed26c88977ed95b5fe96cd545f4aa0b6c3
 # Conclusions

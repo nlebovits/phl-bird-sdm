@@ -1,0 +1,554 @@
+---
+title: "Sea Level Rise and Avian Biodiversity"
+subtitle: "Assessing Projected Impacts in Philadelphia"
+description: "ENVS 6611 Final Project"
+author: "Nissim Lebovits"
+date: today
+format: 
+  html:
+    toc: true
+    theme: flatly
+editor: visual
+execute:
+  echo: false
+  warning: false
+  error: false
+  messages: false
+project:
+  type: website
+  output-dir: docs
+---
+
+
+# Summary
+
+Using data from eBird, NOAA, and other relevant sources, this project will attempt to evaluate the possible impact of sea level rise on the spatial distribution of avifauna in the Philadelphia region.
+
+KEY: IF I FRAME THIS AS SIMPLY AN EXPLORATION OF THE POTENTIAL USE OF EBIRD DATA FOR SLR ADAPTATION, RATHER THAN PURE MODELING, IT WORKS A HELL OF A LOT BETTER.
+
+Things to highlight: 1) impact & unpredictability of sea level rise 2) importance of biodiversity to ecosystems; increasing recognition of this 3) cities are realizing that it is more and more important to value and protect their biodiversity 4) this approach considers the potential utility of citizen science data as a tool to understand the threat of sea level rise to avian biodiversity in philadelphia
+
+Saltwater vs. freshwater (see NOAA map) - in certain scenarios, we could see saltwater intrusion *past* the dam at the Fairmount Waterworks (by the Art Museum)
+
+Based on NOAA map, Heinz is most likely hotspot to be impacted by SLR in the near future, even under an intermediate scenario
+
+# Introduction
+
+## Background
+
+### Study Area
+
+Philadelphia sits at the boundary between the Atlantic Coastal Plain and Piedmont ecoregions. The area was historically covered with hardwood forests, but much of its natural vegetation has been removed for urbanization and cultivation.[^1] Built as a port along the Delaware River, the city was constructed on top of historic wetlands and mudflats. Due to infill and development, 95% of the region's freshwater tidal wetlands have been lost. As a result of Philadelphia's location and development patterns, SLR projections estimate that much of the area adjacent to the Delaware will be under water within the next century.[^2]
+
+[^1]:  https://www.epa.gov/sites/default/files/2019-03/documents/phipa_final.pdf
+
+[^2]:  https://watercenter.sas.upenn.edu/philadelphia-urban-ecology-and-the-balance-of-human-and-ecological-communities/
+
+The city of Philadelphia is also a major hotspot for bird biodiversity in North America. A key migratory stopover location on the [Atlantic Flyway](https://www.audubon.org/atlantic-flyway), Philadelphia sees more than 200 species of migratory birds pass through it each year.[^3] The city hosts a number of regional bird hotspots, especially Pennypack on the Delaware (266 species), John Heinz National Wildlife Reserve (281 species), and FDR Park (313 species).[^4] Given their proximity to the Schuylkill and Delaware rivers, all three of these sites are likely to be significantly impacted by SLR. From a management perspective, it is therefore important to understand the possible impact of SLR on Philadelphia's avian biodiversity.
+
+[^3]:  https://pa.audubon.org/chapters-centers/discovery-center
+
+[^4]: https://ebird.org/hotspots
+
+![Bird Biodiversity Hotspots in the Philadelphia Region](C:%5CUsers%5CNissim%5CDesktop%5CFall%202022%5CFloodplain%20Management%5CFinal%20Project%20Data%5C2022_11_03_ebird_phl_hotspots_screenshot.png){fig-align="center"}
+
+### Birds as Indicator Species
+
+Birds are a popular subject for biodiversity monitoring because "compared to other vertebrates, birds are easily monitored by skilled observers and provide a mechanism to explore urban effects and responses to different urban designs."[^5]
+
+[^5]: Chace and Walsh, 1
+
+"Bird populations are sensitive to many types of environmental change and, because they occupy a position at or near the top of the food chain, give indications of overall ecosystem functioning."[^6]
+
+[^6]: Wilby and Perry, 78
+
+### Existing Research
+
+Research is lacking on the impacts of SLR on urban biodiversity in North America. While there is some literature on the impacts of SLR on tropical island biodiversity or on global extinction, there has not been much work done specifically on the impact of SLR on avifauna distributions, least of all in North American coastal cities.[^7] Generally speaking, however, a few general trends have been found. First, research suggests that species with limited ranges will be most impacted.[^8]. In particular, species reliant on rare and/or vulnerable coastal habitats will be most threatened.[^9]
+
+[^7]: include citations
+
+[^8]: *Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities*, Elmqvist et al., 2013, 496
+
+[^9]: Wilby and Perry (2006), 73
+
+Freshwater wetlands and intertidal habitats face especially high risk. Threats include increased levels of inundation and storm flooding; accelerated coastal erosion; sea water intrusion into freshwater tributaries; changes to the tidal prism, tidal range, sediment supply and rates of accretion; changes in air temperature and rainfall affecting the growth of salt marsh plants with secondary effects on sedimentation (Adam, 2002; Kennish, 2002; Moore, 1999; Nicholls et al., 1999; Reed, 1990).[^10] The effects of these inputs are unpredictable. For example, depending on a variety of factors, marshes could either contract or expand.[^11]
+
+[^10]: From Wilby and Perry 76
+
+[^11]:  Wilby and Perry 76-78
+
+Sea level rise will cause shifts in flooding potential on the urban coastal wetlands and beach zones, which will alter the habitat quality of these locations at rates signifi cantly above natural baseline conditions. The amount of sea level rise could have potential large-scale impacts on the areal extent and ecosystem health of the urban coastal wetlands, including permanent inundation, accelerated inland wetland migration (if the wetlands are not blocked by bulkheads or similar structures), and shifts in salinity gradients. (Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities\*, Elmqvist et al., 2013, 497)
+
+## Project Goals
+
+This report will combine NOAA sea level rise projections with eBird citizen science data on bird species presence to evaluate how Philadelphia's endemic birds might be affected by future sea level rise. It will use a presence-only maximum entropy model, break species down by [preferred habitat](https://science.ebird.org/en/status-and-trends/habitat-regional-charts), and focus on endemic species listed by the IUCN as [species of concern or higher](https://www.iucnredlist.org/).
+
+## Data
+
+This project will draw on 3 key data sources:
+
+1)  Bird observations recorded by [eBird](https://ebird.org/home), a project of the [Cornell Lab of Ornithology](https://www.birds.cornell.edu/home/). CLO has published a [guide to using eBird's citizen science data for species distribution modeling](https://cornelllabofornithology.github.io/ebird-best-practices/), which I will be using extensively.
+2)  The National Oceanic and Atmospheric Administration's data on [current sea levels and projected sea level rise](https://coast.noaa.gov/slrdata/).
+3)  Various predictive factors assembled based on background reading and availability, such as habitat patch size, connectivity, degree of urbanization, road density, tree canopy cover, impervious surface cover, population density, land use, distance to fresh water, distance to salt water, etc.[^12] These layers will be assembled from [ESRI](https://livingatlas.arcgis.com/en/home/), [PASDA](https://www.pasda.psu.edu/), and [OpenDataPhilly](https://www.opendataphilly.org/), among other possible sources.
+
+[^12]: *Ecology and Conservation of Birds in Urban Environments*, Murgui and Hedblom eds., 2017
+
+## Challenges and Limitations
+
+Because of the time frame of this assignment and my own limitations, this report will focus exclusively on sea level rise. Crucially, however, *this is not an accurate representation of ecosystem function in the real world.* It is impossible to divorce the impact of sea level rise alone on biodiversity from other confounding factors like [coastal modification, saltwater intrusion, increased rainfall, and water pollution,](https://explorer.audubon.org/explore/conservation-challenges?zoom=3&x=1306099.1620122588&y=2810864.562197212) let alone less proximate factors like changes in human population density and land use or the arrival of invasive species. Furthermore, as Pilkey and Pilkey point out, even if the scale of such impacts could be measured, it is difficult to account for ordering complexity: the unpredictable differences in impact depending on the order in which events occur.[^13] As Jimenez-Valverde et al., explain, prediction via species distribution modeling only works "if correlation structures are stable and consistent across different landscapes and time periods".[^14] As a result, this project is more of an intellectual exercise than a genuine management tool. I will follow Pilkey and Pilkey, furthermore, in making only *qualitative* predictions based on my model (e.g., "the range of Species X will likely decrease", or "species richness at FDR Park will likely decline") rather than precise quantitative projections for species numbers or ranges.
+
+[^13]: *Useless Arithmetic*, 2007
+
+[^14]: Jimenez-Valverde et al., 2009
+
+# Data Exploration and Cleaning
+
+## Sourcing Data
+
+### R Setup
+
+
+```{r setup}
+library(tidyverse)
+library(sf)
+library(janitor)
+library(lubridate)
+library(tmap)
+library(mapview)
+library(janitor)
+library(plotly)
+library(ggthemr)
+library(auk)
+library(ggpubr)
+library(ggrepel)
+
+ggthemr("pale") #set global ggplot theme
+
+options(scipen = 999) # turn off scientific notation
+```
+
+
+### Importing eBird and IUCN Data
+
+The primary dataset for this project comes from Cornell Ornithology Lab's [eBird](https://ebird.org/home). To avoid downloading the entire 200 GB global eBird dataset, I have manually downloaded a subset of the [eBird Basic Dataset](https://ebird.org/data/download/ebd) prepared specifically for Philadelphia, Pennsylvania beginning in 2011. Instructions for how to manually download these data rather than using eBird's `auk` package are [available here](https://cornelllabofornithology.github.io/ebird-best-practices/ebird.html#ebird-size).
+
+
+```{r ebird import}
+ebird = read.table("C:/Users/Nissim/Desktop/Fall 2022/Floodplain Management/Final Project Data/eBird/ebd_US-PA-101_relSep-2022.txt",
+           sep = "\t", 
+           header = TRUE,
+           fill = TRUE) |>
+           clean_names()|>
+           filter(protocol_type %in% c("Stationary", "Traveling")) |> # restrict to the standard traveling and stationary count protocols 
+           auk_unique() #filter for only unique checklists to avoid duplicates created by groups
+```
+
+
+## Cleaning Data
+
+\[Include explanation of how I cleaned these data.\]
+
+1)  Explain where eBird data come from and what the limitations are
+2)  Explain that we are following dest practices based on the eBird book
+3)  Explain what that entails:
+
+"Based on our experience working with these data, we suggest restricting checklists to less than 5 hours long and 5 km in length, and with 10 or fewer observers. Furthermore, we'll only consider data from the past 10 years (2010-2019)."
+
+"The chance of an observer detecting a bird when present can be highly dependent on time of day. For example, many species exhibit a peak in detection early in the morning during dawn chorus and a secondary peak early in the evening. With this in mind, the first predictor of detection that we'll explore is the time of day at which a checklist was started. We'll summarize the data in 1 hour intervals, then plot them. Since estimates of detection frequency are unreliable when only a small number of checklists are available, we'll only plot hours for which at least 100 checklists are present."
+
+"In later chapters, we'll make predictions at the peak time of day for detecatibility to limit the effect of this variation. The majority of checklist submissions also occurs in the morning; however, there are reasonable numbers of checklists between 5am and 9pm. It's in this region that our model estimates will be most reliable."
+
+From IUCN: "The IUCN Red List Categories and Criteria are intended to be an easily and widely understood system for classifying species at high risk of global extinction. It divides species into nine categories: Not Evaluated, Data Deficient, Least Concern, Near Threatened, Vulnerable, Endangered, Critically Endangered, Extinct in the Wild and Extinct." https://www.iucnredlist.org/
+
+
+```{r ebird clean}
+ebird_i = ebird |>
+            dplyr::select(taxonomic_order,
+                          category,
+                          taxon_concept_id,
+                          common_name,
+                          scientific_name,
+                          exotic_code,
+                          observation_count,
+                          breeding_code,
+                          breeding_category,
+                          county_code,
+                          locality,
+                          locality_id,
+                          latitude,
+                          longitude,
+                          observation_date,
+                          time_observations_started,
+                          observer_id,
+                          approved,
+                          effort_distance_km,
+                          number_observers,
+                          protocol_type,
+                          duration_minutes,
+                          sampling_event_identifier) |>
+            dplyr::filter(approved == "1") # make sure R doesn't confuse dplyr::filter with stats::filter
+
+# function to convert time observation to hours since midnight
+# pulled directly from https://cornelllabofornithology.github.io/ebird-best-practices/ebird.html#ebird-zf
+time_to_decimal <- function(x) {
+  x <- hms(x, quiet = TRUE)
+  hour(x) + minute(x) / 60 + second(x) / 3600
+}
+
+ebird_i$observation_date = as_date(ebird_i$observation_date)
+
+ebird_i = ebird_i |>
+            mutate(
+              # convert X to NA
+              observation_count = if_else(observation_count == "X", 
+                                          NA_character_, observation_count),
+              observation_count = as.integer(observation_count),
+              # effort_distance_km to 0 for non-travelling counts
+              effort_distance_km = if_else(protocol_type != "Traveling", 
+                                           "0", effort_distance_km),
+              # convert time to decimal hours since midnight
+              time_observations_started = time_to_decimal(time_observations_started),
+              # split date into year and day of year
+              year = year(observation_date),
+              day_of_year = yday(observation_date)
+            ) |>
+          filter(
+            # effort filters
+            duration_minutes <= 5 * 60,
+            effort_distance_km <= 5,
+            # last 10 years of data
+            year >= 2010,
+            # 10 or fewer observers
+            number_observers <= 10)
+
+ebird_last_decade = ebird_i |>
+                      filter(year >= 2012 & year <= 2021)
+```
+
+
+## Exploring Data
+
+Now that we've cleaned up and supplemented our eBird data, we'll explore it.
+
+### Observations and Checklists by Year
+
+First, we need to look at our raw number of observations year by year. This element is crucial because of the influence of pandemic birding. The extraordinary and unprecedented rise in citizen science data collection during the pandemic has been a boon for ecological data. However, it also complicates the interpretation of these data. As Sara Harrison explains in *Wired*, "Scientists can't always tell whether changes in the data are due to animal behavior or just an increase in the amount of information available. Furthermore,"It's not just that *more* people are observing---it's also a matter of *where* they are observing." Observations in urban areas have increased, while observations in rural areas have decreased, suggesting likely undersampling in less-accessible habitats.[^15]
+
+[^15]: Sara Harrison, "Pandemic Bird-Watching Created a Data Boom-and a Conundrum," Wired (Conde Nast, September 30, 2021), https://www.wired.com/story/pandemic-bird-watching-created-a-data-boom-and-a-conundrum/.
+
+As we can see in Philadelphia, the number of observations in 2021 is substantially larger than any of the previous nine years. Although observations per year were already trending up over the previous decade, 2021 represented an \[r avg\]% increase in bird observations from 2020 and was \[r avg\]% higher than the average number of observations per year in the previous nine years.
+
+To understand the rise in the number of birders submitting observations during the pandemic, it helps to track how many checklists were submitted each year in the last decade. An eBird checklist represents a single observation event (a birding outing), and groups together sightings of multiple species from the same observation event.[^16] By counting the number of checklists submitted in each year, we have a proxy for birder activity, which will help us account for the rise in pandemic birding mentioned in the previous section.
+
+[^16]: https://cornelllabofornithology.github.io/ebird-best-practices/intro.html#intro-intro
+
+
+```{r annual observations tally}
+obsvs = ggplot(ebird_last_decade, aes(year)) +
+  geom_bar() +
+  labs(title = "Annual Observations",
+       subtitle = "2012-21",
+       x = "Year",
+       y = "Total Observations")
+
+ countXyearXsei = aggregate(data = ebird_last_decade,                # Applying aggregate
+                          sampling_event_identifier ~ year,
+                          function(sampling_event_identifier) length(unique(sampling_event_identifier)))
+
+chklsts = ggplot(countXyearXsei) +
+  geom_col(aes(x = year, y = sampling_event_identifier)) +
+  labs(title = "Annual Sampling Events",
+       subtitle = "2012-21",
+       x = "Year",
+       y = "Total Sampling Events")
+
+ggarrange(obsvs, chklsts)
+```
+
+
+### Number of Species
+
+The primary focus of our analysis here is *species richness*: the total number of species within our study region. To that end, it's helpful to visualize the total number of unique species observed in Philadelphia in each year. Unlike total observations or total checklists, we expect that the number of unique species observed each year has not changed due to the pandemic. \[Need to give a clear explanation of why.\]
+
+Indeed, the data confirm that there has been only a slight uptick in the number of unique species observed annually in Philadelphia since the start of the pandemic. \[Will want to analyze this using normal distribution, mean, std, etc.\]
+
+### A Rudimentary Species Accumulation Curve
+
+
+```{r unique per chklst}
+countXyearXspecies = aggregate(data = ebird_last_decade,                # Applying aggregate
+                          scientific_name ~ year,
+                          function(scientific_name) length(unique(scientific_name)))
+
+unique_per_chklst = countXyearXspecies |>
+                      select(-year) |>
+                      cbind(countXyearXsei)
+
+sd_upc = sd(unique_per_chklst$scientific_name)
+
+mean_upc = mean(unique_per_chklst$scientific_name)
+
+upc_2021 = unique_per_chklst$scientific_name[unique_per_chklst$year == 2021]
+
+upc_2021_above_mean = round((upc_2021 - mean_upc) / sd_upc, digits = 2)
+
+ggplot(unique_per_chklst) +
+  geom_histogram(aes(x = scientific_name), bins = 5) +
+  #geom_vline(xintercept = mean(unique_per_chklst$scientific_name)) +
+  #geom_vline(xintercept = (mean(unique_per_chklst$scientific_name))+ sd((unique_per_chklst$scientific_name))) +
+  #geom_vline(xintercept = (mean(unique_per_chklst$scientific_name))- sd((unique_per_chklst$scientific_name))) +
+  labs(title = "Distribution of Annual Total Unique Species",
+       subtitle = "2012-21",
+       x = "Total Unique Species",
+       y = "Count")
+```
+
+
+Lastly, a further confirmation comes from checking the number of unique species per checklist. This is basically a species-accumulation curve, a way of estimating species richness based on the diminishing marginal return on observation estimate:
+
+> Biologists often interpret species-survey data by examining the number of species found as a function of effort, plotted as a species-accumulation curves (SAC). The SAC plots the cumulative number of species recorded as a function of sampling effort (i.e. number of individuals collected or cumulative number of samples). At the start of a species survey, the total number of species found typically grows quickly with every unit of effort. After some time, however, effort expended yields more and more species that have already been found earlier in the survey---and the total number of species grows more slowly per unit of effort. A plot of species number vs effort will come to a plateau, and this saturation level is a common estimator for the number of species in an area.[^17]
+
+[^17]: https://cities-urbanshift.s3.eu-west-3.amazonaws.com/baseline-indicators/biodiversity/reports/UrbanShift-Biodiversity-SanJose.html#change-in-number-of-native-species-sicb-4-sicb-5-sicb-6
+
+I've approximated a real SAC here using a logarithmic line of best fit. The asymptote appears to be around 290 species. Given the small sample size and the fact that the number of unique species observations in 2021 is a meaningful outlier (`r upc_2021_above_mean` standard deviations above the mean) it's hard to be extremely confident in the accuracy of our estimation. However,
+
+<<<<<<< HEAD
+=======
+I've approximated a real SAC here using a quadratic line of best fit. The asymptote appears to be around 290 species. Given the small sample size and the fact that the number of unique species observations in 2021 is a meaningful outlier (`r upc_2021_above_mean` standard deviations above the mean) it's hard to be extremely confident in the accuracy of our estimation. However, 
+
+NOTE THAT THIS SHOULD PROBABLY BE A LOGARITHMIC FUNCTION, NOT QUADRATIC. UPDATE TO FIT.
+
+<<<<<<< HEAD
+>>>>>>> 67b6afed26c88977ed95b5fe96cd545f4aa0b6c3
+=======
+>>>>>>> 67b6afed26c88977ed95b5fe96cd545f4aa0b6c3
+
+```{r unique per chklst plt}
+
+ggplot(unique_per_chklst, aes(x = sampling_event_identifier, y = scientific_name, label = year)) +
+    geom_smooth(method = "lm", se = FALSE, formula = y ~ log(x), aes(col = "Logarithmiceex")) +
+    geom_smooth(method = "lm", se = FALSE, linetype = 'dashed', aes(col = "Linear")) +
+    geom_point()+
+    geom_label_repel(size = 2.5) +
+    scale_colour_manual(name = "Model", values = c("#5E2C25", "#C8E370")) +
+    labs(title = "Unique Species vs. Total Checklists",
+         subtitle = '2012-21',
+       x = "Total Sampling Events",
+       y = "Unique Species")
+```
+
+
+### Spatial Bias
+
+According to the Cornell Lab of Ornithology's guide to using eBird data, spatial bias is a major issue in working with these data.
+
+> Spatial bias: most participants in citizen science surveys sample near their homes (Luck et al. 2004), in easily accessible areas such as roadsides (Kadmon, Farber, and Danin 2004), or in areas and habitats of known high biodiversity (Prendergast et al. 1993). A simple method to reduce the spatial bias that we describe is to create an equal area grid over the region of interest, and sample a given number of checklists from within each grid cell.
+
+In the maps below, we compare the raw number of checklists per hexagon per year.
+
+Using the same approach, we can also map *unique species per checklist*. This allows us to approximate species richness relative to the amount of effort spent looking for species. In this way, we can at least partially correct for over/under-sampling and hone in on areas of real biodiversity.
+
+### Observation Hotspots over Time
+
+To identify hotspots of avian biodiversity in Philadelphia, we will explore spatial distribution of species richness through two approaches: binning and kernel density estimate.
+
+Don't forget to mention MAUP
+
+
+```{r hotspots by year}
+#| include: false
+ebird_sf = sf::st_as_sf(ebird_last_decade,
+                        coords = c("longitude",
+                                   "latitude"),
+                        crs = st_crs("EPSG:4326")) |>
+  st_transform(st_crs("EPSG:2272")) #NAD83/PA South (ftUS)
+
+# import phl boundaries to generatte a grid
+phl_bounds = st_read("C:/Users/Nissim/Desktop/Fall 2022/Spat Stats/phl_city_limits/City_Limits.shp") |>
+  st_transform(crs = st_crs(ebird_sf))
+
+phl_grid <- phl_bounds %>%
+  st_make_grid(st_bbox(.), square = FALSE, cellsize = 2640) %>% #currently using half mile cells
+  st_sf() %>% 
+  mutate(hex_id = row_number())
+
+phl_grid = phl_grid[phl_bounds,]
+
+ebird_sf = st_join(ebird_sf, phl_grid)
+
+phl_ebird_hex = ebird_sf |>
+                  st_drop_geometry() |>
+                  aggregate(scientific_name ~ year + hex_id,
+                          function(scientific_name) length(unique(scientific_name))) |>
+                  rename(unique_species = scientific_name) |>
+                  right_join(phl_grid, by = "hex_id") |>
+                  st_as_sf()
+
+tmap_mode('view')
+
+phl_bird_hex_means = phl_ebird_hex |>
+                      group_by(hex_id) |>
+                      summarize(avg_unique_species = mean(unique_species, na.rm = TRUE))
+                      
+
+phl_bird_hex_means$avg_unique_species[is.na(phl_bird_hex_means$avg_unique_species)] = 0
+```
+
+```{r hotspots map}
+tm_shape(phl_bird_hex_means) + 
+                  tm_polygons(col = "avg_unique_species", 
+                              style = "jenks", 
+                              palette = "viridis", 
+                              alpha = 0.7, 
+                              id = "avg_unique_species")
+```
+
+
+#### Five-Year Means
+
+In both cases, we can look at the average species richness per location. With the hexagon bins, we join the layers together and create a new layer that is the mean. Similarly, with the kernel density estimate raster, we can use cell statistics to accomplish the same thing. The resultant maps are compared here side by side and indicate that \[are the hotspots the same? different?\].
+
+#### Visual Comparison
+
+### Hypothesis
+
+Let's identify hotposts based on the clustering maps!
+
+Can I plot hexagon avg unique species vs. % SLR innundation for different SLR scenarios as a measure of severity? how to map that? - might be a good opportunity for a bivariate choropleth map--high biodiversity vs. high % innundation
+
+## NOAA Data
+
+Pulling in NOAA data here, visualizing
+
+From [NOAA](https://coast.noaa.gov/slr/#/layer/slr/2/-8377224.1536652865/4852001.7769825505/13/satellite/none/0.8/2050/interHigh/midAccretion):
+
+> Water levels are relative to local Mean Higher High Water Datum. Areas that are hydrologically connected to the ocean are shown in shades of blue (darker blue = greater depth).
+
+> Low-lying areas, displayed in green, are hydrologically "unconnected" areas that may also flood. They are determined solely by how well the elevation data captures the area's drainage characteristics. The mapping may not accurately capture detailed hydrologic/hydraulic features such as canals, ditches, and stormwater infrastructure. A more detailed analysis, may be required to determine the area's actual susceptibility to flooding.
+
+
+```{r slr import}
+#| output: false
+
+# create object that has path to gdb
+gdb_path = 'C:/Users/Nissim/Desktop/Fall 2022/Floodplain Management/Final Project Data/NOAA/PA_slr_final_dist.gdb'
+
+# list all the layers (why its not a data frame idk)
+all_layers <- st_layers(gdb_path)
+
+# find all polygon fcs 
+poly_index <- which(stringr::str_detect(unlist(all_layers[["geomtype"]]), "Polygon"))
+
+
+all_polygons <- purrr::map(
+  all_layers[["name"]][poly_index],
+  ~st_read(gdb_path, layer = .x) |>
+  st_transform(crs = st_crs(ebird_sf)) |>
+  st_make_valid()
+)
+
+
+ calculate_overlap <- function(polygon, phl_bird_hex_means, id) {
+  # this function assumes that the hex_id and Shape Area 
+  # are always available in the respective sf object
+  # assign an id 
+    st_intersection(phl_bird_hex_means, polygon) |> 
+    as_tibble()|>
+    mutate(area = as.numeric(st_area(geometry))) |>
+    group_by(hex_id)|>
+    summarise(area = sum(area),
+              id = {{ id }})
+          }
+
+
+# the id is the index of the iteration here (imap == index map)
+overlapping_areas <- purrr::imap(
+  all_polygons[1:seq_along(all_polygons)],  ~calculate_overlap(.x, phl_bird_hex_means, .y) #changed from 1:length(all_polygons) to 1:seq_along(all_polygons) bc of https://twitter.com/data_question/status/1594669670531239938
+  )
+
+# squish them all together 
+areas_by_id <- bind_rows(overlapping_areas) |> 
+  # spread them so that each column is an id
+  # and the value is the area
+  tidyr::pivot_wider(names_from = "id",
+                     values_from = "area",
+                     names_prefix = "polygon_")
+
+# join back to the hexagons
+phl_bird_hex_means = left_join(phl_bird_hex_means, areas_by_id)
+
+phl_bird_hex_means = phl_bird_hex_means |>
+                      mutate(hex_area = as.numeric(st_area(geometry)),
+                             pct_poly_1 = polygon_1 / hex_area * 100,
+                             pct_poly_9 = polygon_9 / hex_area * 100,
+                             pct_poly_19 = polygon_19 / hex_area * 100)
+
+# set vector of colnames
+
+### need to now compare the polygon_x column to the one from the method that I came up with
+  # can do this visually using tmap_arrange to see if they look the same
+
+
+
+## can also doublecheck by actually just overlayin gthe layer itself, rather than the hexes
+
+### pa low 0ft 
+
+breaks = c(0, 10, 30, 70, 100)
+
+tmap_mode("view")
+```
+
+```{r plots}
+ tm_shape(phl_bird_hex_means) +
+                 tm_polygons(col = 'pct_poly_19', 
+                             palette = 'viridis', 
+                             style = 'fixed',
+                             breaks = breaks,
+                             alpha = 0.7) +
+             tm_shape(all_polygons[[9]][phl_bounds, ]) +
+                 tm_polygons(col = 'red', alpha = 0.5)
+
+
+ 
+ ggplot(phl_bird_hex_means) +
+   geom_point(aes(y = avg_unique_species, x = polygon_18))
+ 
+ 
+ # might want to now pivot these data into a new df for easy faceting & mapping
+ # need to do it by % total area of the hex
+ # and then standardize breaks according to eBird:
+  # 0 - 10% is low
+ # 11 to 30% is moderate
+ # 31 to 70% is high
+ #71 to 100% is very high
+```
+
+
+# Distribution Modeling
+
+Need to select: 1) vulnerable species 2) species with sufficient observations
+
+## Preparing for SDM
+
+### Selecting Species
+
+### Preparing Rasters
+
+## Executing SDM
+
+# Findings
+
+## Challenges for Management
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+-misalignment of data sources -difficult to get sufficient spatial resolution with citizen science data for mapping---observations are not consistently tied to specific enough points to be truly helpful for finely-tuned management
+
+=======
+>>>>>>> 67b6afed26c88977ed95b5fe96cd545f4aa0b6c3
+=======
+>>>>>>> 67b6afed26c88977ed95b5fe96cd545f4aa0b6c3
+# Conclusions
+
