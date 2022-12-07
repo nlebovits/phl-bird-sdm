@@ -33,6 +33,12 @@ Based on NOAA map, Heinz is most likely hotspot to be impacted by SLR in the nea
 
 # Introduction
 
+## Motivation
+
+ - Explore available data for biodiversity monitoring in Philadelphia
+ - Demonstrate utility of CS data for urban conservation
+ - Explore possible ways to use these data + limitations on them
+
 ## Background
 
 ### Study Area
@@ -131,6 +137,8 @@ options(scipen = 999) # turn off scientific notation
 The primary dataset for this project comes from Cornell Ornithology Lab's [eBird](https://ebird.org/home). To avoid downloading the entire 200 GB global eBird dataset, I have manually downloaded a subset of the [eBird Basic Dataset](https://ebird.org/data/download/ebd) prepared specifically for Philadelphia, Pennsylvania beginning in 2011. Instructions for how to manually download these data rather than using eBird's `auk` package are [available here](https://cornelllabofornithology.github.io/ebird-best-practices/ebird.html#ebird-size).
 
 ```{r ebird import}
+#| cache: true
+
 ebird = read.table("C:/Users/Nissim/Desktop/Fall 2022/Floodplain Management/Final Project Data/eBird/ebd_US-PA-101_relSep-2022.txt",
            sep = "\t", 
            header = TRUE,
@@ -157,6 +165,7 @@ ebird = read.table("C:/Users/Nissim/Desktop/Fall 2022/Floodplain Management/Fina
 From IUCN: "The IUCN Red List Categories and Criteria are intended to be an easily and widely understood system for classifying species at high risk of global extinction. It divides species into nine categories: Not Evaluated, Data Deficient, Least Concern, Near Threatened, Vulnerable, Endangered, Critically Endangered, Extinct in the Wild and Extinct." https://www.iucnredlist.org/
 
 ```{r ebird clean}
+#| cache: true
 ebird_i = ebird |>
             dplyr::select(taxonomic_order,
                           category,
@@ -242,7 +251,9 @@ obsvs = ggplot(ebird_last_decade, aes(year)) +
   labs(title = "Annual Observations",
        subtitle = "2012-21",
        x = "Year",
-       y = "Total Observations")
+       y = "Total Observations") +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
 
  countXyearXsei = aggregate(data = ebird_last_decade,                # Applying aggregate
                           sampling_event_identifier ~ year,
@@ -253,7 +264,9 @@ chklsts = ggplot(countXyearXsei) +
   labs(title = "Annual Sampling Events",
        subtitle = "2012-21",
        x = "Year",
-       y = "Total Sampling Events")
+       y = "Total Sampling Events")+
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
 
 ggarrange(obsvs, chklsts)
 ```
@@ -291,7 +304,9 @@ ggplot(unique_per_chklst) +
   labs(title = "Distribution of Annual Total Unique Species",
        subtitle = "2012-21",
        x = "Total Unique Species",
-       y = "Count")
+       y = "Count")+
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
 ```
 
 Lastly, a further confirmation comes from checking the number of unique species per checklist. This is basically a species-accumulation curve, a way of estimating species richness based on the diminishing marginal return on observation estimate:
@@ -310,7 +325,7 @@ NOTE THAT THIS SHOULD PROBABLY BE A LOGARITHMIC FUNCTION, NOT QUADRATIC. UPDATE 
 ```{r unique per chklst plt}
 
 ggplot(unique_per_chklst, aes(x = sampling_event_identifier, y = scientific_name, label = year)) +
-    geom_smooth(method = "lm", se = FALSE, formula = y ~ log(x), aes(col = "Logarithmiceex")) +
+    geom_smooth(method = "lm", formula = y ~ x + I(x^2), se = FALSE, aes(col = "Quadratic")) +
     geom_smooth(method = "lm", se = FALSE, linetype = 'dashed', aes(col = "Linear")) +
     geom_point()+
     geom_label_repel(size = 2.5) +
@@ -318,7 +333,9 @@ ggplot(unique_per_chklst, aes(x = sampling_event_identifier, y = scientific_name
     labs(title = "Unique Species vs. Total Checklists",
          subtitle = '2012-21',
        x = "Total Sampling Events",
-       y = "Unique Species")
+       y = "Unique Species")+
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
 ```
 
 ### Spatial Bias
@@ -336,6 +353,12 @@ Using the same approach, we can also map *unique species per checklist*. This al
 To identify hotspots of avian biodiversity in Philadelphia, we will explore spatial distribution of species richness through two approaches: binning and kernel density estimate.
 
 Don't forget to mention MAUP
+
+In both cases, we can look at the average species richness per location. With the hexagon bins, we join the layers together and create a new layer that is the mean. Similarly, with the kernel density estimate raster, we can use cell statistics to accomplish the same thing. The resultant maps are compared here side by side and indicate that \[are the hotspots the same? different?\].
+
+Let's identify hotspts based on the clustering maps!
+
+Can I plot hexagon avg unique species vs. % SLR innundation for different SLR scenarios as a measure of severity? how to map that? - might be a good opportunity for a bivariate choropleth map--high biodiversity vs. high % innundation
 
 ```{r hotspots by year}
 #| include: false
@@ -384,18 +407,29 @@ tm_shape(phl_bird_hex_means) +
                               alpha = 0.7, 
                               id = "avg_unique_species")
 ```
+#### Top Hot Spots
+```{r top hotspots}
+pennypack = tm_shape(phl_bird_hex_means[phl_bird_hex_means$hex_id == 1319, ]) + 
+                  tm_polygons(col = "#fced65",
+                              alpha = 0.5, 
+                              id = "avg_unique_species")
 
-#### Five-Year Means
+fdr = tm_shape(phl_bird_hex_means[phl_bird_hex_means$hex_id == 137, ]) + 
+                  tm_polygons(col = "#fced65",
+                              alpha = 0.5, 
+                              id = "avg_unique_species")
+  
+heinz = tm_shape(phl_bird_hex_means[phl_bird_hex_means$hex_id == 521, ]) + 
+                  tm_polygons(col = "#fced65",
+                              alpha = 0.5, 
+                              id = "avg_unique_species")
 
-In both cases, we can look at the average species richness per location. With the hexagon bins, we join the layers together and create a new layer that is the mean. Similarly, with the kernel density estimate raster, we can use cell statistics to accomplish the same thing. The resultant maps are compared here side by side and indicate that \[are the hotspots the same? different?\].
-
-NOTE: I CAN ALSO USE TMAP TO ZOOM IN ON THE SPECIFIC HOTSPOTS HERE IN THREE SIDE-BY-SIDE MAPS
+tmap_arrange(pennypack, fdr, heinz)
+```
 
 ### Hypothesis
 
-Let's identify hotspts based on the clustering maps!
 
-Can I plot hexagon avg unique species vs. % SLR innundation for different SLR scenarios as a measure of severity? how to map that? - might be a good opportunity for a bivariate choropleth map--high biodiversity vs. high % innundation
 
 ## NOAA Data
 
@@ -409,6 +443,7 @@ From [NOAA](https://coast.noaa.gov/slr/#/layer/slr/2/-8377224.1536652865/4852001
 
 ```{r slr import}
 #| output: false
+#| cache: true
 
 # create object that has path to gdb
 gdb_path = 'C:/Users/Nissim/Desktop/Fall 2022/Floodplain Management/Final Project Data/NOAA/PA_slr_final_dist.gdb'
@@ -443,7 +478,7 @@ all_polygons <- purrr::map(
 
 # the id is the index of the iteration here (imap == index map)
 overlapping_areas <- purrr::imap(
-  all_polygons[1:seq_along(all_polygons)],  ~calculate_overlap(.x, phl_bird_hex_means, .y) #changed from 1:length(all_polygons) to 1:seq_along(all_polygons) bc of https://twitter.com/data_question/status/1594669670531239938
+  all_polygons[1:length(all_polygons)],  ~calculate_overlap(.x, phl_bird_hex_means, .y) #changed from 1:length(all_polygons) to 1:seq_along(all_polygons) bc of https://twitter.com/data_question/status/1594669670531239938
   )
 
 # squish them all together 
@@ -457,11 +492,32 @@ areas_by_id <- bind_rows(overlapping_areas) |>
 # join back to the hexagons
 phl_bird_hex_means = left_join(phl_bird_hex_means, areas_by_id)
 
+
 phl_bird_hex_means = phl_bird_hex_means |>
                       mutate(hex_area = as.numeric(st_area(geometry)),
-                             pct_poly_1 = polygon_1 / hex_area * 100,
-                             pct_poly_9 = polygon_9 / hex_area * 100,
-                             pct_poly_19 = polygon_19 / hex_area * 100)
+                             pct_flooding_0ft = polygon_1 / hex_area * 100,
+                             pct_flooding_1ft= polygon_3 / hex_area * 100,
+                             pct_flooding_2ft = polygon_4 / hex_area * 100,
+                             pct_flooding_3ft = polygon_5 / hex_area * 100,
+                             pct_flooding_4ft = polygon_6 / hex_area * 100,
+                             pct_flooding_5ft = polygon_7 / hex_area * 100,
+                             pct_flooding_6ft = polygon_8 / hex_area * 100,
+                             pct_flooding_7ft = polygon_9 / hex_area * 100,
+                             pct_flooding_8ft = polygon_10 / hex_area * 100,
+                             pct_flooding_9ft = polygon_11 / hex_area * 100,
+                             pct_flooding_10ft = polygon_2 / hex_area * 100, #note that the 10ft flooding poly is out of order
+                             #SLR now
+                             pct_SLR_0ft = polygon_12 / hex_area * 100,
+                             pct_SLR_1ft = polygon_14 / hex_area * 100,
+                             pct_SLR_2ft = polygon_15 / hex_area * 100,
+                             pct_SLR_3ft = polygon_16 / hex_area * 100,
+                             pct_SLR_4ft = polygon_17 / hex_area * 100,
+                             pct_SLR_5ft = polygon_18 / hex_area * 100,
+                             pct_SLR_6ft = polygon_19 / hex_area * 100,
+                             pct_SLR_7ft = polygon_17 / hex_area * 100,
+                             pct_SLR_8ft = polygon_18 / hex_area * 100,
+                             pct_SLR_9ft = polygon_19 / hex_area * 100,
+                             pct_SLR_10ft = polygon_13 / hex_area * 100) #note that the 10ft SLR poly is out of order)
 
 # set vector of colnames
 
@@ -477,31 +533,70 @@ phl_bird_hex_means = phl_bird_hex_means |>
 breaks = c(0, 10, 30, 70, 100)
 
 tmap_mode("view")
-```
-```{r plots}
- tm_shape(phl_bird_hex_means) +
-                 tm_polygons(col = 'pct_poly_19', 
-                             palette = 'viridis', 
-                             style = 'fixed',
-                             breaks = breaks,
-                             alpha = 0.7) +
-             tm_shape(all_polygons[[9]][phl_bounds, ]) +
-                 tm_polygons(col = 'red', alpha = 0.5)
 
-
- 
- ggplot(phl_bird_hex_means) +
-   geom_point(aes(y = avg_unique_species, x = polygon_18))
- 
- 
- # might want to now pivot these data into a new df for easy faceting & mapping
- # need to do it by % total area of the hex
- # and then standardize breaks according to eBird:
-  # 0 - 10% is low
- # 11 to 30% is moderate
- # 31 to 70% is high
- #71 to 100% is very high
+all_layers$name
 ```
+
+### SLR Scenarios
+
+```{r piv long slr}
+piv_long_SLR = phl_bird_hex_means |>
+  select(pct_SLR_0ft,
+         pct_SLR_1ft,
+         pct_SLR_2ft,
+         pct_SLR_3ft,
+         pct_SLR_4ft,
+         pct_SLR_5ft,
+         pct_SLR_6ft,
+         pct_SLR_7ft,
+         pct_SLR_8ft,
+         pct_SLR_9ft,
+         pct_SLR_10ft) |>
+  pivot_longer(
+    cols = starts_with("pct_SLR_"),
+    names_to = "pct_SLR_",
+    names_prefix = "pct_SLR_"
+  )
+
+tm_shape(piv_long_SLR) +
+  tm_polygons(col = 'value', 
+              palette = 'viridis', 
+              style = 'fixed',
+              breaks = breaks,
+              alpha = 0.7) +
+  tm_facets(by = "pct_SLR_")
+```
+
+### Flooding Scenarios
+
+```{r piv long flooding}
+piv_long_flooding = phl_bird_hex_means |>
+  select(pct_flooding_0ft,
+         pct_flooding_1ft,
+         pct_flooding_2ft,
+         pct_flooding_3ft,
+         pct_flooding_4ft,
+         pct_flooding_5ft,
+         pct_flooding_6ft,
+         pct_flooding_7ft,
+         pct_flooding_8ft,
+         pct_flooding_9ft,
+         pct_flooding_10ft) |>
+  pivot_longer(
+    cols = starts_with("pct_flooding_"),
+    names_to = "pct_flooding_",
+    names_prefix = "pct_flooding_"
+  )
+
+tm_shape(piv_long_flooding) +
+  tm_polygons(col = 'value', 
+              palette = 'viridis', 
+              style = 'fixed',
+              breaks = breaks,
+              alpha = 0.7) +
+  tm_facets(by = "pct_flooding_")
+```
+
 
 # Distribution Modeling
 
@@ -519,12 +614,6 @@ Need to select: 1) vulnerable species 2) species with sufficient observations
 
 ## Challenges for Management
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 -misalignment of data sources -difficult to get sufficient spatial resolution with citizen science data for mapping---observations are not consistently tied to specific enough points to be truly helpful for finely-tuned management
 
-=======
->>>>>>> 67b6afed26c88977ed95b5fe96cd545f4aa0b6c3
-=======
->>>>>>> 67b6afed26c88977ed95b5fe96cd545f4aa0b6c3
 # Conclusions
