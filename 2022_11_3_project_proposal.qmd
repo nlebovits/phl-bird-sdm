@@ -49,7 +49,7 @@ The city of Philadelphia is also a major hotspot for bird biodiversity in North 
 
 [^4]: https://ebird.org/hotspots
 
-![Bird Biodiversity Hotspots in the Philadelphia Region](C:%5CUsers%5CNissim%5CDesktop%5CFall%202022%5CFloodplain%20Management%5CFinal%20Project%20Data%5C2022_11_03_ebird_phl_hotspots_screenshot.png){fig-align="center"}
+![Bird Biodiversity Hotspots in the Philadelphia Region](https://github.com/nlebovits/phl-bird-sdm/blob/ba13b638a7a52eb79d42af6d52e0562fe639699e/2022_11_03_ebird_phl_hotspots_screenshot.png?raw=true){fig-align="center"}
 
 ### Birds as Indicator Species
 
@@ -302,16 +302,11 @@ Lastly, a further confirmation comes from checking the number of unique species 
 
 I've approximated a real SAC here using a logarithmic line of best fit. The asymptote appears to be around 290 species. Given the small sample size and the fact that the number of unique species observations in 2021 is a meaningful outlier (`r upc_2021_above_mean` standard deviations above the mean) it's hard to be extremely confident in the accuracy of our estimation. However,
 
-<<<<<<< HEAD
-=======
 I've approximated a real SAC here using a quadratic line of best fit. The asymptote appears to be around 290 species. Given the small sample size and the fact that the number of unique species observations in 2021 is a meaningful outlier (`r upc_2021_above_mean` standard deviations above the mean) it's hard to be extremely confident in the accuracy of our estimation. However, 
 
 NOTE THAT THIS SHOULD PROBABLY BE A LOGARITHMIC FUNCTION, NOT QUADRATIC. UPDATE TO FIT.
 
-<<<<<<< HEAD
->>>>>>> 67b6afed26c88977ed95b5fe96cd545f4aa0b6c3
-=======
->>>>>>> 67b6afed26c88977ed95b5fe96cd545f4aa0b6c3
+
 ```{r unique per chklst plt}
 
 ggplot(unique_per_chklst, aes(x = sampling_event_identifier, y = scientific_name, label = year)) +
@@ -394,11 +389,11 @@ tm_shape(phl_bird_hex_means) +
 
 In both cases, we can look at the average species richness per location. With the hexagon bins, we join the layers together and create a new layer that is the mean. Similarly, with the kernel density estimate raster, we can use cell statistics to accomplish the same thing. The resultant maps are compared here side by side and indicate that \[are the hotspots the same? different?\].
 
-#### Visual Comparison
+NOTE: I CAN ALSO USE TMAP TO ZOOM IN ON THE SPECIFIC HOTSPOTS HERE IN THREE SIDE-BY-SIDE MAPS
 
 ### Hypothesis
 
-Let's identify hotposts based on the clustering maps!
+Let's identify hotspts based on the clustering maps!
 
 Can I plot hexagon avg unique species vs. % SLR innundation for different SLR scenarios as a measure of severity? how to map that? - might be a good opportunity for a bivariate choropleth map--high biodiversity vs. high % innundation
 
