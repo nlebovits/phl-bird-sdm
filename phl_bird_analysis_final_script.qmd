@@ -1,0 +1,158 @@
+---
+title: "Sea Level Rise and Avian Biodiversity"
+subtitle: "Assessing Projected Impacts in Philadelphia"
+description: "ENVS 6611 Final Project"
+author: "Nissim Lebovits"
+date: today
+format: 
+  html:
+    toc: true
+    theme: flatly
+editor: visual
+execute:
+  echo: false
+  warning: false
+  error: false
+  messages: false
+---
+
+## Summary
+
+## Introduction
+
+### Background
+
+#### Sea Level Rise and Biodiversity
+Sea level rise is one of the most significant and immediate consequences of anthropogenic climate change. In addition to its material impacts on human society, sea level rise threatens global biodiversity. Species will be impacted by increased inundation and storm flooding; coastal erosion; saltwater intrusion; changes to tides and sedimentation; changes to air temperature and rainfall; and further yet unpredictable effects, such as the contraction or expansion of marshes.^[Wilby and Perry 76-78] Additionally, sea level rise will alter habitat quality in urban coastal areas, which could have large-scale impacts on the areal extent and health of urban ecosystems such as wetlands.^[Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities*, Elmqvist et al., 2013, 497]
+
+Current research suggests that sea level rise will primarily affect tropical biodiversity, especially in South America and various islands habitats. Less research exists on how sea level rise will impact urban biodiversity in North America. Generally speaking, however, research suggests that species with limited ranges will be most impacted, and that species reliant on rare and/or vulnerable coastal habitats will be most threatened.^[*Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities*, Elmqvist et al., 2013, 496; Wilby and Perry (2006), 73]
+
+#### Philadelphia's Situation
+Philadelphia sits at the boundary between the Atlantic Coastal Plain and Piedmont ecoregions. The area was historically covered with hardwood forests, but much of its natural vegetation has been removed for urbanization and cultivation.[^1] Built as a port along the Delaware River, the city was constructed on top of historic wetlands and mudflats. Due to infill and development, 95% of the region's freshwater tidal wetlands have been lost. As a result of Philadelphia's location and development patterns, SLR projections estimate that much of the area adjacent to the Delaware will be under water within the next century.[^2]
+
+[^1]:  https://www.epa.gov/sites/default/files/2019-03/documents/phipa_final.pdf
+
+[^2]:  https://watercenter.sas.upenn.edu/philadelphia-urban-ecology-and-the-balance-of-human-and-ecological-communities/
+
+![Elevation of Land in Philadelphia Close to Sea Level](http://maps.risingsea.net/CCSP/D.3_Philadelphia50cm_Titus_and_Wang_2008.jpg){width=50%}
+
+The city of Philadelphia is also a major hotspot for bird biodiversity in North America. A key migratory stopover location on the [Atlantic Flyway](https://www.audubon.org/atlantic-flyway), Philadelphia sees more than 200 species of migratory birds pass through it each year.[^3] The city hosts a number of regional bird hotspots, especially Pennypack on the Delaware (266 species), John Heinz National Wildlife Reserve (281 species), and FDR Park (313 species).[^4] Given their proximity to the Schuylkill and Delaware rivers, all three of these sites are likely to be significantly impacted by SLR. From a management perspective, it is therefore important to understand the possible impact of SLR on Philadelphia's avian biodiversity.
+
+[^3]:  https://pa.audubon.org/chapters-centers/discovery-center
+
+[^4]: https://ebird.org/hotspots
+
+![Bird Biodiversity Hotspots in the Philadelphia Region](https://github.com/nlebovits/phl-bird-sdm/blob/main/2022_11_03_ebird_phl_hotspots_screenshot.png?raw=true){fig-align="center"}
+
+Finally, a key motivation for this project is Philadelphia's lack of resources for conservation. Although the city government includes a Parks and Recreation department and an Office of Sustainability, both are notoriously underfunded. The Trust for Public Land calculated that Philadelphia spends 25% less per capita on parks than the national average, with most of that funding directed to recreation, not environmental conservation.^[https://oceanservice.noaa.gov/hazards/sealevelrise/sealevelrise-tech-report.html] The recently-launched Office of Sustainability nominally has a mandate to work on "quality natural resources", but does not explicit work on conservation.^[https://www.phila.gov/departments/office-of-sustainability/] Much of the conservation work in the city is left to volunteer organizations like the [Philly Forest Stewards](https://loveyourpark.org/volunteer/forest-stewards), or non-profits like [Friends of the Wissashickon](https://fow.org/). Given the limited capacity of governmental, non-profit, and community organizations, there is an evident use for tools to support more efficient, cost-effective monitoring and interventions.
+
+#### Data Sources
+This project uses two primary data sources: citizen science bird observation from eBird, and NOAA's sea level rise projections.
+
+##### eBird Data
+This project focuses on bird biodiversity for two reasons. First, birds are strong indicator species. Although it is not clear that bird populations alone are an effective measure of ecosystem health, they are the best-studied indicator of urban biodiversity, and their role in supporting a larger ecosystem is critical.^[McDonnell, M.J., Hahs, A.K.  “The use of gradient analysis studies in advancing our understanding of the ecology of urbanizing landscapes: current status and  future directions”. Landscape Ecol. vol. 23, 2008, pp. 1143–1155; Oostermeijer, Gegard. “Methods for studying urban biodiversity” in Seeing the City: Interdisciplinary Perspectives on the Study of the Urban Book. Edited by Nanke Verloo and Luca Bertolini. Amsterdam: Amsterdam University Press, 2020; Bairlein, Franz. “Introduction.” Ecology and Conservation of Birds in Urban Environments, edited by Enrique Murgui and Marcus Hedblom, Cham, Switzerland, Spring International Publishing, 2017, pp. v–vi; Morelli, F., Y. Benedetti, and C. T. Callaghan. “Ecological specialization and population trends in European breeding birds”. Global Ecology and Conservation, vol. 22, 2020,  e00996. Link to paper] Second, an abundance of quality data on bird biodiversity are publicly available from sources like the [Cornell Ornithology Lab's eBird](https://ebird.org/about), and recent studies have demonstrated the effectiveness of using these citizen science data to evaluate bird biodiversity. ^[Callaghan, C. T., M. B. Lyons, J. M. Martin, R. E. Major, and R. T. Kingsford. “Assessing the reliability of avian biodiversity measures of urban greenspaces using eBird citizen science data”. Avian Conservation and Ecology, vol. 12, no.2, 2017, pp.12. https://doi.org/10.5751/ACE-01104-120212; Callaghan, C. T., J. H. Wilshire, J. M. Martin, R. E. Major, M. B. Lyons, and R. T. Kingsford. “The Greenspace Bird Calculator: a citizen-driven tool for monitoring avian biodiversity in urban greenspaces”. Australian Zoologist, vol. 40, 2020,  pp. 468-476.] Because these data are publicly available and well-documented, they are valuable for low-cost conservation, especially from the perspective of under-resourced local governments such as Philadelphia's.
+
+One key caveat with eBird data is the impact of pandemic birding. The extraordinary and unprecedented rise in citizen science data collection during the pandemic has been a boon for ecological data. However, it also complicates the interpretation of these data. As Sara Harrison explains in Wired, “Scientists can’t always tell whether changes in the data are due to animal behavior or just an increase in the amount of information available. Furthermore, ”It’s not just that more people are observing—it’s also a matter of where they are observing.”^[Sara Harrison, "Pandemic Bird-Watching Created a Data Boom-and a Conundrum," Wired (Conde Nast, September 30, 2021), https://www.wired.com/story/pandemic-bird-watching-created-a-data-boom-and-a-conundrum/] Observations in urban areas have increased, while observations in rural areas have decreased, suggesting likely undersampling in less-accessible habitats. As I will explain in the Data Wrangling and Exploration section, this issue must be accounted for.
+
+##### NOAA Data
+Data on sea level rise projections in Philadelphia comes from the National Ocean and Atmospheric Administration and is [available for all 50 states](https://coast.noaa.gov/slrdata/). It offers a range of scenarios, from 0 feet of sea level rise to 10 feet. As explained on the website,
+
+> [The relative sea level rise (RSL) scenarios] are derived from the 2022 Sea Level Rise Technical Report using the same methods as the U.S. Army Corps of Engineers Sea Level Change Curve Calculator. These new scenarios were developed by the U.S. Sea Level Rise and Coastal Flood Hazard Scenarios and Tools Interagency Task Force as input into the U.S. Global Change Research Program Sustained Assessment process and, Fifth National Climate Assessment. These RSL scenarios provide an update to the NOAA 2017 scenarios, which were developed as input to the Fourth National Climate Assessment.^[https://coast.noaa.gov/slr/#/layer/slr/10/-8376235.061842223/4852224.4720263705/14/dark/192/0.8/2050/inter/midAccretion]
+
+Further information on the technical details is available in the [2022 Sea Level Rise Technical Report](https://oceanservice.noaa.gov/hazards/sealevelrise/sealevelrise-tech-report.html).
+
+This project maps most of those scenarios, with some important caveats. First, the NOAA data include both sea level rise projections and sunny day high tide flooding projections. Although the latter is an important impact of sea level rise, temporary flooding and permanent inundation have different (and potentially conflicting) impacts on biodiversity and therefore must be considered separately. For the sake of simplicity given the limited scope of this project, then, I have only explored sea level rise, not sunny day high tide flooding. 
+
+Second, I have excluded data for rates of sea level rise that are unlikely to happen in Philadelphia. Although NOAA data include up to 10 feet of sea level rise, their projections for even the worst scenario in Philadelphia max out at 6.59 feet of sea level rise. Therefore, I have included only the current mean higher-high water level (0 feet of rise) through 7 feet of rise. Similarly, in the clustering analysis later in the report, I used the 1 foot projection for sea level rise, as this is what NOAA considers the "intermediate" scenario likely to occur by 2040, which is the first post-2022 date for which they have projections.
+
+##### Evaluating Biodiveristy in an Urban Context
+One of the unique challenges of this project is that it focuses on an urban context. Analyzing biodiversity in general is complicated, as all environmental systems are. But urban environments add special complications that disrupt some of the normal approaches and assumptions of biodiversity modeling. Urban environments introduce variables that do not exist in "natural" spaces, such as human population density and abrupt fragmentation and changes in land use type. The scales, boundaries, and definitions of various types of data can be hard to reconcile as well. Furthermore, prediction becomes even more difficult in urban contexts where factors such as population density, buildout, and impervious surface cover can change rapidly and unexpectedly, even in the course of a few years. (This poses a particular challenge for sea level rise, flooding, and related issues like stormwater management.) Arguably, it is more difficult to evaluate biodiversity in urban contexts than in "natural" environments. There are efforts to address this, however, many of which are discussed in *Urbanization, Biodiversty, and Ecosystem Services: Challenges and Opportunities*, by Elmqvist et al.^[Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities*, Elmqvist et al., 2013] In fact, efforts to use citizen science data to improve monitoring, analysis, and management are key to improving the health of urban biodiversity. As explained in the chapter on "Indicators for Management of Urban Biodiversity and Ecosystem Services", 
+
+> [The City Biodiversity Index] can provide incentives for municipalities to start making inventories and monitoring programs of their biodiversity. For example, it is today possible to integrate remote sensing data and in situ observations to monitor several essential biodiversity variables such as habitat structure and phenology. ... In this context, municipalities should explore the possibilities of launching citizen science projects and consider the possibility in general that within cities local knowledge on biodiversity and ecosystem services may reside in many different groups within civic society.^[Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities*, Elmqvist et al., 2013, 713.]
+
+### Project Goals
+The goal of this project is to explore the potential of using publicly available citizen science data to assess the impacts of sea level rise on avian biodiversity in Philadelphia. The primary focus is to demonstrate that eBird data can be applied to conservation managements in an urban context. Secondarily, this project aims to identify the biodiversity hotspots in Philadelphia that will be most heavily impacted by sea level rise in the coming years. Lastly, it hopes to identify potential next steps and applications for the workflow and approaches employed here.
+
+## Data Wrangling and Exploration
+
+### Bird Biodiversity
+
+#### Wrangling
+
+#### Exploration
+
+##### 
+
+##### Estimating Biodiversity
+- Species richness as biodiversity
+- Actual biodiversity vs observed biodiversity
+- Approximating rarefaction curve
+- Proper rarefaction would be a good next step
+- Global vs local estimates
+
+##### Mapping
+- eBird observations are imprecise
+- This technique drawn from eBird guide but is a common approach to handling messy point data in spatial statisticis
+- Top hotspots in FDR, Heinz, Pennypack
+
+### Sea Level Rise
+Explain distinction between flooding and SLR
+
+#### Wrangling
+
+#### Exploration
+- Following Cornell precedent with % breaks
+
+##### Mapping
+
+### Clustering Analysis
+Why try clustering analysis?
+
+Can use DBSCAN, I think
+
+## Findings
+
+## Conclusions
+
+### Possible Applications
+
+#### Habitat Restoration
+
+### Limitations
+
+#### Prediction vs. Monitoring
+At the outset of this project, I hoped to model species distribution in Philadelphia and predict how it would be impacted by sea level rise. In the course of my research, though, I came to the conclusion that this was neither feasible nor desirable, for reasons that are worth stating.
+
+First, the quality of available data was insufficient for predictive modeling at an urban scale. Presence-only or presence/absence distribution models both rely on point data for species observations combined with raster data for landscape variables such as land cover. Because of the way citizen science data in eBird is reported, the observations available did not include adequately precise coordinate data for this approach, nor would it have been feasible to reconcile the different landscape variables given their diverse spatial scales. 
+
+Second, environmental modeling is notoriously complex, even for single species with ideal data. It is impossible to divorce the impact of sea level rise alone on biodiversity from other confounding factors like [coastal modification, saltwater intrusion, increased rainfall, and water pollution,](https://explorer.audubon.org/explore/conservation-challenges?zoom=3&x=1306099.1620122588&y=2810864.562197212) let alone less proximate factors like changes in human population density and land use or the arrival of invasive species. Furthermore, as Pilkey and Pilkey point out, even if the scale of such impacts could be measured, it is difficult to account for ordering complexity: the unpredictable differences in impact depending on the order in which events occur.^[*Useless Arithmetic*, 2007] As Jimenez-Valverde et al., explain, prediction via species distribution modeling only works "if correlation structures are stable and consistent across different landscapes and time periods".^[Jimenez-Valverde et al., 2009] Given the aforementioned rapid change of key factors like habitat fragmentation, buildout, and land cover in urban environments, attempts at predictive modeling of biodiversity for cities may do more harm than good by obscuring the underlying uncertainty.
+
+With that in mind, I follow Orrin Pilkey in suggesting that, in this context, monitoring and adapting are far more important than predicting.^[*Useless Arithmetic*, 2007] Given that the general scope and direction of sea level rise and other threats to biodiversty are known, citizen science data employed in projects like this one can help cities keep tabs on their biodiversity and make adjustments to support it, without relying on dubious predictive models. 
+
+Finally, the use of citizen science data for management can help to engage community memebers in conservation and stewardship by giving them a defined, valuable role to play in efforts to support local biodiversity. Philadelphia already has a strong citizen science and stewardship community in the form of grops like the [City Nature Challenge](https://cncphilly.org/), [Bird Philly](https://birdphilly.org/cgi-sys/suspendedpage.cgi), [Philly Naturalists](https://phillynaturalists.org/), and the [Master Watershed Steward program](https://extension.psu.edu/programs/watershed-stewards/counties/philadelphia). Employing data that they collect gives them a demonstrable stake in conservation efforts and can help to justify investment in a virtuous cycle of municipal support for local stewardship and citizen science helping to advance municipal conservation efforts and so forth.
+
+### Next Steps
+
+#### Improve Statistical Rigor
+A key next step for this project would be employing more rigorous statistical tools to analyze species richness and distribution. As stated in the Data Wrangling and Exploration section, calculating a rarefaction curve using eBird data would be a more accurate way of estimating total species richness. There are a variety of ways to accomplish this; the [`vegan` package in R](https://github.com/vegandevs/vegan), for example, includes a function to calculate rarefaction curves. However, this requires an understanding of quantitative ecology beyond what I am currently capable of. To this end, if I were to repeat this project, I would want to recruit a quantitative ecologist to help improve the statistical and methodological rigor of my analysis.
+
+Furthermore, it would be worthwhile to incorporate a sophisticated analysis of spatial clustering for biodiversity. In an early version of this project, I attempted to calculate global and local Moran's I values to analyze the distribution of biodiversity for [spatial autocorrelation](https://www.sciencedirect.com/topics/computer-science/spatial-autocorrelation). However, the patterns that I found were unexpected and had p-values that indicated that they were not statistically significant. I suspect that this is related to extreme habitat fragmentation and abrupt land use changes in urban contexts, as well as my choice to use hexagon bins to accommodate issues with the point data from eBird. Again, a quantitative ecologist who focuses on urban contexts would likely better understand these issues and be able to provide guidance.
+
+#### Develop a Workflow
+One of the primary aims of this project is to demonstrate replicability. Nothing about the data used is unique to Philadelphia; in theory, this project could be replicated in any city with sufficient eBird data and sea level rise projections. (The eBird data could even be used in isolation for projects unrelated to sea level rise.) If a proper workflow were developed, it would be possible to easily apply these tools in other cities to support conservation decisions, including in cities that otherwise lack substantial data on biodiversity. In order to facilitate this, it would be worth 1) solidifying a consistent workflow, 2) developing some kind of guide such as [the one prepared by the Cornell Ornithology Lab for handling eBird data](https://cornelllabofornithology.github.io/ebird-best-practices/), and 3) potentially preparing an R package to simplify this workflow and make it more consistent, much like Cornell has done with [their `auk` package](https://rdrr.io/github/mstrimas/auk/#vignettes). Together, these tools could help cities around the globe more effectively and consistently analyze their local biodiversity and potential threats to it.
+
+#### Incorporate More Data
+There are a variety of opportunities to incorporate more nuanced, diverse data into an analysis like this. Three primary opportunities are 1) more species observations other than birds, 2) common ecology-related raster data, and 3) datasets specific to urban contexts.
+
+Biodiversity consists of more than birds. Although it is nearly impossible to account for the full spectrum of biodiversity in an urban contexts (how, for example, can we reliably sample microorganisms at any meaningful scale?), measures of biodiversity such as the [City Biodiversity Index](https://www.cbd.int/doc/publications/cbd-ts-98-en.pdf) incorporate other biotic kingdom, namely arthropods and vascular plants.^[https://www.cbd.int/doc/publications/cbd-ts-98-en.pdf] Expanding beyond an analysis of avian biodiversity can offer a more complex understanding of a city's ecosystems, which is vital in planning responses to systems as complex as climate change. To accomplish this, future analysis could incorporate data from platforms such as [iNaturalist](https://www.inaturalist.org/pages/about), which collects and publishes citizen science data on all biota, not just birds. One example of a potential application of this is [Urban Shift's report on conservation planning in San Jose, Costa Rica](https://cities-urbanshift.s3.eu-west-3.amazonaws.com/baseline-indicators/biodiversity/reports/UrbanShift-Biodiversity-SanJose.html).
+
+Another possible supplement to biodiversity data for conservation purposes are the standard raster layers often used in biodiversity analyses such as species distribution modeling. This includes data such as tree cover, land cover type, distance to water, altitude, slope, aspect, soil type, and more. Many (if not all) of these data are available publicly, especially in the United States, from sources like the [United States Geological Service](https://www.usgs.gov/products/data) or [Pennsylvania Spatial Data Access](https://www.pasda.psu.edu/). The primary challenge with these datasets is reconciling their different resolutions in order to apply them in the desired context.
+
+Finally, given the urban context of this evaluation, it would be worthwhile to incorporate measures of biodiveristy disturbance associated with urbanization, such as habitat fragmentation, impervious surface cover, and human population density. A major challenge here, however, is that such measures change on a much more granular scale in urban contexts than in "natural" contexts where ecological analyses are commonly carried out. Similarly, many urban interventions to support biodiversity, such as pocket parks or pollinator gardens, happen at scales so small that they would be hard to meaningfully factor into an analysis such as this one.
+
+One important caveat to this discussion, however, is that any additional data must be motivated by a clear use. First, much of these data likely covaries, raising the possibility of redundance. In particular, the premise of choosing indicator species is to simplifying ecological monitoring by using an effective proxy. Introducing too much new data may defeat the purpose of the exercise. Second (and  this is especially important in the case of Philadelphia), a main motivation of this project is to find a cost-effective, scalable means of exploring the impact of sea level rise on biodiversity. Introducing more data raises the prospect of diminishing marginal returns: that is, it may exceed the capacity of under-resourced local governments to actually analyze and use the data without actually producing a more robust understanding of conservation challenges. In sum, more data is useful, but only insofar as it contributes to under-resourced cities' ability to better plan for conservation.
+
+#### Interace with Government and Community
+Above all else, the best next step would be to connect with members of the local government and various community organizations to identify potential applications of an analysis like this. Currently, this project amounts to an intellectual exercise. However, by speaking with members of the local parks department, conservation organizations, or community stewardship groups, it may be possible to find ways to use this analysis to support conservation work that they are currently doing or to motivate new work.
+
+

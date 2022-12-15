@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.247">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nissim Lebovits">
+<meta name="dcterms.date" content="2022-12-14">
+<meta name="description" content="ENVS 6611 Final Project">
+
+<title>Sea Level Rise and Avian Biodiversity</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="phl_bird_analysis_final_script_files/libs/clipboard/clipboard.min.js"></script>
+<script src="phl_bird_analysis_final_script_files/libs/quarto-html/quarto.js"></script>
+<script src="phl_bird_analysis_final_script_files/libs/quarto-html/popper.min.js"></script>
+<script src="phl_bird_analysis_final_script_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="phl_bird_analysis_final_script_files/libs/quarto-html/anchor.min.js"></script>
+<link href="phl_bird_analysis_final_script_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="phl_bird_analysis_final_script_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="phl_bird_analysis_final_script_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="phl_bird_analysis_final_script_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="phl_bird_analysis_final_script_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#background" id="toc-background" class="nav-link" data-scroll-target="#background">Background</a></li>
+  <li><a href="#project-goals" id="toc-project-goals" class="nav-link" data-scroll-target="#project-goals">Project Goals</a></li>
+  </ul></li>
+  <li><a href="#data-wrangling-and-exploration" id="toc-data-wrangling-and-exploration" class="nav-link" data-scroll-target="#data-wrangling-and-exploration">Data Wrangling and Exploration</a>
+  <ul class="collapse">
+  <li><a href="#ebird-data-1" id="toc-ebird-data-1" class="nav-link" data-scroll-target="#ebird-data-1">eBird Data</a></li>
+  <li><a href="#noaa-data-1" id="toc-noaa-data-1" class="nav-link" data-scroll-target="#noaa-data-1">NOAA Data</a></li>
+  <li><a href="#clustering-analysis" id="toc-clustering-analysis" class="nav-link" data-scroll-target="#clustering-analysis">Clustering Analysis</a></li>
+  </ul></li>
+  <li><a href="#findings" id="toc-findings" class="nav-link" data-scroll-target="#findings">Findings</a></li>
+  <li><a href="#conclusions" id="toc-conclusions" class="nav-link" data-scroll-target="#conclusions">Conclusions</a>
+  <ul class="collapse">
+  <li><a href="#possible-applications" id="toc-possible-applications" class="nav-link" data-scroll-target="#possible-applications">Possible Applications</a></li>
+  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations">Limitations</a></li>
+  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">Next Steps</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Sea Level Rise and Avian Biodiversity</h1>
+<p class="subtitle lead">Assessing Projected Impacts in Philadelphia</p>
+</div>
+
+<div>
+  <div class="description">
+    ENVS 6611 Final Project
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nissim Lebovits </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 14, 2022</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+</section>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<section id="background" class="level3">
+<h3 class="anchored" data-anchor-id="background">Background</h3>
+<section id="sea-level-rise-and-biodiversity" class="level4">
+<h4 class="anchored" data-anchor-id="sea-level-rise-and-biodiversity">Sea Level Rise and Biodiversity</h4>
+<p>Sea level rise is one of the most significant and immediate consequences of anthropogenic climate change. In addition to its material impacts on human society, sea level rise threatens global biodiversity. Species will be impacted by increased inundation and storm flooding; coastal erosion; saltwater intrusion; changes to tides and sedimentation; changes to air temperature and rainfall; and further yet unpredictable effects, such as the contraction or expansion of marshes.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Additionally, sea level rise will alter habitat quality in urban coastal areas, which could have large-scale impacts on the areal extent and health of urban ecosystems such as wetlands.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>Current research suggests that sea level rise will primarily affect tropical biodiversity, especially in South America and various islands habitats. Less research exists on how sea level rise will impact urban biodiversity in North America. Generally speaking, however, research suggests that species with limited ranges will be most impacted, and that species reliant on rare and/or vulnerable coastal habitats will be most threatened.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+</section>
+<section id="philadelphias-situation" class="level4">
+<h4 class="anchored" data-anchor-id="philadelphias-situation">Philadelphia’s Situation</h4>
+<p>Philadelphia sits at the boundary between the Atlantic Coastal Plain and Piedmont ecoregions. The area was historically covered with hardwood forests, but much of its natural vegetation has been removed for urbanization and cultivation.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Built as a port along the Delaware River, the city was constructed on top of historic wetlands and mudflats. Due to infill and development, 95% of the region’s freshwater tidal wetlands have been lost. As a result of Philadelphia’s location and development patterns, SLR projections estimate that much of the area adjacent to the Delaware will be under water within the next century.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="http://maps.risingsea.net/CCSP/D.3_Philadelphia50cm_Titus_and_Wang_2008.jpg" class="img-fluid figure-img" style="width:50.0%"></p>
+<p></p><figcaption class="figure-caption">Elevation of Land in Philadelphia Close to Sea Level</figcaption><p></p>
+</figure>
+</div>
+<p>The city of Philadelphia is also a major hotspot for bird biodiversity in North America. A key migratory stopover location on the <a href="https://www.audubon.org/atlantic-flyway">Atlantic Flyway</a>, Philadelphia sees more than 200 species of migratory birds pass through it each year.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> The city hosts a number of regional bird hotspots, especially Pennypack on the Delaware (266 species), John Heinz National Wildlife Reserve (281 species), and FDR Park (313 species).<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> Given their proximity to the Schuylkill and Delaware rivers, all three of these sites are likely to be significantly impacted by SLR. From a management perspective, it is therefore important to understand the possible impact of SLR on Philadelphia’s avian biodiversity.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://github.com/nlebovits/phl-bird-sdm/blob/main/2022_11_03_ebird_phl_hotspots_screenshot.png?raw=true" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Bird Biodiversity Hotspots in the Philadelphia Region</figcaption><p></p>
+</figure>
+</div>
+<p>Finally, a key motivation for this project is Philadelphia’s lack of resources for conservation. Although the city government includes a Parks and Recreation department and an Office of Sustainability, both are notoriously underfunded. The Trust for Public Land calculated that Philadelphia spends 25% less per capita on parks than the national average, with most of that funding directed to recreation, not environmental conservation.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> The recently-launched Office of Sustainability nominally has a mandate to work on “quality natural resources”, but does not explicit work on conservation.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> Much of the conservation work in the city is left to volunteer organizations like the <a href="https://loveyourpark.org/volunteer/forest-stewards">Philly Forest Stewards</a>, or non-profits like <a href="https://fow.org/">Friends of the Wissashickon</a>. Given the limited capacity of governmental, non-profit, and community organizations, there is an evident use for tools to support more efficient, cost-effective monitoring and interventions.</p>
+</section>
+<section id="data-sources" class="level4">
+<h4 class="anchored" data-anchor-id="data-sources">Data Sources</h4>
+<p>This project uses two primary data sources: citizen science bird observation from eBird, and NOAA’s sea level rise projections.</p>
+<section id="ebird-data" class="level5">
+<h5 class="anchored" data-anchor-id="ebird-data">eBird Data</h5>
+<p>This project focuses on bird biodiversity for two reasons. First, birds are strong indicator species. Although it is not clear that bird populations alone are an effective measure of ecosystem health, they are the best-studied indicator of urban biodiversity, and their role in supporting a larger ecosystem is critical.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> Second, an abundance of quality data on bird biodiversity are publicly available from sources like the <a href="https://ebird.org/about">Cornell Ornithology Lab’s eBird</a>, and recent studies have demonstrated the effectiveness of using these citizen science data to evaluate bird biodiversity. <a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> Because these data are publicly available and well-documented, they are valuable for low-cost conservation, especially from the perspective of under-resourced local governments such as Philadelphia’s.</p>
+<p>One key caveat with eBird data is the impact of pandemic birding. The extraordinary and unprecedented rise in citizen science data collection during the pandemic has been a boon for ecological data. However, it also complicates the interpretation of these data. As Sara Harrison explains in Wired, “Scientists can’t always tell whether changes in the data are due to animal behavior or just an increase in the amount of information available. Furthermore,”It’s not just that more people are observing—it’s also a matter of where they are observing.”<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a> Observations in urban areas have increased, while observations in rural areas have decreased, suggesting likely undersampling in less-accessible habitats. As I will explain in the Data Wrangling and Exploration section, this issue must be accounted for.</p>
+</section>
+<section id="noaa-data" class="level5">
+<h5 class="anchored" data-anchor-id="noaa-data">NOAA Data</h5>
+<p>Data on sea level rise projections in Philadelphia comes from the National Ocean and Atmospheric Administration and is <a href="https://coast.noaa.gov/slrdata/">available for all 50 states</a>. It offers a range of scenarios, from 0 feet of sea level rise to 10 feet. As explained on the website,</p>
+<blockquote class="blockquote">
+<p>The four relative sea level rise (RSL) scenarios shown in this tab are derived from the 2022 Sea Level Rise Technical Report using the same methods as the U.S. Army Corps of Engineers Sea Level Change Curve Calculator. These new scenarios were developed by the U.S. Sea Level Rise and Coastal Flood Hazard Scenarios and Tools Interagency Task Force as input into the U.S. Global Change Research Program Sustained Assessment process and, Fifth National Climate Assessment. These RSL scenarios provide an update to the NOAA 2017 scenarios, which were developed as input to the Fourth National Climate Assessment.<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p>
+</blockquote>
+<p>Further information on the technical details is available in the <a href="https://oceanservice.noaa.gov/hazards/sealevelrise/sealevelrise-tech-report.html">2022 Sea Level Rise Technical Report</a>.</p>
+<p>This project maps most of those scenarios, with some important caveats. First, the NOAA data include both sea level rise projections and sunny day high tide flooding projections. Although the latter is an important impact of sea level rise, temporary flooding and permanent inundation have different (and potentially conflicting) impacts on biodiversity and therefore must be considered separately. For the sake of simplicity given the limited scope of this project, then, I have only explored sea level rise, not sunny day high tide flooding.</p>
+<p>Second, I have excluded data for rates of sea level rise that are unlikely to happen in Philadelphia. Although NOAA data include up to 10 feet of sea level rise, their projections for even the worst scenario in Philadelphia max out at 6.59 feet of sea level rise. Therefore, I have included only the current mean higher-high water level (0 feet of rise) through 7 feet of rise. Similarly, in the clustering analysis later in the report, I used the 1 foot projection for sea level rise, as this is what NOAA considers the “intermediate” scenario likely to occur by 2040, which is the first post-2022 date for which they have projections.</p>
+</section>
+<section id="evaluating-biodiveristy-in-an-urban-context" class="level5">
+<h5 class="anchored" data-anchor-id="evaluating-biodiveristy-in-an-urban-context">Evaluating Biodiveristy in an Urban Context</h5>
+<p>One of the unique challenges of this project is that it focuses on an urban context. Analyzing biodiversity in general is complicated, as all environmental systems are. But urban environments add special complications that disrupt some of the normal approaches and assumptions of biodiversity modeling. Urban environments introduce variables that do not exist in “natural” spaces, such as human population density and abrupt fragmentation and changes in land use type. The scales, boundaries, and definitions of various types of data can be hard to reconcile as well. Furthermore, prediction becomes even more difficult in urban contexts where factors such as population density, buildout, and impervious surface cover can change rapidly and unexpectedly, even in the course of a few years. (This poses a particular challenge for sea level rise, flooding, and related issues like stormwater management.) Arguably, it is more difficult to evaluate biodiversity in urban contexts than in “natural” environments. There are efforts to address this, however, many of which are discussed in <em>Urbanization, Biodiversty, and Ecosystem Services: Challenges and Opportunities, by Elmqvist et al</em>.<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a> In fact, efforts to use citizen science data to improve monitoring, analysis, and management are key to improving the health of urban biodiversity. As explained in the chapter on “Indicators for Management of Urban Biodiversity and Ecosystem Services”,</p>
+<blockquote class="blockquote">
+<p>[The City Biodiversity Index] can provide incentives for municipalities to start making inventories and monitoring programs of their biodiversity. For example, it is today possible to integrate remote sensing data and in situ observations to monitor several essential biodiversity variables such as habitat structure and phenology. … In this context, municipalities should explore the possibilities of launching citizen science projects and consider the possibility in general that within cities local knowledge on biodiversity and ecosystem services may reside in many different groups within civic society.<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a></p>
+</blockquote>
+</section>
+</section>
+</section>
+<section id="project-goals" class="level3">
+<h3 class="anchored" data-anchor-id="project-goals">Project Goals</h3>
+<p>The goal of this project is to explore the potential of using publicly available citizen science data to assess the impacts of sea level rise on avian biodiversity in Philadelphia. The primary focus is to demonstrate that eBird data can be applied to conservation managements in an urban context. Secondarily, this project aims to identify the biodiversity hotspots in Philadelphia that will be most heavily impacted by sea level rise in the coming years. Lastly, it hopes to identify potential next steps and applications for the workflow and approaches employed here.</p>
+</section>
+</section>
+<section id="data-wrangling-and-exploration" class="level2">
+<h2 class="anchored" data-anchor-id="data-wrangling-and-exploration">Data Wrangling and Exploration</h2>
+<section id="ebird-data-1" class="level3">
+<h3 class="anchored" data-anchor-id="ebird-data-1">eBird Data</h3>
+<section id="wrangling" class="level4">
+<h4 class="anchored" data-anchor-id="wrangling">Wrangling</h4>
+</section>
+<section id="exploration" class="level4">
+<h4 class="anchored" data-anchor-id="exploration">Exploration</h4>
+<section id="section" class="level5">
+<h5 class="anchored" data-anchor-id="section"></h5>
+</section>
+<section id="estimating-biodiversity" class="level5">
+<h5 class="anchored" data-anchor-id="estimating-biodiversity">Estimating Biodiversity</h5>
+<ul>
+<li>Species richness as biodiversity</li>
+<li>Actual biodiversity vs observed biodiversity</li>
+<li>Approximating rarefaction curve</li>
+<li>Proper rarefaction would be a good next step</li>
+<li>Global vs local estimates</li>
+</ul>
+</section>
+<section id="mapping" class="level5">
+<h5 class="anchored" data-anchor-id="mapping">Mapping</h5>
+<ul>
+<li>eBird observations are imprecise</li>
+<li>This technique drawn from eBird guide but is a common approach to handling messy point data in spatial statisticis</li>
+<li>Top hotspots in FDR, Heinz, Pennypack</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="noaa-data-1" class="level3">
+<h3 class="anchored" data-anchor-id="noaa-data-1">NOAA Data</h3>
+<p>Explain distinction between flooding and SLR</p>
+<section id="wrangling-1" class="level4">
+<h4 class="anchored" data-anchor-id="wrangling-1">Wrangling</h4>
+</section>
+<section id="exploration-1" class="level4">
+<h4 class="anchored" data-anchor-id="exploration-1">Exploration</h4>
+<ul>
+<li>Following Cornell precedent with % breaks</li>
+</ul>
+<section id="mapping-1" class="level5">
+<h5 class="anchored" data-anchor-id="mapping-1">Mapping</h5>
+</section>
+</section>
+</section>
+<section id="clustering-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="clustering-analysis">Clustering Analysis</h3>
+<p>Why try clustering analysis?</p>
+<p>Can use DBSCAN, I think</p>
+</section>
+</section>
+<section id="findings" class="level2">
+<h2 class="anchored" data-anchor-id="findings">Findings</h2>
+</section>
+<section id="conclusions" class="level2">
+<h2 class="anchored" data-anchor-id="conclusions">Conclusions</h2>
+<section id="possible-applications" class="level3">
+<h3 class="anchored" data-anchor-id="possible-applications">Possible Applications</h3>
+<section id="habitat-restoration" class="level4">
+<h4 class="anchored" data-anchor-id="habitat-restoration">Habitat Restoration</h4>
+</section>
+</section>
+<section id="limitations" class="level3">
+<h3 class="anchored" data-anchor-id="limitations">Limitations</h3>
+<section id="prediction-vs.-monitoring" class="level4">
+<h4 class="anchored" data-anchor-id="prediction-vs.-monitoring">Prediction vs.&nbsp;Monitoring</h4>
+<p>At the outset of this project, I hoped to model species distribution in Philadelphia and predict how it would be impacted by sea level rise. In the course of my research, though, I came to the conclusion that this was neither feasible nor desirable, for reasons that are worth stating.</p>
+<p>First, the quality of available data was insufficient for predictive modeling at an urban scale. Presence-only or presence/absence distribution models both rely on point data for species observations combined with raster data for landscape variables such as land cover. Because of the way citizen science data in eBird is reported, the observations available did not include adequately precise coordinate data for this approach, nor would it have been feasible to reconcile the different landscape variables given their diverse spatial scales.</p>
+<p>Second, environmental modeling is notoriously complex, even for single species with ideal data. It is impossible to divorce the impact of sea level rise alone on biodiversity from other confounding factors like <a href="https://explorer.audubon.org/explore/conservation-challenges?zoom=3&amp;x=1306099.1620122588&amp;y=2810864.562197212">coastal modification, saltwater intrusion, increased rainfall, and water pollution,</a> let alone less proximate factors like changes in human population density and land use or the arrival of invasive species. Furthermore, as Pilkey and Pilkey point out, even if the scale of such impacts could be measured, it is difficult to account for ordering complexity: the unpredictable differences in impact depending on the order in which events occur.<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a> As Jimenez-Valverde et al., explain, prediction via species distribution modeling only works “if correlation structures are stable and consistent across different landscapes and time periods”.<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a> Given the aforementioned rapid change of key factors like habitat fragmentation, buildout, and land cover in urban environments, attempts at predictive modeling of biodiversity for cities may do more harm than good by obscuring the underlying uncertainty.</p>
+<p>With that in mind, I follow Orrin Pilkey in suggesting that, in this context, monitoring and adapting are far more important than predicting.<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a> Given that the general scope and direction of sea level rise and other threats to biodiversty are known, citizen science data employed in projects like this one can help cities keep tabs on their biodiversity and make adjustments to support it, without relying on dubious predictive models.</p>
+<p>Finally, the use of citizen science data for management can help to engage community memebers in conservation and stewardship by giving them a defined, valuable role to play in efforts to support local biodiversity. Philadelphia already has a strong citizen science and stewardship community in the form of grops like the <a href="https://cncphilly.org/">City Nature Challenge</a>, <a href="https://birdphilly.org/cgi-sys/suspendedpage.cgi">Bird Philly</a>, <a href="https://phillynaturalists.org/">Philly Naturalists</a>, and the <a href="https://extension.psu.edu/programs/watershed-stewards/counties/philadelphia">Master Watershed Steward program</a>. Employing data that they collect gives them a demonstrable stake in conservation efforts and can help to justify investment in a virtuous cycle of municipal support for local stewardship and citizen science helping to advance municipal conservation efforts and so forth.</p>
+</section>
+</section>
+<section id="next-steps" class="level3">
+<h3 class="anchored" data-anchor-id="next-steps">Next Steps</h3>
+<section id="improve-statistical-rigor" class="level4">
+<h4 class="anchored" data-anchor-id="improve-statistical-rigor">Improve Statistical Rigor</h4>
+<p>A key next step for this project would be employing more rigorous statistical tools to analyze species richness and distribution. As stated in the Data Wrangling and Exploration section, calculating a rarefaction curve using eBird data would be a more accurate way of estimating total species richness. There are a variety of ways to accomplish this; the <a href="https://github.com/vegandevs/vegan"><code>vegan</code> package in R</a>, for example, includes a function to calculate rarefaction curves. However, this requires an understanding of quantitative ecology beyond what I am currently capable of. To this end, if I were to repeat this project, I would want to recruit a quantitative ecologist to help improve the statistical and methodological rigor of my analysis.</p>
+<p>Furthermore, it would be worthwhile to incorporate a sophisticated analysis of spatial clustering for biodiversity. In an early version of this project, I attempted to calculate global and local Moran’s I values to analyze the distribution of biodiversity for <a href="https://www.sciencedirect.com/topics/computer-science/spatial-autocorrelation">spatial autocorrelation</a>. However, the patterns that I found were unexpected and had p-values that indicated that they were not statistically significant. I suspect that this is related to extreme habitat fragmentation and abrupt land use changes in urban contexts, as well as my choice to use hexagon bins to accommodate issues with the point data from eBird. Again, a quantitative ecologist who focuses on urban contexts would likely better understand these issues and be able to provide guidance.</p>
+</section>
+<section id="develop-a-workflow" class="level4">
+<h4 class="anchored" data-anchor-id="develop-a-workflow">Develop a Workflow</h4>
+<p>One of the primary aims of this project is to demonstrate replicability. Nothing about the data used is unique to Philadelphia; in theory, this project could be replicated in any city with sufficient eBird data and sea level rise projections. (The eBird data could even be used in isolation for projects unrelated to sea level rise.) If a proper workflow were developed, it would be possible to easily apply these tools in other cities to support conservation decisions, including in cities that otherwise lack substantial data on biodiversity. In order to facilitate this, it would be worth 1) solidifying a consistent workflow, 2) developing some kind of guide such as <a href="https://cornelllabofornithology.github.io/ebird-best-practices/">the one prepared by the Cornell Ornithology Lab for handling eBird data</a>, and 3) potentially preparing an R package to simplify this workflow and make it more consistent, much like Cornell has done with <a href="https://rdrr.io/github/mstrimas/auk/#vignettes">their <code>auk</code> package</a>. Together, these tools could help cities around the globe more effectively and consistently analyze their local biodiversity and potential threats to it.</p>
+</section>
+<section id="incorporate-more-data" class="level4">
+<h4 class="anchored" data-anchor-id="incorporate-more-data">Incorporate More Data</h4>
+<p>There are a variety of opportunities to incorporate more nuanced, diverse data into an analysis like this. Three primary opportunities are 1) more species observations other than birds, 2) common ecology-related raster data, and 3) datasets specific to urban contexts.</p>
+<p>Biodiversity consists of more than birds. Although it is nearly impossible to account for the full spectrum of biodiversity in an urban contexts (how, for example, can we reliably sample microorganisms at any meaningful scale?), measures of biodiversity such as the <a href="https://www.cbd.int/doc/publications/cbd-ts-98-en.pdf">City Biodiversity Index</a> incorporate other biotic kingdom, namely arthropods and vascular plants.<a href="#fn19" class="footnote-ref" id="fnref19" role="doc-noteref"><sup>19</sup></a> Expanding beyond an analysis of avian biodiversity can offer a more complex understanding of a city’s ecosystems, which is vital in planning responses to systems as complex as climate change. To accomplish this, future analysis could incorporate data from platforms such as <a href="https://www.inaturalist.org/pages/about">iNaturalist</a>, which collects and publishes citizen science data on all biota, not just birds. One example of a potential application of this is <a href="https://cities-urbanshift.s3.eu-west-3.amazonaws.com/baseline-indicators/biodiversity/reports/UrbanShift-Biodiversity-SanJose.html">Urban Shift’s report on conservation planning in San Jose, Costa Rica</a>.</p>
+<p>Another possible supplement to biodiversity data for conservation purposes are the standard raster layers often used in biodiversity analyses such as species distribution modeling. This includes data such as tree cover, land cover type, distance to water, altitude, slope, aspect, soil type, and more. Many (if not all) of these data are available publicly, especially in the United States, from sources like the <a href="https://www.usgs.gov/products/data">United States Geological Service</a> or <a href="https://www.pasda.psu.edu/">Pennsylvania Spatial Data Access</a>. The primary challenge with these datasets is reconciling their different resolutions in order to apply them in the desired context.</p>
+<p>Finally, given the urban context of this evaluation, it would be worthwhile to incorporate measures of biodiveristy disturbance associated with urbanization, such as habitat fragmentation, impervious surface cover, and human population density. A major challenge here, however, is that such measures change on a much more granular scale in urban contexts than in “natural” contexts where ecological analyses are commonly carried out. Similarly, many urban interventions to support biodiversity, such as pocket parks or pollinator gardens, happen at scales so small that they would be hard to meaningfully factor into an analysis such as this one.</p>
+<p>One important caveat to this discussion, however, is that any additional data must be motivated by a clear use. First, much of these data likely covaries, raising the possibility of redundance. In particular, the premise of choosing indicator species is to simplifying ecological monitoring by using an effective proxy. Introducing too much new data may defeat the purpose of the exercise. Second (and this is especially important in the case of Philadelphia), a main motivation of this project is to find a cost-effective, scalable means of exploring the impact of sea level rise on biodiversity. Introducing more data raises the prospect of diminishing marginal returns: that is, it may exceed the capacity of under-resourced local governments to actually analyze and use the data without actually producing a more robust understanding of conservation challenges. In sum, more data is useful, but only insofar as it contributes to under-resourced cities’ ability to better plan for conservation.</p>
+</section>
+<section id="interace-with-government-and-community" class="level4">
+<h4 class="anchored" data-anchor-id="interace-with-government-and-community">Interace with Government and Community</h4>
+<p>Above all else, the best next step would be to connect with members of the local government and various community organizations to identify potential applications of an analysis like this. Currently, this project amounts to an intellectual exercise. However, by speaking with members of the local parks department, conservation organizations, or community stewardship groups, it may be possible to find ways to use this analysis to support conservation work that they are currently doing or to motivate new work.</p>
+</section>
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Wilby and Perry 76-78<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities*, Elmqvist et al., 2013, 497<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><em>Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities</em>, Elmqvist et al., 2013, 496; Wilby and Perry (2006), 73<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>https://www.epa.gov/sites/default/files/2019-03/documents/phipa_final.pdf<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>https://watercenter.sas.upenn.edu/philadelphia-urban-ecology-and-the-balance-of-human-and-ecological-communities/<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>https://pa.audubon.org/chapters-centers/discovery-center<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>https://ebird.org/hotspots<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>https://oceanservice.noaa.gov/hazards/sealevelrise/sealevelrise-tech-report.html<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>https://www.phila.gov/departments/office-of-sustainability/<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>McDonnell, M.J., Hahs, A.K. “The use of gradient analysis studies in advancing our understanding of the ecology of urbanizing landscapes: current status and future directions”. Landscape Ecol. vol.&nbsp;23, 2008, pp.&nbsp;1143–1155; Oostermeijer, Gegard. “Methods for studying urban biodiversity” in Seeing the City: Interdisciplinary Perspectives on the Study of the Urban Book. Edited by Nanke Verloo and Luca Bertolini. Amsterdam: Amsterdam University Press, 2020; Bairlein, Franz. “Introduction.” Ecology and Conservation of Birds in Urban Environments, edited by Enrique Murgui and Marcus Hedblom, Cham, Switzerland, Spring International Publishing, 2017, pp.&nbsp;v–vi; Morelli, F., Y. Benedetti, and C. T. Callaghan. “Ecological specialization and population trends in European breeding birds”. Global Ecology and Conservation, vol.&nbsp;22, 2020, e00996. Link to paper<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p>Callaghan, C. T., M. B. Lyons, J. M. Martin, R. E. Major, and R. T. Kingsford. “Assessing the reliability of avian biodiversity measures of urban greenspaces using eBird citizen science data”. Avian Conservation and Ecology, vol.&nbsp;12, no.2, 2017, pp.12. https://doi.org/10.5751/ACE-01104-120212; Callaghan, C. T., J. H. Wilshire, J. M. Martin, R. E. Major, M. B. Lyons, and R. T. Kingsford. “The Greenspace Bird Calculator: a citizen-driven tool for monitoring avian biodiversity in urban greenspaces”. Australian Zoologist, vol.&nbsp;40, 2020, pp.&nbsp;468-476.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p>Sara Harrison, “Pandemic Bird-Watching Created a Data Boom-and a Conundrum,” Wired (Conde Nast, September 30, 2021), https://www.wired.com/story/pandemic-bird-watching-created-a-data-boom-and-a-conundrum/<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13"><p>https://coast.noaa.gov/slr/#/layer/slr/10/-8376235.061842223/4852224.4720263705/14/dark/192/0.8/2050/inter/midAccretion<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14"><p>Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities*, Elmqvist et al., 2013<a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15"><p>Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities*, Elmqvist et al., 2013, 713.<a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16"><p><em>Useless Arithmetic</em>, 2007<a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn17"><p>Jimenez-Valverde et al., 2009<a href="#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn18"><p><em>Useless Arithmetic</em>, 2007<a href="#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn19"><p>https://www.cbd.int/doc/publications/cbd-ts-98-en.pdf<a href="#fnref19" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
