@@ -23,136 +23,752 @@ execute:
 ### Background
 
 #### Sea Level Rise and Biodiversity
-Sea level rise is one of the most significant and immediate consequences of anthropogenic climate change. In addition to its material impacts on human society, sea level rise threatens global biodiversity. Species will be impacted by increased inundation and storm flooding; coastal erosion; saltwater intrusion; changes to tides and sedimentation; changes to air temperature and rainfall; and further yet unpredictable effects, such as the contraction or expansion of marshes.^[Wilby and Perry 76-78] Additionally, sea level rise will alter habitat quality in urban coastal areas, which could have large-scale impacts on the areal extent and health of urban ecosystems such as wetlands.^[Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities*, Elmqvist et al., 2013, 497]
 
-Current research suggests that sea level rise will primarily affect tropical biodiversity, especially in South America and various islands habitats. Less research exists on how sea level rise will impact urban biodiversity in North America. Generally speaking, however, research suggests that species with limited ranges will be most impacted, and that species reliant on rare and/or vulnerable coastal habitats will be most threatened.^[*Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities*, Elmqvist et al., 2013, 496; Wilby and Perry (2006), 73]
+Sea level rise is one of the most significant and immediate consequences of anthropogenic climate change. In addition to its material impacts on human society, sea level rise threatens global biodiversity. Species will be impacted by increased inundation and storm flooding; coastal erosion; saltwater intrusion; changes to tides and sedimentation; changes to air temperature and rainfall; and further yet unpredictable effects, such as the contraction or expansion of marshes.[^1] Additionally, sea level rise will alter habitat quality in urban coastal areas, which could have large-scale impacts on the areal extent and health of urban ecosystems such as wetlands.[^2]
+
+[^1]: Wilby and Perry 76-78
+
+[^2]: Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities/*, Elmqvist et al., 2013, 497
+
+Current research suggests that sea level rise will primarily affect tropical biodiversity, especially in South America and various islands habitats. Less research exists on how sea level rise will impact urban biodiversity in North America. Generally speaking, however, research suggests that species with limited ranges will be most impacted, and that species reliant on rare and/or vulnerable coastal habitats will be most threatened.[^3]
+
+[^3]: *Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities*, Elmqvist et al., 2013, 496; Wilby and Perry (2006), 73
 
 #### Philadelphia's Situation
-Philadelphia sits at the boundary between the Atlantic Coastal Plain and Piedmont ecoregions. The area was historically covered with hardwood forests, but much of its natural vegetation has been removed for urbanization and cultivation.[^1] Built as a port along the Delaware River, the city was constructed on top of historic wetlands and mudflats. Due to infill and development, 95% of the region's freshwater tidal wetlands have been lost. As a result of Philadelphia's location and development patterns, SLR projections estimate that much of the area adjacent to the Delaware will be under water within the next century.[^2]
 
-[^1]:  https://www.epa.gov/sites/default/files/2019-03/documents/phipa_final.pdf
+Philadelphia sits at the boundary between the Atlantic Coastal Plain and Piedmont ecoregions. The area was historically covered with hardwood forests, but much of its natural vegetation has been removed for urbanization and cultivation.[^4] Built as a port along the Delaware River, the city was constructed on top of historic wetlands and mudflats. Due to infill and development, 95% of the region's freshwater tidal wetlands have been lost. As a result of Philadelphia's location and development patterns, SLR projections estimate that much of the area adjacent to the Delaware will be under water within the next century.[^5]
 
-[^2]:  https://watercenter.sas.upenn.edu/philadelphia-urban-ecology-and-the-balance-of-human-and-ecological-communities/
+[^4]: https://www.epa.gov/sites/default/files/2019-03/documents/phipa_final.pdf
 
-![Elevation of Land in Philadelphia Close to Sea Level](http://maps.risingsea.net/CCSP/D.3_Philadelphia50cm_Titus_and_Wang_2008.jpg){width=50%}
+[^5]: https://watercenter.sas.upenn.edu/philadelphia-urban-ecology-and-the-balance-of-human-and-ecological-communities/
 
-The city of Philadelphia is also a major hotspot for bird biodiversity in North America. A key migratory stopover location on the [Atlantic Flyway](https://www.audubon.org/atlantic-flyway), Philadelphia sees more than 200 species of migratory birds pass through it each year.[^3] The city hosts a number of regional bird hotspots, especially Pennypack on the Delaware (266 species), John Heinz National Wildlife Reserve (281 species), and FDR Park (313 species).[^4] Given their proximity to the Schuylkill and Delaware rivers, all three of these sites are likely to be significantly impacted by SLR. From a management perspective, it is therefore important to understand the possible impact of SLR on Philadelphia's avian biodiversity.
+![Elevation of Land in Philadelphia Close to Sea Level](http://maps.risingsea.net/CCSP/D.3_Philadelphia50cm_Titus_and_Wang_2008.jpg){width="50%"}
 
-[^3]:  https://pa.audubon.org/chapters-centers/discovery-center
+The city of Philadelphia is also a major hotspot for bird biodiversity in North America. A key migratory stopover location on the [Atlantic Flyway](https://www.audubon.org/atlantic-flyway), Philadelphia sees more than 200 species of migratory birds pass through it each year.[^6] The city hosts a number of regional bird hotspots, especially Pennypack on the Delaware (266 species), John Heinz National Wildlife Reserve (281 species), and FDR Park (313 species).[^7] Given their proximity to the Schuylkill and Delaware rivers, all three of these sites are likely to be significantly impacted by SLR. From a management perspective, it is therefore important to understand the possible impact of SLR on Philadelphia's avian biodiversity.
 
-[^4]: https://ebird.org/hotspots
+[^6]: https://pa.audubon.org/chapters-centers/discovery-center
+
+[^7]: https://ebird.org/hotspots
 
 ![Bird Biodiversity Hotspots in the Philadelphia Region](https://github.com/nlebovits/phl-bird-sdm/blob/main/2022_11_03_ebird_phl_hotspots_screenshot.png?raw=true){fig-align="center"}
 
-Finally, a key motivation for this project is Philadelphia's lack of resources for conservation. Although the city government includes a Parks and Recreation department and an Office of Sustainability, both are notoriously underfunded. The Trust for Public Land calculated that Philadelphia spends 25% less per capita on parks than the national average, with most of that funding directed to recreation, not environmental conservation.^[https://oceanservice.noaa.gov/hazards/sealevelrise/sealevelrise-tech-report.html] The recently-launched Office of Sustainability nominally has a mandate to work on "quality natural resources", but does not explicit work on conservation.^[https://www.phila.gov/departments/office-of-sustainability/] Much of the conservation work in the city is left to volunteer organizations like the [Philly Forest Stewards](https://loveyourpark.org/volunteer/forest-stewards), or non-profits like [Friends of the Wissashickon](https://fow.org/). Given the limited capacity of governmental, non-profit, and community organizations, there is an evident use for tools to support more efficient, cost-effective monitoring and interventions.
+Finally, a key motivation for this project is Philadelphia's lack of resources for conservation. Although the city government includes a Parks and Recreation department and an Office of Sustainability, both are notoriously underfunded. The Trust for Public Land calculated that Philadelphia spends 25% less per capita on parks than the national average, with most of that funding directed to recreation, not environmental conservation.[^8] The recently-launched Office of Sustainability nominally has a mandate to work on "quality natural resources", but does not explicit work on conservation.[^9] Much of the conservation work in the city is left to volunteer organizations like the [Philly Forest Stewards](https://loveyourpark.org/volunteer/forest-stewards), or non-profits like [Friends of the Wissashickon](https://fow.org/). Given the limited capacity of governmental, non-profit, and community organizations, there is an evident use for tools to support more efficient, cost-effective monitoring and interventions.
+
+[^8]: https://oceanservice.noaa.gov/hazards/sealevelrise/sealevelrise-tech-report.html
+
+[^9]: https://www.phila.gov/departments/office-of-sustainability/
 
 #### Data Sources
+
 This project uses two primary data sources: citizen science bird observation from eBird, and NOAA's sea level rise projections.
 
 ##### eBird Data
-This project focuses on bird biodiversity for two reasons. First, birds are strong indicator species. Although it is not clear that bird populations alone are an effective measure of ecosystem health, they are the best-studied indicator of urban biodiversity, and their role in supporting a larger ecosystem is critical.^[McDonnell, M.J., Hahs, A.K.  “The use of gradient analysis studies in advancing our understanding of the ecology of urbanizing landscapes: current status and  future directions”. Landscape Ecol. vol. 23, 2008, pp. 1143–1155; Oostermeijer, Gegard. “Methods for studying urban biodiversity” in Seeing the City: Interdisciplinary Perspectives on the Study of the Urban Book. Edited by Nanke Verloo and Luca Bertolini. Amsterdam: Amsterdam University Press, 2020; Bairlein, Franz. “Introduction.” Ecology and Conservation of Birds in Urban Environments, edited by Enrique Murgui and Marcus Hedblom, Cham, Switzerland, Spring International Publishing, 2017, pp. v–vi; Morelli, F., Y. Benedetti, and C. T. Callaghan. “Ecological specialization and population trends in European breeding birds”. Global Ecology and Conservation, vol. 22, 2020,  e00996. Link to paper] Second, an abundance of quality data on bird biodiversity are publicly available from sources like the [Cornell Ornithology Lab's eBird](https://ebird.org/about), and recent studies have demonstrated the effectiveness of using these citizen science data to evaluate bird biodiversity. ^[Callaghan, C. T., M. B. Lyons, J. M. Martin, R. E. Major, and R. T. Kingsford. “Assessing the reliability of avian biodiversity measures of urban greenspaces using eBird citizen science data”. Avian Conservation and Ecology, vol. 12, no.2, 2017, pp.12. https://doi.org/10.5751/ACE-01104-120212; Callaghan, C. T., J. H. Wilshire, J. M. Martin, R. E. Major, M. B. Lyons, and R. T. Kingsford. “The Greenspace Bird Calculator: a citizen-driven tool for monitoring avian biodiversity in urban greenspaces”. Australian Zoologist, vol. 40, 2020,  pp. 468-476.] Because these data are publicly available and well-documented, they are valuable for low-cost conservation, especially from the perspective of under-resourced local governments such as Philadelphia's.
 
-One key caveat with eBird data is the impact of pandemic birding. The extraordinary and unprecedented rise in citizen science data collection during the pandemic has been a boon for ecological data. However, it also complicates the interpretation of these data. As Sara Harrison explains in Wired, “Scientists can’t always tell whether changes in the data are due to animal behavior or just an increase in the amount of information available. Furthermore, ”It’s not just that more people are observing—it’s also a matter of where they are observing.”^[Sara Harrison, "Pandemic Bird-Watching Created a Data Boom-and a Conundrum," Wired (Conde Nast, September 30, 2021), https://www.wired.com/story/pandemic-bird-watching-created-a-data-boom-and-a-conundrum/] Observations in urban areas have increased, while observations in rural areas have decreased, suggesting likely undersampling in less-accessible habitats. As I will explain in the Data Wrangling and Exploration section, this issue must be accounted for.
+This project focuses on bird biodiversity for two reasons. First, birds are strong indicator species. Although it is not clear that bird populations alone are an effective measure of ecosystem health, they are the best-studied indicator of urban biodiversity, and their role in supporting a larger ecosystem is critical.[^10] Second, an abundance of quality data on bird biodiversity are publicly available from sources like the [Cornell Ornithology Lab's eBird](https://ebird.org/about), and recent studies have demonstrated the effectiveness of using these citizen science data to evaluate bird biodiversity. [^11] Because these data are publicly available and well-documented, they are valuable for low-cost conservation, especially from the perspective of under-resourced local governments such as Philadelphia's.
+
+[^10]: McDonnell, M.J., Hahs, A.K. "The use of gradient analysis studies in advancing our understanding of the ecology of urbanizing landscapes: current status and future directions". Landscape Ecol. vol. 23, 2008, pp. 1143--1155; Oostermeijer, Gegard. "Methods for studying urban biodiversity" in Seeing the City: Interdisciplinary Perspectives on the Study of the Urban Book. Edited by Nanke Verloo and Luca Bertolini. Amsterdam: Amsterdam University Press, 2020; Bairlein, Franz. "Introduction." Ecology and Conservation of Birds in Urban Environments, edited by Enrique Murgui and Marcus Hedblom, Cham, Switzerland, Spring International Publishing, 2017, pp. v--vi; Morelli, F., Y. Benedetti, and C. T. Callaghan. "Ecological specialization and population trends in European breeding birds". Global Ecology and Conservation, vol. 22, 2020, e00996. Link to paper
+
+[^11]: Callaghan, C. T., M. B. Lyons, J. M. Martin, R. E. Major, and R. T. Kingsford. "Assessing the reliability of avian biodiversity measures of urban greenspaces using eBird citizen science data". Avian Conservation and Ecology, vol. 12, no.2, 2017, pp.12. https://doi.org/10.5751/ACE-01104-120212; Callaghan, C. T., J. H. Wilshire, J. M. Martin, R. E. Major, M. B. Lyons, and R. T. Kingsford. "The Greenspace Bird Calculator: a citizen-driven tool for monitoring avian biodiversity in urban greenspaces". Australian Zoologist, vol. 40, 2020, pp. 468-476.
+
+One key caveat with eBird data is the impact of pandemic birding. The extraordinary and unprecedented rise in citizen science data collection during the pandemic has been a boon for ecological data. However, it also complicates the interpretation of these data. As Sara Harrison explains in Wired, "Scientists can't always tell whether changes in the data are due to animal behavior or just an increase in the amount of information available. Furthermore,"It's not just that more people are observing---it's also a matter of where they are observing."[^12] Observations in urban areas have increased, while observations in rural areas have decreased, suggesting likely undersampling in less-accessible habitats. As I will explain in the Data Wrangling and Exploration section, this issue must be accounted for.
+
+[^12]: Sara Harrison, "Pandemic Bird-Watching Created a Data Boom-and a Conundrum," Wired (Conde Nast, September 30, 2021), https://www.wired.com/story/pandemic-bird-watching-created-a-data-boom-and-a-conundrum/
 
 ##### NOAA Data
+
 Data on sea level rise projections in Philadelphia comes from the National Ocean and Atmospheric Administration and is [available for all 50 states](https://coast.noaa.gov/slrdata/). It offers a range of scenarios, from 0 feet of sea level rise to 10 feet. As explained on the website,
 
-> [The relative sea level rise (RSL) scenarios] are derived from the 2022 Sea Level Rise Technical Report using the same methods as the U.S. Army Corps of Engineers Sea Level Change Curve Calculator. These new scenarios were developed by the U.S. Sea Level Rise and Coastal Flood Hazard Scenarios and Tools Interagency Task Force as input into the U.S. Global Change Research Program Sustained Assessment process and, Fifth National Climate Assessment. These RSL scenarios provide an update to the NOAA 2017 scenarios, which were developed as input to the Fourth National Climate Assessment.^[https://coast.noaa.gov/slr/#/layer/slr/10/-8376235.061842223/4852224.4720263705/14/dark/192/0.8/2050/inter/midAccretion]
+> \[The relative sea level rise (RSL) scenarios\] are derived from the 2022 Sea Level Rise Technical Report using the same methods as the U.S. Army Corps of Engineers Sea Level Change Curve Calculator. These new scenarios were developed by the U.S. Sea Level Rise and Coastal Flood Hazard Scenarios and Tools Interagency Task Force as input into the U.S. Global Change Research Program Sustained Assessment process and, Fifth National Climate Assessment. These RSL scenarios provide an update to the NOAA 2017 scenarios, which were developed as input to the Fourth National Climate Assessment.[^13]
+
+[^13]: https://coast.noaa.gov/slr/#/layer/slr/10/-8376235.061842223/4852224.4720263705/14/dark/192/0.8/2050/inter/midAccretion
 
 Further information on the technical details is available in the [2022 Sea Level Rise Technical Report](https://oceanservice.noaa.gov/hazards/sealevelrise/sealevelrise-tech-report.html).
 
-This project maps most of those scenarios, with some important caveats. First, the NOAA data include both sea level rise projections and sunny day high tide flooding projections. Although the latter is an important impact of sea level rise, temporary flooding and permanent inundation have different (and potentially conflicting) impacts on biodiversity and therefore must be considered separately. For the sake of simplicity given the limited scope of this project, then, I have only explored sea level rise, not sunny day high tide flooding. 
+This project maps most of those scenarios, with some important caveats. First, the NOAA data include both sea level rise projections and sunny day high tide flooding projections. Although the latter is an important impact of sea level rise, temporary flooding and permanent inundation have different (and potentially conflicting) impacts on biodiversity and therefore must be considered separately. For the sake of simplicity given the limited scope of this project, then, I have only explored sea level rise, not sunny day high tide flooding.
 
 Second, I have excluded data for rates of sea level rise that are unlikely to happen in Philadelphia. Although NOAA data include up to 10 feet of sea level rise, their projections for even the worst scenario in Philadelphia max out at 6.59 feet of sea level rise. Therefore, I have included only the current mean higher-high water level (0 feet of rise) through 7 feet of rise. Similarly, in the clustering analysis later in the report, I used the 1 foot projection for sea level rise, as this is what NOAA considers the "intermediate" scenario likely to occur by 2040, which is the first post-2022 date for which they have projections.
 
 ##### Evaluating Biodiveristy in an Urban Context
-One of the unique challenges of this project is that it focuses on an urban context. Analyzing biodiversity in general is complicated, as all environmental systems are. But urban environments add special complications that disrupt some of the normal approaches and assumptions of biodiversity modeling. Urban environments introduce variables that do not exist in "natural" spaces, such as human population density and abrupt fragmentation and changes in land use type. The scales, boundaries, and definitions of various types of data can be hard to reconcile as well. Furthermore, prediction becomes even more difficult in urban contexts where factors such as population density, buildout, and impervious surface cover can change rapidly and unexpectedly, even in the course of a few years. (This poses a particular challenge for sea level rise, flooding, and related issues like stormwater management.) Arguably, it is more difficult to evaluate biodiversity in urban contexts than in "natural" environments. There are efforts to address this, however, many of which are discussed in *Urbanization, Biodiversty, and Ecosystem Services: Challenges and Opportunities*, by Elmqvist et al.^[Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities*, Elmqvist et al., 2013] In fact, efforts to use citizen science data to improve monitoring, analysis, and management are key to improving the health of urban biodiversity. As explained in the chapter on "Indicators for Management of Urban Biodiversity and Ecosystem Services", 
 
-> [The City Biodiversity Index] can provide incentives for municipalities to start making inventories and monitoring programs of their biodiversity. For example, it is today possible to integrate remote sensing data and in situ observations to monitor several essential biodiversity variables such as habitat structure and phenology. ... In this context, municipalities should explore the possibilities of launching citizen science projects and consider the possibility in general that within cities local knowledge on biodiversity and ecosystem services may reside in many different groups within civic society.^[Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities*, Elmqvist et al., 2013, 713.]
+One of the unique challenges of this project is that it focuses on an urban context. Analyzing biodiversity in general is complicated, as all environmental systems are. But urban environments add special complications that disrupt some of the normal approaches and assumptions of biodiversity modeling. Urban environments introduce variables that do not exist in "natural" spaces, such as human population density and abrupt fragmentation and changes in land use type. The scales, boundaries, and definitions of various types of data can be hard to reconcile as well. Furthermore, prediction becomes even more difficult in urban contexts where factors such as population density, buildout, and impervious surface cover can change rapidly and unexpectedly, even in the course of a few years. (This poses a particular challenge for sea level rise, flooding, and related issues like stormwater management.) Arguably, it is more difficult to evaluate biodiversity in urban contexts than in "natural" environments. There are efforts to address this, however, many of which are discussed in *Urbanization, Biodiversty, and Ecosystem Services: Challenges and Opportunities*, by Elmqvist et al.[^14] In fact, efforts to use citizen science data to improve monitoring, analysis, and management are key to improving the health of urban biodiversity. As explained in the chapter on "Indicators for Management of Urban Biodiversity and Ecosystem Services",
+
+[^14]: Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities\*, Elmqvist et al., 2013
+
+> \[The City Biodiversity Index\] can provide incentives for municipalities to start making inventories and monitoring programs of their biodiversity. For example, it is today possible to integrate remote sensing data and in situ observations to monitor several essential biodiversity variables such as habitat structure and phenology. ... In this context, municipalities should explore the possibilities of launching citizen science projects and consider the possibility in general that within cities local knowledge on biodiversity and ecosystem services may reside in many different groups within civic society.[^15]
+
+[^15]: Urbanization, Biodiversity, and Ecosystem Services: Challenges and Opportunities\*, Elmqvist et al., 2013, 713.
 
 ### Project Goals
+
 The goal of this project is to explore the potential of using publicly available citizen science data to assess the impacts of sea level rise on avian biodiversity in Philadelphia. The primary focus is to demonstrate that eBird data can be applied to conservation managements in an urban context. Secondarily, this project aims to identify the biodiversity hotspots in Philadelphia that will be most heavily impacted by sea level rise in the coming years. Lastly, it hopes to identify potential next steps and applications for the workflow and approaches employed here.
 
 ## Data Wrangling and Exploration
+```{r setup}
+library(tidyverse)
+library(sf)
+library(janitor)
+library(lubridate)
+library(tmap)
+library(mapview)
+library(janitor)
+library(plotly)
+library(ggthemr)
+library(auk)
+library(ggpubr)
+library(ggrepel)
+library(readxl)
+library(dbscan)
+library(ggExtra)
+library(BAMMtools)
 
+ggthemr("pale") #set global ggplot theme
+
+options(scipen = 999) # turn off scientific notation
+```
 ### Bird Biodiversity
 
 #### Wrangling
+A number of steps were necessary to render eBird's raw data usable. After downloading the data from the eBird website, I followed the workflow laid out in the [Cornell Ornithology Lab's guide to using eBird data](https://cornelllabofornithology.github.io/ebird-best-practices/ebird.html), with some modifications specific to this project. 
 
+Based on their recommendations, I filtered out eBird checklists over 5 hours long, over 5 km in length, or with more than 10 observers. I also only looked at data between 2012 and 2021 (the last ten full years). I also filtered only for eBird "approved" checklists. Additionally, I downloaded the [Internal Union for Conservation and Nature and Natural Resources'](https://www.iucnredlist.org/) (IUCN) [redlist data on threatened bird species](http://datazone.birdlife.org/userfiles/file/Species/Taxonomy/HBW-BirdLife_Checklist_v6b_Jul22.zip), which I then joined to the eBird dataset for later analysis.
+
+Finally, I aggregated point observations to a grid of 0.5 kilometer hexagons covering Philadelphia. This is the approach recommended by the Cornell Ornithology lab for handling the imprecision of point observations. Although they use 5 km bins in their analysis, they are considering a much larger spatial scale (the southeastern United States). Such large bins are inappropriate for an urban scale, so I opted for 0.5 kilometer hexagons based on trial and error. (In future, more rigorous versions of a project like this, it would be better to identify ideal hexagon sizes [based on a more statistically sophisticated analysis](https://www.azavea.com/blog/2020/09/04/choosing-cell-size-for-point-pattern-analysis/)). Visualizations for these aggregations are visible in the Mapping section below.
+```{r ebird import and clean}
+#| cache: true
+
+ebird = read.table("C:/Users/Nissim/Desktop/Fall 2022/Floodplain Management/Final Project Data/eBird/ebd_US-PA-101_relSep-2022.txt",
+           sep = "\t", 
+           header = TRUE,
+           fill = TRUE) |>
+           clean_names()|>
+           filter(protocol_type %in% c("Stationary", "Traveling")) |> # restrict to the standard traveling and stationary count protocols 
+           auk_unique() #filter for only unique checklists to avoid duplicates created by groups
+
+ebird_i = ebird |>
+            dplyr::select(taxonomic_order,
+                          category,
+                          taxon_concept_id,
+                          common_name,
+                          scientific_name,
+                          exotic_code,
+                          observation_count,
+                          breeding_code,
+                          breeding_category,
+                          county_code,
+                          locality,
+                          locality_id,
+                          latitude,
+                          longitude,
+                          observation_date,
+                          time_observations_started,
+                          observer_id,
+                          approved,
+                          effort_distance_km,
+                          number_observers,
+                          protocol_type,
+                          duration_minutes,
+                          sampling_event_identifier) |>
+            dplyr::filter(approved == "1") # make sure R doesn't confuse dplyr::filter with stats::filter
+
+# function to convert time observation to hours since midnight
+# pulled directly from https://cornelllabofornithology.github.io/ebird-best-practices/ebird.html#ebird-zf
+time_to_decimal <- function(x) {
+  x <- hms(x, quiet = TRUE)
+  hour(x) + minute(x) / 60 + second(x) / 3600
+}
+
+ebird_i$observation_date = as_date(ebird_i$observation_date)
+
+ebird_i = ebird_i |>
+            mutate(
+              # convert X to NA
+              observation_count = if_else(observation_count == "X", 
+                                          NA_character_, observation_count),
+              observation_count = as.integer(observation_count),
+              # effort_distance_km to 0 for non-travelling counts
+              effort_distance_km = if_else(protocol_type != "Traveling", 
+                                           "0", effort_distance_km),
+              # convert time to decimal hours since midnight
+              time_observations_started = time_to_decimal(time_observations_started),
+              # split date into year and day of year
+              year = year(observation_date),
+              day_of_year = yday(observation_date)
+            ) |>
+          filter(
+            # effort filters
+            duration_minutes <= 5 * 60,
+            effort_distance_km <= 5,
+            # last 10 years of data
+            year >= 2010,
+            # 10 or fewer observers
+            number_observers <= 10)
+
+ebird_last_decade = ebird_i |>
+                      filter(year >= 2012 & year <= 2021)
+
+iucn = read_excel("C:/Users/Nissim/Desktop/Fall 2022/Floodplain Management/Final Project Data/Handbook of the Birds of the World and BirdLife International Digital Checklist of the Birds of the World_Version_6b.xlsx")
+
+colnames(iucn) = iucn[2, ]
+
+iucn = iucn[-c(1,2), ]
+
+iucn = iucn |>
+        clean_names() |>
+        filter(!is.na(order)) |>
+        select(scientific_name,
+               x2022_iucn_red_list_category)
+
+ebird_last_decade = left_join(ebird_last_decade, iucn, by = "scientific_name")
+
+
+countXyearXspecies = aggregate(data = ebird_last_decade,                # Applying aggregate
+                          scientific_name ~ year,
+                          function(scientific_name) length(unique(scientific_name)))
+
+countXyearXsei = aggregate(data = ebird_last_decade,                # Applying aggregate
+                          sampling_event_identifier ~ year,
+                          function(sampling_event_identifier) length(unique(sampling_event_identifier)))
+
+unique_per_chklst = countXyearXspecies |>
+                      select(-year) |>
+                      cbind(countXyearXsei)
+
+sd_upc = sd(unique_per_chklst$scientific_name)
+
+mean_upc = mean(unique_per_chklst$scientific_name)
+
+upc_2021 = unique_per_chklst$scientific_name[unique_per_chklst$year == 2021]
+
+upc_2021_above_mean = round((upc_2021 - mean_upc) / sd_upc, digits = 2)
+```
 #### Exploration
 
-##### 
+##### Observations vs. Effort
+First, we need to look at our raw number of observations year by year. This element is crucial because of the influence of pandemic birding. The extraordinary and unprecedented rise in citizen science data collection during the pandemic has been a boon for ecological data. However, it also complicates the interpretation of these data. As Sara Harrison explains in *Wired*, "Scientists can't always tell whether changes in the data are due to animal behavior or just an increase in the amount of information available. Furthermore,"It's not just that *more* people are observing---it's also a matter of *where* they are observing." Observations in urban areas have increased, while observations in rural areas have decreased, suggesting likely undersampling in less-accessible habitats.[^15]
+
+[^15]: Sara Harrison, "Pandemic Bird-Watching Created a Data Boom-and a Conundrum," Wired (Conde Nast, September 30, 2021), https://www.wired.com/story/pandemic-bird-watching-created-a-data-boom-and-a-conundrum/.
+
+As we can see in Philadelphia, the number of observations in 2021 is substantially larger than any of the previous nine years. Although observations per year were already trending up over the previous decade, 2021 represented an \[r avg\]% increase in bird observations from 2020 and was \[r avg\]% higher than the average number of observations per year in the previous nine years.
+
+To understand the rise in the number of birders submitting observations during the pandemic, it helps to track how many checklists were submitted each year in the last decade. An eBird checklist represents a single observation event (a birding outing), and groups together sightings of multiple species from the same observation event.[^16] By counting the number of checklists submitted in each year, we have a proxy for birder activity, which will help us account for the rise in pandemic birding mentioned in the previous section.
+
+[^16]: https://cornelllabofornithology.github.io/ebird-best-practices/intro.html#intro-intro
+```{r annual observations tally}
+obsvs = ggplot(ebird_last_decade, aes(year)) +
+  geom_bar() +
+  labs(title = "Annual Observations",
+       subtitle = "2012-21",
+       x = "Year",
+       y = "Total Observations") +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
+
+chklsts = ggplot(countXyearXsei) +
+  geom_col(aes(x = year, y = sampling_event_identifier)) +
+  labs(title = "Annual Sampling Events",
+       subtitle = "2012-21",
+       x = "Year",
+       y = "Total Sampling Events")+
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
+
+ggarrange(obsvs, chklsts)
+```
 
 ##### Estimating Biodiversity
-- Species richness as biodiversity
-- Actual biodiversity vs observed biodiversity
-- Approximating rarefaction curve
-- Proper rarefaction would be a good next step
-- Global vs local estimates
+The primary focus of our analysis here is *species richness*: the total number of species within our study region. To that end, it's helpful to visualize the total number of unique species observed in Philadelphia in each year. Unlike total observations or total checklists, we expect that the number of unique species observed each year has not changed due to the pandemic. \[Need to give a clear explanation of why.\]
+
+Indeed, the data confirm that there has been only a slight uptick in the number of unique species observed annually in Philadelphia since the start of the pandemic. \[Will want to analyze this using normal distribution, mean, std, etc.\]
+
+astly, a further confirmation comes from checking the number of unique species per checklist. This is basically a species-accumulation curve, a way of estimating species richness based on the diminishing marginal return on observation estimate:
+
+> Biologists often interpret species-survey data by examining the number of species found as a function of effort, plotted as a species-accumulation curves (SAC). The SAC plots the cumulative number of species recorded as a function of sampling effort (i.e. number of individuals collected or cumulative number of samples). At the start of a species survey, the total number of species found typically grows quickly with every unit of effort. After some time, however, effort expended yields more and more species that have already been found earlier in the survey---and the total number of species grows more slowly per unit of effort. A plot of species number vs effort will come to a plateau, and this saturation level is a common estimator for the number of species in an area.[^17]
+
+[^17]: https://cities-urbanshift.s3.eu-west-3.amazonaws.com/baseline-indicators/biodiversity/reports/UrbanShift-Biodiversity-SanJose.html#change-in-number-of-native-species-sicb-4-sicb-5-sicb-6
+
+I've approximated a real SAC here using a quadratic line of best fit. The asymptote appears to be around 290 species. Given the small sample size and the fact that the number of unique species observations in 2021 is a meaningful outlier (`r upc_2021_above_mean` standard deviations above the mean) it's hard to be extremely confident in the accuracy of our estimation. However, as more data are entered (2022 data, for instance), we can be more and more confident.
+
+```{r unique per chklst plt}
+
+ggplot(unique_per_chklst, aes(x = sampling_event_identifier, y = scientific_name, label = year)) +
+    geom_smooth(method = "lm", formula = y ~ x + I(x^2), se = FALSE, aes(col = "Quadratic")) +
+    geom_smooth(method = "lm", se = FALSE, linetype = 'dashed', aes(col = "Linear")) +
+    geom_point()+
+    geom_label_repel(size = 2.5) +
+    scale_colour_manual(name = "Model", values = c("#5E2C25", "#C8E370")) +
+    labs(title = "Unique Species vs. Total Checklists",
+         subtitle = '2012-21',
+       x = "Total Sampling Events",
+       y = "Unique Species")+
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
+```
+-   Species richness as biodiversity
+-   Actual biodiversity vs observed biodiversity
+-   Approximating rarefaction curve
+-   Proper rarefaction would be a good next step
+-   Global vs local estimates
+
+
+From IUCN: "The IUCN Red List Categories and Criteria are intended to be an easily and widely understood system for classifying species at high risk of global extinction. It divides species into nine categories: Not Evaluated, Data Deficient, Least Concern, Near Threatened, Vulnerable, Endangered, Critically Endangered, Extinct in the Wild and Extinct." https://www.iucnredlist.org/
+```{r iucn}
+ebird_last_decade |>
+filter(year < 2015) |>
+ggplot(aes(x2022_iucn_red_list_category)) +
+  geom_bar() +
+  ylim(0, 35000) +
+  labs(title = "IUCN Redlist Status",
+       y = "Total Observations") +
+  facet_wrap(~year, ncol = 3) +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle=45, hjust=1, size = 7),
+        axis.title.x = element_blank())
+
+ebird_last_decade |>
+filter(year >= 2015 & year < 2018) |>
+ggplot(aes(x2022_iucn_red_list_category)) +
+  geom_bar() +
+  ylim(0, 35000) +
+  labs(y = "Total Observations") +
+  facet_wrap(~year, ncol = 3) +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle=45, hjust=1, size = 7),
+        axis.title.x = element_blank())
+
+ebird_last_decade |>
+filter(year >= 2018 & year < 2022) |>
+ggplot(aes(x2022_iucn_red_list_category)) +
+  geom_bar() +
+  ylim(0, 35000) +
+  labs(y = "Total Observations") +
+  facet_wrap(~year, ncol = 4) +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle=45, hjust=1, size = 7),
+        axis.title.x = element_blank())
+```
+
+We can look specifically at the number of observations of vulnerable species as a function of effort, much like in the previous SAC.
 
 ##### Mapping
-- eBird observations are imprecise
-- This technique drawn from eBird guide but is a common approach to handling messy point data in spatial statisticis
-- Top hotspots in FDR, Heinz, Pennypack
+
+-   eBird observations are imprecise
+-   This technique drawn from eBird guide but is a common approach to handling messy point data in spatial statisticis
+-   Top hotspots in FDR, Heinz, Pennypack
+
+According to the Cornell Lab of Ornithology's guide to using eBird data, spatial bias is a major issue in working with these data.
+
+> Spatial bias: most participants in citizen science surveys sample near their homes (Luck et al. 2004), in easily accessible areas such as roadsides (Kadmon, Farber, and Danin 2004), or in areas and habitats of known high biodiversity (Prendergast et al. 1993). A simple method to reduce the spatial bias that we describe is to create an equal area grid over the region of interest, and sample a given number of checklists from within each grid cell.
+
+In the maps below, we compare the raw number of checklists per hexagon per year.
+
+Using the same approach, we can also map *unique species per checklist*. This allows us to approximate species richness relative to the amount of effort spent looking for species. In this way, we can at least partially correct for over/under-sampling and hone in on areas of real biodiversity.
+
+### Observation Hotspots over Time
+
+To identify hotspots of avian biodiversity in Philadelphia, we will explore spatial distribution of species richness through two approaches: binning and kernel density estimate.
+
+Don't forget to mention MAUP
+
+In both cases, we can look at the average species richness per location. With the hexagon bins, we join the layers together and create a new layer that is the mean. Similarly, with the kernel density estimate raster, we can use cell statistics to accomplish the same thing. The resultant maps are compared here side by side and indicate that \[are the hotspots the same? different?\].
+
+Let's identify hotspts based on the clustering maps!
+
+Can I plot hexagon avg unique species vs. % SLR innundation for different SLR scenarios as a measure of severity? how to map that? - might be a good opportunity for a bivariate choropleth map--high biodiversity vs. high % innundation
+
+Really need to make sure to account for over/under-sampling in future analyses.
+
+```{r hotspots by year}
+#| cache: true
+#| include: false
+
+ebird_sf = sf::st_as_sf(ebird_last_decade,
+                        coords = c("longitude",
+                                   "latitude"),
+                        crs = st_crs("EPSG:4326")) |>
+  st_transform(st_crs("EPSG:2272")) #NAD83/PA South (ftUS)
+
+# import phl boundaries to generatte a grid
+phl_bounds = st_read("C:/Users/Nissim/Desktop/Fall 2022/Spat Stats/phl_city_limits/City_Limits.shp") |>
+  st_transform(crs = st_crs(ebird_sf))
+
+phl_grid <- phl_bounds %>%
+  st_make_grid(st_bbox(.), square = FALSE, cellsize = 2640) %>% #currently using half mile cells
+  st_sf() %>% 
+  mutate(hex_id = row_number())
+
+phl_grid = phl_grid[phl_bounds,]
+
+ebird_sf = st_join(ebird_sf, phl_grid)
+
+
+# so I need:
+  # unique species per cell
+  # checklists per cell
+
+unique_species_per_hex = ebird_sf |>
+                  st_drop_geometry() |>
+                  aggregate(scientific_name ~ year + hex_id,
+                          function(scientific_name) length(unique(scientific_name))) |>
+                  rename(unique_species = scientific_name)
+
+checklsits_per_hex = ebird_sf |>
+                  st_drop_geometry() |>
+                  aggregate(sampling_event_identifier ~ year + hex_id,
+                          function(sampling_event_identifier) length(unique(sampling_event_identifier))) |>
+                  rename(unique_sei = sampling_event_identifier)
+
+per_hex = left_join(unique_species_per_hex, (checklsits_per_hex |> select(-year))) |>
+              mutate(unique_per_sei = unique_species / unique_sei)|>
+                    group_by(hex_id) |>
+                    summarize(avg_unique_species = mean(unique_species, na.rm = TRUE),
+                              avg_unique_per_sei = mean(unique_per_sei, na.rm = TRUE))
+
+
+phl_ebird_hex_means = left_join(phl_grid, per_hex, by = "hex_id")
+
+phl_ebird_hex_means$avg_unique_species[is.na(phl_ebird_hex_means$avg_unique_species)] = 0
+phl_ebird_hex_means$avg_unique_per_sei[is.na(phl_ebird_hex_means$avg_unique_per_sei)] = 0
+
+
+
+# now repeat the same thing with vulnerable species only
+
+vu_unique_species_per_hex = ebird_sf |>
+                  filter(x2022_iucn_red_list_category == "VU") |>
+                  st_drop_geometry() |>
+                  aggregate(scientific_name ~ year + hex_id,
+                          function(scientific_name) length(unique(scientific_name))) |>
+                  rename(unique_species = scientific_name)
+
+vu_checklsits_per_hex = ebird_sf |>
+                  filter(x2022_iucn_red_list_category == "VU") |>
+                  st_drop_geometry() |>
+                  aggregate(sampling_event_identifier ~ year + hex_id,
+                          function(sampling_event_identifier) length(unique(sampling_event_identifier))) |>
+                  rename(unique_sei = sampling_event_identifier)
+
+vu_per_hex = left_join(vu_unique_species_per_hex, (vu_checklsits_per_hex |> select(-year))) |>
+              mutate(unique_per_sei = unique_species / unique_sei)|>
+                    group_by(hex_id) |>
+                    summarize(avg_unique_species = mean(unique_species, na.rm = TRUE),
+                              avg_unique_per_sei = mean(unique_per_sei, na.rm = TRUE))
+
+
+vu_phl_ebird_hex_means = left_join(phl_grid, vu_per_hex, by = "hex_id")
+
+vu_phl_ebird_hex_means$avg_unique_species[is.na(vu_phl_ebird_hex_means$avg_unique_species)] = 0
+vu_phl_ebird_hex_means$avg_unique_per_sei[is.na(vu_phl_ebird_hex_means$avg_unique_per_sei)] = 0
+```
+
+The importance of these hotspots is highlighted even further if we look only at the distribution of vulnerable species in Philadelphia.
+
+Again, we have to be mindful of diminishing marginal returns on observations and the likelihood of undersampling in some of these areas. The best indication of true vulnerable biodiversity is probably a comparison of average unique species per hexagon and average unique species. This could, again, be improved by employing local rather than global rarefaction, but that is beyond the scope of the current project.
+
+Recalling from above that research suggests that already-vulnerable species reliant on rare and/or vulnerable coastal habitats will be most threatened, the maps of total average unique species and of average unique vulnerable species offer the best understanding of bird biodiversity hotspots in Philadelphia. Here they are again side by side:
+```{r hotspots}
+tmap_mode('view')
+
+unique = tm_shape(phl_ebird_hex_means) + 
+                  tm_polygons(title = "Avg. Unique Species (All)",
+                              col = "avg_unique_species", 
+                              style = "jenks", 
+                              palette = "viridis", 
+                              alpha = 0.7, 
+                              id = "avg_unique_species")
+
+vu_unique = tm_shape(vu_phl_ebird_hex_means) + 
+                  tm_polygons(title = "Avg. Unique Vulnerable Species",
+                              col = "avg_unique_species", 
+                              style = "jenks", 
+                              palette = "viridis", 
+                              alpha = 0.7, 
+                              id = "avg_unique_species")
+
+tmap_arrange(unique, vu_unique)
+```
 
 ### Sea Level Rise
+
 Explain distinction between flooding and SLR
 
-#### Wrangling
+Pulling in NOAA data here, visualizing
 
+From [NOAA](https://coast.noaa.gov/slr/#/layer/slr/2/-8377224.1536652865/4852001.7769825505/13/satellite/none/0.8/2050/interHigh/midAccretion):
+
+> Water levels are relative to local Mean Higher High Water Datum. Areas that are hydrologically connected to the ocean are shown in shades of blue (darker blue = greater depth).
+
+> Low-lying areas, displayed in green, are hydrologically "unconnected" areas that may also flood. They are determined solely by how well the elevation data captures the area's drainage characteristics. The mapping may not accurately capture detailed hydrologic/hydraulic features such as canals, ditches, and stormwater infrastructure. A more detailed analysis, may be required to determine the area's actual susceptibility to flooding.
+
+#### Wrangling
+```{r slr import}
+#| include: false
+#| cache: true
+
+# create object that has path to gdb
+gdb_path = 'C:/Users/Nissim/Desktop/Fall 2022/Floodplain Management/Final Project Data/NOAA/PA_slr_final_dist.gdb'
+
+# list all the layers (why its not a data frame idk)
+all_layers <- st_layers(gdb_path)
+
+# find all polygon fcs 
+poly_index <- which(stringr::str_detect(unlist(all_layers[["geomtype"]]), "Polygon"))
+
+all_polygons <- purrr::map(
+  all_layers[["name"]][poly_index],
+  ~st_read(gdb_path, layer = .x) |>
+  st_transform(crs = st_crs(ebird_sf)) |>
+  st_make_valid()
+)
+
+
+ calculate_overlap <- function(polygon, ephl_bird_hex_means, id) {
+  # this function assumes that the hex_id and Shape Area 
+  # are always available in the respective sf object
+  # assign an id 
+    st_intersection(phl_ebird_hex_means, polygon) |> 
+    as_tibble()|>
+    mutate(area = as.numeric(st_area(geometry))) |>
+    group_by(hex_id)|>
+    summarise(area = sum(area),
+              id = {{ id }})
+          }
+
+
+# the id is the index of the iteration here (imap == index map)
+overlapping_areas <- purrr::imap(
+  all_polygons[12:22],  ~calculate_overlap(.x, phl_ebird_hex_means, .y) #only need 0 to 7ft slr scenarios
+  )
+
+# squish them all together 
+areas_by_id <- bind_rows(overlapping_areas) |> 
+  # spread them so that each column is an id
+  # and the value is the area
+  tidyr::pivot_wider(names_from = "id",
+                     values_from = "area",
+                     names_prefix = "polygon_")
+
+# join back to the hexagons
+phl_ebird_hex_means = left_join(phl_ebird_hex_means, areas_by_id)
+
+phl_ebird_hex_means = phl_ebird_hex_means |>
+                      mutate(hex_area = as.numeric(st_area(geometry)),
+                             pct_SLR_0ft = polygon_1 / hex_area * 100, #note that polygon_13 is actually 10ft slr--exclude it
+                             pct_SLR_1ft = polygon_3 / hex_area * 100,
+                             pct_SLR_2ft = polygon_4 / hex_area * 100,
+                             pct_SLR_3ft = polygon_5 / hex_area * 100,
+                             pct_SLR_4ft = polygon_6 / hex_area * 100,
+                             pct_SLR_5ft = polygon_7 / hex_area * 100,
+                             pct_SLR_6ft = polygon_8 / hex_area * 100,
+                             pct_SLR_7ft = polygon_9 / hex_area * 100,
+                             pct_SLR_8ft = polygon_10 / hex_area * 100,
+                             pct_SLR_9ft = polygon_11 / hex_area * 100,
+                             pct_SLR_10ft = polygon_2 / hex_area * 100)
+
+piv_long_SLR = phl_ebird_hex_means |>
+  select(pct_SLR_0ft,
+         pct_SLR_1ft,
+         pct_SLR_2ft,
+         pct_SLR_3ft,
+         pct_SLR_4ft,
+         pct_SLR_5ft,
+         pct_SLR_6ft,
+         pct_SLR_7ft) |>
+  pivot_longer(
+    cols = starts_with("pct_SLR_"),
+    names_to = "pct_SLR_",
+    names_prefix = "pct_SLR_"
+  )
+```
 #### Exploration
-- Following Cornell precedent with % breaks
+
+-   Following Cornell precedent with % breaks
 
 ##### Mapping
+```{r piv long slr}
+breaks = c(0, 10, 30, 70, 100)
+
+tm_shape((piv_long_SLR |> filter (pct_SLR_ %in% c("0ft", "1ft")))) +
+  tm_polygons(
+              title = "Pct. Inundation",
+              col = 'value', 
+              palette = 'viridis', 
+              style = 'fixed',
+              breaks = breaks,
+              alpha = 0.7) +
+  tm_facets(by = "pct_SLR_")
+
+tm_shape((piv_long_SLR |> filter (pct_SLR_ %in% c("2ft", "3ft", "4ft")))) +
+  tm_polygons(title = "Pct. Inundation",
+              col = 'value', 
+              palette = 'viridis', 
+              style = 'fixed',
+              breaks = breaks,
+              alpha = 0.7) +
+  tm_facets(by = "pct_SLR_")
+
+tm_shape((piv_long_SLR |> filter (pct_SLR_ %in% c("5ft", "6ft", "7ft")))) +
+  tm_polygons(title = "Pct. Inundation",
+              col = 'value', 
+              palette = 'viridis', 
+              style = 'fixed',
+              breaks = breaks,
+              alpha = 0.7) +
+  tm_facets(by = "pct_SLR_")
+```
 
 ### Clustering Analysis
-Why try clustering analysis?
+
+```{r cluster plots}
+ggplot(phl_ebird_hex_means, aes(x = pct_SLR_1ft, y = avg_unique_species, col = pct_SLR_1ft, size = avg_unique_species)) +
+                            geom_point() +
+  labs(title = "Avg. Unique Species vs. % Sea Level Rise",
+       subtitle = "1 ft. SLR Scenario",
+       x = "% SLR",
+       y = "Avg. Unique Species",
+       size = "Avg. Unique Species",
+       col = "% SLR") +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
+```
+
+Why try clustering analysis? Because it helps us prioritize
 
 Can use DBSCAN, I think
 
+Can see that it's not normally distributed
+
+```{r avg species hist}
+ggplot(phl_ebird_hex_means, aes(x = avg_unique_species)) +
+  geom_histogram() +
+  labs(title = "Avg. Unique Species",
+       subtitle = "Per Hexagon",
+       x = "Number of Unique Species",
+       y = "Count of Hexagons") +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
+```
+This is where clustering analysis becomes an issue. To get around this complexity, I incorporate a few different classification schemes for our "most biodiverse" areas: quantile 
+
+It's worth being mindful that these are not perfect proxies for "top" hotspots, especially because any ranking bumps up against the issue that the number of hexagons we have here is arbitrary.
+
+
 ## Findings
+
+```{r jenks clusters}
+
+jenks = getJenksBreaks(phl_ebird_hex_means$avg_unique_species, 5)
+
+phl_ebird_hex_means = phl_ebird_hex_means |>
+                        mutate(jenks_bio_risk = case_when(
+                                                pct_SLR_1ft >= 70 & avg_unique_species >= jenks[3] ~ "High SLR, High Biodiversity",
+                                                pct_SLR_1ft >= 70 & avg_unique_species >= jenks[2] ~ "High SLR, Medium Biodiversity",
+                                                 pct_SLR_1ft >= 30 & pct_SLR_1ft < 70 & avg_unique_species >= jenks[3] ~ "Medium SLR, High Biodiversity",
+                                                pct_SLR_1ft >= 30 & pct_SLR_1ft < 70 & avg_unique_species >= jenks[2] ~ "Medium SLR, Medium Biodiversity",
+                                                TRUE ~ "Minimal Risk"
+                                                ))
+```
+
+```{r tmap jenks clusters}
+risk_palette = c("red", "orange", "orange", "yellow", NA)
+
+tm_shape(phl_ebird_hex_means) +
+  tm_polygons(title = "Jenks Breaks",
+              col = 'jenks_bio_risk', 
+              palette = risk_palette, 
+              style = 'cat',
+              alpha = 0.7,
+              id = "hex_id",
+              popup.vars = c("Avg. Unique Species" = "avg_unique_species",
+                             "% SLR (1ft)" = "pct_SLR_1ft"))
+```
+
+```{r quantile clusters}
+
+quantile = quantile(phl_ebird_hex_means$avg_unique_species, probs = seq(0, 1, 1/5))
+
+phl_ebird_hex_means = phl_ebird_hex_means |>
+                        mutate(quantile_bio_risk = case_when(
+                                                pct_SLR_1ft >= 70 & avg_unique_species >= quantile[5] ~ "High SLR, High Biodiversity",
+                                                pct_SLR_1ft >= 70 & avg_unique_species >= quantile[4] ~ "High SLR, Medium Biodiversity",
+                                                 pct_SLR_1ft >= 30 & pct_SLR_1ft < 70 & avg_unique_species >= quantile[5] ~ "Medium SLR, High Biodiversity",
+                                                pct_SLR_1ft >= 30 & pct_SLR_1ft < 70 & avg_unique_species >= quantile[4] ~ "Medium SLR, Medium Biodiversity",
+                                                TRUE ~ "Minimal Risk"
+                                                ))
+```
+
+```{r tmap quantile clusters}
+tm_shape(phl_ebird_hex_means) +
+  tm_polygons(title = "Quantile Breaks",
+              col = 'quantile_bio_risk', 
+              palette = risk_palette, 
+              style = 'cat',
+              alpha = 0.7,
+              id = "hex_id",
+              popup.vars = c("Avg. Unique Species" = "avg_unique_species",
+                             "% SLR (1ft)" = "pct_SLR_1ft"))
+```
+
+The areas most likely to be impacted by sea level rise under the intermediate scenario likely to occur by 2040 do not perfectly align with the obvious biodiversity hotspots at FDR, John Heinz, and Pennypack on the Delaware. Instead (perhaps unsurprisingly), they form a near-continuous chain along the shore of the Delaware. 
 
 ## Conclusions
 
-### Possible Applications
+### Key Takeaways
+This project aimed to explore whether citizen science data from eBird could support an analysis of the potential impacts of sea level rise on bird biodiversity in Philadelphia. 
 
-#### Habitat Restoration
 
-### Limitations
+- Even rudimentary tools are helpful in analyzing these data; sophisticated methods like rarefaction and clustering analysis might be overkill. (This is in keeping with what Pilkey says.)
+
+Furthermore, as more resources are invested in tools like eBird and more data are collected, analyses like these will become easier and more robust. Some of the issues with this particular project relate to insufficient data, for instance, and should become irrelevant as eBird data are reported more and more consistently. Additionally, issues related to statistical rigor could be ameliorated by developing a consistent, reproducible workflow in conjunction with specialists. As tools like eBird became more commonplace and established, there will be a greater and greater incentive for governments, research institutions, and so forth to invest in making them reliable, sustainable, and reproducible.
+
+As Philadelphia prepares for inevitable sea level rise, tools like this one can help local institutions of government make better decisions about conversation. For instance, knowing that [sea walls pose an outsize threat to bird biodiversity](https://www.audubon.org/news/the-best-defense-against-sea-level-rise-leaves-little-room-birds), understanding the geography of biodiversity in the city can help guide choices between habitat restoration and sea wall construction, or motivate the avoidance of sea walls in some parts of the city.^[Dugan, J.E., Hubbard, D.M., Rodil, I.F., Revell, D.L. and Schroeter, S. (2008), Ecological effects of coastal armoring on sandy beaches. Marine Ecology, 29: 160-170. https://doi.org/10.1111/j.1439-0485.2008.00231.x] 
 
 #### Prediction vs. Monitoring
+
 At the outset of this project, I hoped to model species distribution in Philadelphia and predict how it would be impacted by sea level rise. In the course of my research, though, I came to the conclusion that this was neither feasible nor desirable, for reasons that are worth stating.
 
-First, the quality of available data was insufficient for predictive modeling at an urban scale. Presence-only or presence/absence distribution models both rely on point data for species observations combined with raster data for landscape variables such as land cover. Because of the way citizen science data in eBird is reported, the observations available did not include adequately precise coordinate data for this approach, nor would it have been feasible to reconcile the different landscape variables given their diverse spatial scales. 
+First, the quality of available data was insufficient for predictive modeling at an urban scale. Presence-only or presence/absence distribution models both rely on point data for species observations combined with raster data for landscape variables such as land cover. Because of the way citizen science data in eBird is reported, the observations available did not include adequately precise coordinate data for this approach, nor would it have been feasible to reconcile the different landscape variables given their diverse spatial scales.
 
-Second, environmental modeling is notoriously complex, even for single species with ideal data. It is impossible to divorce the impact of sea level rise alone on biodiversity from other confounding factors like [coastal modification, saltwater intrusion, increased rainfall, and water pollution,](https://explorer.audubon.org/explore/conservation-challenges?zoom=3&x=1306099.1620122588&y=2810864.562197212) let alone less proximate factors like changes in human population density and land use or the arrival of invasive species. Furthermore, as Pilkey and Pilkey point out, even if the scale of such impacts could be measured, it is difficult to account for ordering complexity: the unpredictable differences in impact depending on the order in which events occur.^[*Useless Arithmetic*, 2007] As Jimenez-Valverde et al., explain, prediction via species distribution modeling only works "if correlation structures are stable and consistent across different landscapes and time periods".^[Jimenez-Valverde et al., 2009] Given the aforementioned rapid change of key factors like habitat fragmentation, buildout, and land cover in urban environments, attempts at predictive modeling of biodiversity for cities may do more harm than good by obscuring the underlying uncertainty.
+Second, environmental modeling is notoriously complex, even for single species with ideal data. It is impossible to divorce the impact of sea level rise alone on biodiversity from other confounding factors like [coastal modification, saltwater intrusion, increased rainfall, and water pollution,](https://explorer.audubon.org/explore/conservation-challenges?zoom=3&x=1306099.1620122588&y=2810864.562197212) let alone less proximate factors like changes in human population density and land use or the arrival of invasive species. Furthermore, as Pilkey and Pilkey point out, even if the scale of such impacts could be measured, it is difficult to account for ordering complexity: the unpredictable differences in impact depending on the order in which events occur.[^16] As Jimenez-Valverde et al., explain, prediction via species distribution modeling only works "if correlation structures are stable and consistent across different landscapes and time periods".[^17] Given the aforementioned rapid change of key factors like habitat fragmentation, buildout, and land cover in urban environments, attempts at predictive modeling of biodiversity for cities may do more harm than good by obscuring the underlying uncertainty.
 
-With that in mind, I follow Orrin Pilkey in suggesting that, in this context, monitoring and adapting are far more important than predicting.^[*Useless Arithmetic*, 2007] Given that the general scope and direction of sea level rise and other threats to biodiversty are known, citizen science data employed in projects like this one can help cities keep tabs on their biodiversity and make adjustments to support it, without relying on dubious predictive models. 
+[^16]: *Useless Arithmetic*, 2007
+
+[^17]: Jimenez-Valverde et al., 2009
+
+With that in mind, I follow Orrin Pilkey in suggesting that, in this context, monitoring and adapting are far more important than predicting.[^18] Given that the general scope and direction of sea level rise and other threats to biodiversty are known, citizen science data employed in projects like this one can help cities keep tabs on their biodiversity and make adjustments to support it, without relying on dubious predictive models.
+
+[^18]: *Useless Arithmetic*, 2007
 
 Finally, the use of citizen science data for management can help to engage community memebers in conservation and stewardship by giving them a defined, valuable role to play in efforts to support local biodiversity. Philadelphia already has a strong citizen science and stewardship community in the form of grops like the [City Nature Challenge](https://cncphilly.org/), [Bird Philly](https://birdphilly.org/cgi-sys/suspendedpage.cgi), [Philly Naturalists](https://phillynaturalists.org/), and the [Master Watershed Steward program](https://extension.psu.edu/programs/watershed-stewards/counties/philadelphia). Employing data that they collect gives them a demonstrable stake in conservation efforts and can help to justify investment in a virtuous cycle of municipal support for local stewardship and citizen science helping to advance municipal conservation efforts and so forth.
 
 ### Next Steps
 
 #### Improve Statistical Rigor
+
 A key next step for this project would be employing more rigorous statistical tools to analyze species richness and distribution. As stated in the Data Wrangling and Exploration section, calculating a rarefaction curve using eBird data would be a more accurate way of estimating total species richness. There are a variety of ways to accomplish this; the [`vegan` package in R](https://github.com/vegandevs/vegan), for example, includes a function to calculate rarefaction curves. However, this requires an understanding of quantitative ecology beyond what I am currently capable of. To this end, if I were to repeat this project, I would want to recruit a quantitative ecologist to help improve the statistical and methodological rigor of my analysis.
 
 Furthermore, it would be worthwhile to incorporate a sophisticated analysis of spatial clustering for biodiversity. In an early version of this project, I attempted to calculate global and local Moran's I values to analyze the distribution of biodiversity for [spatial autocorrelation](https://www.sciencedirect.com/topics/computer-science/spatial-autocorrelation). However, the patterns that I found were unexpected and had p-values that indicated that they were not statistically significant. I suspect that this is related to extreme habitat fragmentation and abrupt land use changes in urban contexts, as well as my choice to use hexagon bins to accommodate issues with the point data from eBird. Again, a quantitative ecologist who focuses on urban contexts would likely better understand these issues and be able to provide guidance.
 
 #### Develop a Workflow
+
 One of the primary aims of this project is to demonstrate replicability. Nothing about the data used is unique to Philadelphia; in theory, this project could be replicated in any city with sufficient eBird data and sea level rise projections. (The eBird data could even be used in isolation for projects unrelated to sea level rise.) If a proper workflow were developed, it would be possible to easily apply these tools in other cities to support conservation decisions, including in cities that otherwise lack substantial data on biodiversity. In order to facilitate this, it would be worth 1) solidifying a consistent workflow, 2) developing some kind of guide such as [the one prepared by the Cornell Ornithology Lab for handling eBird data](https://cornelllabofornithology.github.io/ebird-best-practices/), and 3) potentially preparing an R package to simplify this workflow and make it more consistent, much like Cornell has done with [their `auk` package](https://rdrr.io/github/mstrimas/auk/#vignettes). Together, these tools could help cities around the globe more effectively and consistently analyze their local biodiversity and potential threats to it.
 
 #### Incorporate More Data
+
 There are a variety of opportunities to incorporate more nuanced, diverse data into an analysis like this. Three primary opportunities are 1) more species observations other than birds, 2) common ecology-related raster data, and 3) datasets specific to urban contexts.
 
-Biodiversity consists of more than birds. Although it is nearly impossible to account for the full spectrum of biodiversity in an urban contexts (how, for example, can we reliably sample microorganisms at any meaningful scale?), measures of biodiversity such as the [City Biodiversity Index](https://www.cbd.int/doc/publications/cbd-ts-98-en.pdf) incorporate other biotic kingdom, namely arthropods and vascular plants.^[https://www.cbd.int/doc/publications/cbd-ts-98-en.pdf] Expanding beyond an analysis of avian biodiversity can offer a more complex understanding of a city's ecosystems, which is vital in planning responses to systems as complex as climate change. To accomplish this, future analysis could incorporate data from platforms such as [iNaturalist](https://www.inaturalist.org/pages/about), which collects and publishes citizen science data on all biota, not just birds. One example of a potential application of this is [Urban Shift's report on conservation planning in San Jose, Costa Rica](https://cities-urbanshift.s3.eu-west-3.amazonaws.com/baseline-indicators/biodiversity/reports/UrbanShift-Biodiversity-SanJose.html).
+Biodiversity consists of more than birds. Although it is nearly impossible to account for the full spectrum of biodiversity in an urban contexts (how, for example, can we reliably sample microorganisms at any meaningful scale?), measures of biodiversity such as the [City Biodiversity Index](https://www.cbd.int/doc/publications/cbd-ts-98-en.pdf) incorporate other biotic kingdom, namely arthropods and vascular plants.[^19] Expanding beyond an analysis of avian biodiversity can offer a more complex understanding of a city's ecosystems, which is vital in planning responses to systems as complex as climate change. To accomplish this, future analysis could incorporate data from platforms such as [iNaturalist](https://www.inaturalist.org/pages/about), which collects and publishes citizen science data on all biota, not just birds. One example of a potential application of this is [Urban Shift's report on conservation planning in San Jose, Costa Rica](https://cities-urbanshift.s3.eu-west-3.amazonaws.com/baseline-indicators/biodiversity/reports/UrbanShift-Biodiversity-SanJose.html).
+
+[^19]: https://www.cbd.int/doc/publications/cbd-ts-98-en.pdf
 
 Another possible supplement to biodiversity data for conservation purposes are the standard raster layers often used in biodiversity analyses such as species distribution modeling. This includes data such as tree cover, land cover type, distance to water, altitude, slope, aspect, soil type, and more. Many (if not all) of these data are available publicly, especially in the United States, from sources like the [United States Geological Service](https://www.usgs.gov/products/data) or [Pennsylvania Spatial Data Access](https://www.pasda.psu.edu/). The primary challenge with these datasets is reconciling their different resolutions in order to apply them in the desired context.
 
 Finally, given the urban context of this evaluation, it would be worthwhile to incorporate measures of biodiveristy disturbance associated with urbanization, such as habitat fragmentation, impervious surface cover, and human population density. A major challenge here, however, is that such measures change on a much more granular scale in urban contexts than in "natural" contexts where ecological analyses are commonly carried out. Similarly, many urban interventions to support biodiversity, such as pocket parks or pollinator gardens, happen at scales so small that they would be hard to meaningfully factor into an analysis such as this one.
 
-One important caveat to this discussion, however, is that any additional data must be motivated by a clear use. First, much of these data likely covaries, raising the possibility of redundance. In particular, the premise of choosing indicator species is to simplifying ecological monitoring by using an effective proxy. Introducing too much new data may defeat the purpose of the exercise. Second (and  this is especially important in the case of Philadelphia), a main motivation of this project is to find a cost-effective, scalable means of exploring the impact of sea level rise on biodiversity. Introducing more data raises the prospect of diminishing marginal returns: that is, it may exceed the capacity of under-resourced local governments to actually analyze and use the data without actually producing a more robust understanding of conservation challenges. In sum, more data is useful, but only insofar as it contributes to under-resourced cities' ability to better plan for conservation.
+One important caveat to this discussion, however, is that any additional data must be motivated by a clear use. First, much of these data likely covaries, raising the possibility of redundance. In particular, the premise of choosing indicator species is to simplifying ecological monitoring by using an effective proxy. Introducing too much new data may defeat the purpose of the exercise. Second (and this is especially important in the case of Philadelphia), a main motivation of this project is to find a cost-effective, scalable means of exploring the impact of sea level rise on biodiversity. Introducing more data raises the prospect of diminishing marginal returns: that is, it may exceed the capacity of under-resourced local governments to actually analyze and use the data without actually producing a more robust understanding of conservation challenges. In sum, more data is useful, but only insofar as it contributes to under-resourced cities' ability to better plan for conservation.
 
 #### Interace with Government and Community
+
 Above all else, the best next step would be to connect with members of the local government and various community organizations to identify potential applications of an analysis like this. Currently, this project amounts to an intellectual exercise. However, by speaking with members of the local parks department, conservation organizations, or community stewardship groups, it may be possible to find ways to use this analysis to support conservation work that they are currently doing or to motivate new work.
-
-
