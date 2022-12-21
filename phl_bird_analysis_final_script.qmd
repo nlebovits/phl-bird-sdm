@@ -546,37 +546,51 @@ shape of the hotspots as similar, and the hotspots near the Delaware River and
 in South Philadelphia stand out as key points of overlap between the two maps.
 This suggests that those are especially important hotspots of bird
 biodiversity. Again, we have to be mindful of diminishing marginal returns on observations and the likelihood of undersampling in some of these areas. The best indication of true vulnerable biodiversity is probably a comparison of average unique species per hexagon and average unique species. This could, again, be improved by employing local rather than global rarefaction, but that is beyond the scope of the current project.
+ 
+:::: {.columns}
 
-
+::: {.column width="45%"}
+###### **Avg. Unique Species**
 ```{r hotspots}
 tmap_mode('view')
 
-unique = tm_shape(phl_ebird_hex_means) + 
-                  tm_polygons(title = "Avg. Unique Species",
+tm_shape(phl_ebird_hex_means) + 
+                  tm_polygons(title = "Avg. Species",
                               col = "avg_unique_species", 
                               style = "jenks", 
                               palette = "viridis", 
                               alpha = 0.7, 
                               id = "hex_id",
                               popup.vars = c("Avg. Unique Species" = "avg_unique_species")) +
-                  tm_layout(title = "Avg. Unique Species per Year")+
                   tm_view(view.legend.position = c("right", "bottom"),
             colorNA = 'transparent')
 
-vu_unique = tm_shape(vu_phl_ebird_hex_means) + 
-                  tm_polygons(title = "Avg. Unique Species",
-                              col = "avg_unique_species", 
-                              style = "jenks", 
-                              palette = "viridis", 
-                              alpha = 0.7, 
-                              id = "hex_id",
-                              popup.vars = c("Avg. Unique Species" = "avg_unique_species")) +
-                  tm_layout(title = "Avg. Unique Vulnerable Species per Year") +
-                  tm_view(view.legend.position = c("right", "bottom"),
-            colorNA = 'transparent')
-
-tmap_arrange(unique, vu_unique)
 ```
+:::
+
+::: {.column width="10%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="45%"}
+###### **Avg. Unique Vulnerable Species**
+```{r vul hotspots}
+tmap_mode('view')
+
+tm_shape(vu_phl_ebird_hex_means) + 
+                  tm_polygons(title = "Avg. Species",
+                              col = "avg_unique_species", 
+                              style = "jenks", 
+                              palette = "viridis", 
+                              alpha = 0.7, 
+                              id = "hex_id",
+                              popup.vars = c("Avg. Unique Species" = "avg_unique_species")) +
+                  tm_view(view.legend.position = c("right", "bottom"),
+            colorNA = 'transparent')
+```
+:::
+
+::::
 
 #### Sea Level Rise
 
@@ -651,7 +665,12 @@ phl_ebird_hex_means = phl_ebird_hex_means |>
                              pct_SLR_9ft = polygon_11 / hex_area * 100,
                              pct_SLR_10ft = polygon_2 / hex_area * 100)
 
+phl_ebird_hex_means$pct_SLR_0ft[is.na(phl_ebird_hex_means$pct_SLR_0ft)] = 0 #replace NA values with zero !!this is important!!
 phl_ebird_hex_means$pct_SLR_1ft[is.na(phl_ebird_hex_means$pct_SLR_1ft)] = 0 #replace NA values with zero !!this is important!!
+phl_ebird_hex_means$pct_SLR_2ft[is.na(phl_ebird_hex_means$pct_SLR_2ft)] = 0 #replace NA values with zero !!this is important!!
+phl_ebird_hex_means$pct_SLR_3ft[is.na(phl_ebird_hex_means$pct_SLR_3ft)] = 0 #replace NA values with zero !!this is important!!
+phl_ebird_hex_means$pct_SLR_7ft[is.na(phl_ebird_hex_means$pct_SLR_7ft)] = 0 #replace NA values with zero !!this is important!!
+
 
 phl_ebird_hex_means = phl_ebird_hex_means |>
                         mutate(jenks_bio_risk = case_when(
@@ -679,6 +698,8 @@ piv_long_SLR = phl_ebird_hex_means |>
     names_to = "pct_SLR_",
     names_prefix = "pct_SLR_"
   )
+
+breaks = c(0, 10, 30, 70, 100) # breaks for color palette 
 ```
 
 #### Exploration
@@ -692,11 +713,14 @@ Furthermore, even under the 1 ft sea level rise scenario, areas immediately adja
 
 Here, we map 0 foot, 1 foot, 2 foot, 3 foot, and 7 foot sea level rise scenarios for the sake of efficiency. Note that NOAA does not anticipate more than 3 feet of sea level rise before the year 2080, and even that would be under their "immediate high" scenario.
 
-```{r piv long slr}
+:::: {.columns}
 
-breaks = c(0, 10, 30, 70, 100)
+::: {.column width="45%"}
+###### **0 Feet of Sea Level Rise**
+```{r 0 ft}
+tmap_mode('view')
 
-zero_ft = tm_shape((piv_long_SLR |> filter (pct_SLR_ == "0ft"))) +
+tm_shape((piv_long_SLR |> filter (pct_SLR_ == "0ft"))) +
   tm_polygons(
               title = "Pct. Inundation",
               col = 'value', 
@@ -706,70 +730,114 @@ zero_ft = tm_shape((piv_long_SLR |> filter (pct_SLR_ == "0ft"))) +
               alpha = 0.7, 
               id = "hex_id",
               popup.vars = c("Pct. Inundation" = "pct_SLR_")) +
-    tm_layout(title = "Current Sea Level Rise")+
   tm_view(view.legend.position = c("right", "bottom"),
             colorNA = 'transparent')
-  
-one_ft = tm_shape((piv_long_SLR |> filter (pct_SLR_ == "1ft"))) +
-  tm_polygons(
-              title = "Pct. Inundation",
-              col = 'value', 
-              palette = 'viridis', 
-              style = 'fixed',
-              breaks = breaks,
-              alpha = 0.7, 
-              id = "hex_id",
-              popup.vars = c("Pct. Inundation" = "pct_SLR_")) +
-    tm_layout(title = "1 Foot Sea Level Rise")+
-  tm_view(view.legend.position = c("right", "bottom",
-            colorNA = 'transparent'))
-  
-two_ft = tm_shape((piv_long_SLR |> filter (pct_SLR_ == "2ft"))) +
-  tm_polygons(
-              title = "Pct. Inundation",
-              col = 'value', 
-              palette = 'viridis', 
-              style = 'fixed',
-              breaks = breaks,
-              alpha = 0.7, 
-              id = "hex_id",
-              popup.vars = c("Pct. Inundation" = "pct_SLR_")) +
-    tm_layout(title = "Two Feet Sea Level Rise")+
-  tm_view(view.legend.position = c("right", "bottom"),
-            colorNA = 'transparent')
-  
-three_ft = tm_shape((piv_long_SLR |> filter (pct_SLR_ == "3ft"))) +
-  tm_polygons(
-              title = "Pct. Inundation",
-              col = 'value', 
-              palette = 'viridis', 
-              style = 'fixed',
-              breaks = breaks,
-              alpha = 0.7, 
-              id = "hex_id",
-              popup.vars = c("Pct. Inundation" = "pct_SLR_")) +
-    tm_layout(title = "Three Feet Sea Level Rise")+
-  tm_view(view.legend.position = c("right", "bottom",
-            colorNA = 'transparent'))
-  
-seven_ft = tm_shape((piv_long_SLR |> filter (pct_SLR_ == "7ft"))) +
-  tm_polygons(
-              title = "Pct. Inundation",
-              col = 'value', 
-              palette = 'viridis', 
-              style = 'fixed',
-              breaks = breaks,
-              alpha = 0.7, 
-              id = "hex_id",
-              popup.vars = c("Pct. Inundation" = "pct_SLR_")) +
-    tm_layout(title = "Seven Feet Sea Level Rise")+
-  tm_view(view.legend.position = c("right", "bottom"),
-            colorNA = 'transparent')
-  
-tmap_arrange(zero_ft, one_ft, ncol = 2)
 
-tmap_arrange(two_ft, three_ft, seven_ft, ncol = 3)
 ```
+:::
+
+::: {.column width="10%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="45%"}
+###### **1 Foot of Sea Level Rise**
+```{r 1 ft}
+tmap_mode('view')
+
+tm_shape((piv_long_SLR |> filter (pct_SLR_ == "1ft"))) +
+  tm_polygons(
+              title = "Pct. Inundation",
+              col = 'value', 
+              palette = 'viridis', 
+              style = 'fixed',
+              breaks = breaks,
+              alpha = 0.7, 
+              id = "hex_id",
+              popup.vars = c("Pct. Inundation" = "pct_SLR_")) +
+  tm_view(view.legend.position = c("right", "bottom"),
+            colorNA = 'transparent')
+```
+:::
+
+::::
+
+<br/><br/>
+
+:::: {.columns}
+
+::: {.column width="30%"}
+###### **2 Feet of Sea Level Rise**
+```{r 2 ft}
+tmap_mode('view')
+
+tm_shape((piv_long_SLR |> filter (pct_SLR_ == "2ft"))) +
+  tm_polygons(
+              title = "Pct. Inundation",
+              col = 'value', 
+              palette = 'viridis', 
+              style = 'fixed',
+              breaks = breaks,
+              alpha = 0.7, 
+              id = "hex_id",
+              popup.vars = c("Pct. Inundation" = "pct_SLR_")) +
+  tm_view(view.legend.position = c("right", "bottom"),
+            colorNA = 'transparent',
+          set.view = 10)
+```
+:::
+
+::: {.column width="5%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="30%"}
+###### **3 Feet of Sea Level Rise**
+```{r 3 ft}
+tmap_mode('view')
+
+tm_shape((piv_long_SLR |> filter (pct_SLR_ == "3ft"))) +
+  tm_polygons(
+              title = "Pct. Inundation",
+              col = 'value', 
+              palette = 'viridis', 
+              style = 'fixed',
+              breaks = breaks,
+              alpha = 0.7, 
+              id = "hex_id",
+              popup.vars = c("Pct. Inundation" = "pct_SLR_")) +
+  tm_view(view.legend.position = c("right", "bottom"),
+            colorNA = 'transparent',
+          set.view = 10)
+```
+:::
+
+::: {.column width="5%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="30%"}
+###### **7 Feet of Sea Level Rise**
+```{r 7 ft}
+tmap_mode('view')
+
+tm_shape((piv_long_SLR |> filter (pct_SLR_ == "7ft"))) +
+  tm_polygons(
+              title = "Pct. Inundation",
+              col = 'value', 
+              palette = 'viridis', 
+              style = 'fixed',
+              breaks = breaks,
+              alpha = 0.7, 
+              id = "hex_id",
+              popup.vars = c("Pct. Inundation" = "pct_SLR_")) +
+  tm_view(view.legend.position = c("right", "bottom"),
+            colorNA = 'transparent',
+          set.view = 10)
+```
+:::
+
+::::
 
 ### Cluster Analysis
 To identify high-priority areas for conservation management, we can turn to cluster analysis. In statistics, cluster analysis helps to identify groupings
@@ -836,6 +904,7 @@ ggplot(phl_ebird_hex_means, aes(x = pct_SLR_1ft, y = avg_unique_species, col = p
 
 Based on our map, we can see that there are two areas in the city that will be heavily inundated under the 1 foot sea level rise scenario and also have high biodiversity. These roughly correspond to the Navy Yard in South Philadelphia and Glen Foerd in the Northeast. 
 
+###### **Sea Level Rise Risk to Biodiversity**
 ```{r tmap jenks clusters}
 tmap_mode('view')
 
@@ -858,7 +927,6 @@ tm_shape(phl_ebird_hex_means) +
               id = "hex_id",
               popup.vars = c("Avg. Unique Species" = "avg_unique_species",
                              "% SLR (1ft)" = "pct_SLR_1ft"))+
-    tm_layout(title = "Sea Level Rise Risk to Biodiversity")+
     tm_view(view.legend.position = c("right", "bottom"),
             colorNA = 'transparent')
 ```

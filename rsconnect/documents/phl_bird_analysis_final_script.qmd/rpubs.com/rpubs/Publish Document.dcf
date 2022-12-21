@@ -4,8 +4,8 @@ username:
 account: rpubs
 server: rpubs.com
 hostUrl: rpubs.com
-appId: https://api.rpubs.com/api/v1/document/986063/7b32f152e924429daae7474552a73e83
-bundleId: https://api.rpubs.com/api/v1/document/986063/7b32f152e924429daae7474552a73e83
-url: http://rpubs.com/nlebovits/986063/edit
-when: 1671589186.14662
-lastSyncTime: 1671589186.14663
+appId: https://api.rpubs.com/api/v1/document/986127/6cf162391ba6486d9f13bafe89623c97
+bundleId: https://api.rpubs.com/api/v1/document/986127/6cf162391ba6486d9f13bafe89623c97
+url: http://rpubs.com/publish/claim/986127/9c94f723d9e04439bd03675ca72791ea
+when: 1671592822.75452
+lastSyncTime: 1671592822.75453
