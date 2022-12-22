@@ -17,7 +17,7 @@ execute:
 ---
 
 ## Summary
-In this project, I explore the potential of using publicly available citizen science data from eBird to asses the threat of sea level rise to bird biodiversity in Philadelphia. Specifically, the Navy Yard in South Philadelphia and Glen Foerd in Northeast Philadelphia are identified as areas facing a particularly high threat by sea level rise to biodiversity. Future efforts along these lines should focus on improving on the statistical rigor of this analysis and standardizing a streamlined workflow to allow for replication in Philadelphia and other cities, while also striving to interface with local government and community members to translate this model into concrete conservation efforts.
+In this project, I explore the potential of using publicly available citizen science data from eBird to asses the threat of sea level rise to bird biodiversity in Philadelphia. Specifically, the John Heinz National Wildlife Refuge, Pennypack on the Delaware, and Bartram's Garden are identified as areas facing a particularly high threat by sea level rise to biodiversity. Future efforts along these lines should focus on improving on the statistical rigor of this analysis and standardizing a streamlined workflow to allow for replication in Philadelphia and other cities, while also striving to interface with local government and community members to translate this model into concrete conservation efforts.
 
 ## Introduction
 
@@ -71,7 +71,7 @@ This project focuses on bird biodiversity for two reasons. First, birds are stro
 
 [^11]: Callaghan, C. T., M. B. Lyons, J. M. Martin, R. E. Major, and R. T. Kingsford. "Assessing the reliability of avian biodiversity measures of urban greenspaces using eBird citizen science data". Avian Conservation and Ecology, vol. 12, no.2, 2017, pp.12. https://doi.org/10.5751/ACE-01104-120212; Callaghan, C. T., J. H. Wilshire, J. M. Martin, R. E. Major, M. B. Lyons, and R. T. Kingsford. "The Greenspace Bird Calculator: a citizen-driven tool for monitoring avian biodiversity in urban greenspaces". Australian Zoologist, vol. 40, 2020, pp. 468-476.
 
-One key caveat with eBird data is the impact of pandemic birding. The extraordinary and unprecedented rise in citizen science data collection during the pandemic has been a boon for ecological data. However, it also complicates the interpretation of these data. As Sara Harrison explains in Wired, "Scientists can't always tell whether changes in the data are due to animal behavior or just an increase in the amount of information available. Furthermore,"It's not just that more people are observing---it's also a matter of where they are observing."[^12] Observations in urban areas have increased, while observations in rural areas have decreased, suggesting likely undersampling in less-accessible habitats. As I will explain in the Data Wrangling and Exploration section, this issue must be accounted for.
+One key caveat with eBird data is the impact of pandemic birding. The extraordinary and unprecedented rise in citizen science data collection during the pandemic has been a boon for ecological data. However, it also complicates the interpretation of these data. As Sara Harrison explains in *Wired*, "Scientists can't always tell whether changes in the data are due to animal behavior or just an increase in the amount of information available. Furthermore, "It's not just that more people are observing---it's also a matter of where they are observing."[^12] Observations in urban areas have increased, while observations in rural areas have decreased, suggesting likely undersampling in less-accessible habitats. As I will explain in the Data Wrangling and Exploration section, this issue must be accounted for.
 
 [^12]: Sara Harrison, "Pandemic Bird-Watching Created a Data Boom-and a Conundrum," Wired (Conde Nast, September 30, 2021), https://www.wired.com/story/pandemic-bird-watching-created-a-data-boom-and-a-conundrum/
 
@@ -87,7 +87,7 @@ Further information on the technical details is available in the [2022 Sea Level
 
 This project maps most of those scenarios, with some important caveats. First, the NOAA data include both sea level rise projections and sunny day high tide flooding projections. Although the latter is an important impact of sea level rise, temporary flooding and permanent inundation have different (and potentially conflicting) impacts on biodiversity and therefore must be considered separately. For the sake of simplicity given the limited scope of this project, then, I have only explored sea level rise, not sunny day high tide flooding.
 
-Second, I have excluded data for rates of sea level rise that are unlikely to happen in Philadelphia. Although NOAA data include up to 10 feet of sea level rise, their projections for even the worst scenario in Philadelphia max out at 6.59 feet of sea level rise. Therefore, I have included only the current mean higher-high water level (0 feet of rise) through 7 feet of rise. Similarly, in the clustering analysis later in the report, I used the 1 foot projection for sea level rise, as this is what NOAA considers the "intermediate" scenario likely to occur by 2040, which is the first post-2022 date for which they have projections.
+Second, I have excluded data for rates of sea level rise that are unlikely to happen in Philadelphia. Although NOAA data include up to 10 feet of sea level rise, their projections for even the worst scenario in Philadelphia max out at 6.59 feet of sea level rise. Therefore, I have included only the likey 1 foot, 2 foot, and 3 foot scenarions and the worst-case scenario of 7 feet of rise. In the clustering analysis later in the report, I used the 1 foot projection for sea level rise, as this is what NOAA considers the "intermediate" scenario likely to occur by 2040, which is the first post-2022 date for which they have projections.
 
 ##### Evaluating Biodiveristy in an Urban Context
 
@@ -106,7 +106,9 @@ The goal of this project is to explore the potential of using publicly available
 ## Data Wrangling and Exploration
 
 ```{r setup}
+
 library(tidyverse)
+library(ggplot2)
 library(sf)
 library(janitor)
 library(lubridate)
@@ -122,23 +124,18 @@ library(readxl)
 library(dbscan)
 library(ggExtra)
 library(BAMMtools)
+library(RColorBrewer)
+library(classInt)
 
 ggthemr("pale") #set global ggplot theme
 
 options(scipen = 999) # turn off scientific notation
+
+tmap_options(basemaps = "Esri.WorldTopoMap", basemaps.alpha = 0.7)
 ```
 
-### Bird Biodiversity
-
-#### Wrangling
-
-A number of steps were necessary to render eBird's raw data usable. After downloading the data from the eBird website, I followed the workflow laid out in the [Cornell Ornithology Lab's guide to using eBird data](https://cornelllabofornithology.github.io/ebird-best-practices/ebird.html), with some modifications specific to this project.
-
-Based on their recommendations, I filtered out eBird checklists over 5 hours long, over 5 km in length, or with more than 10 observers. I also only looked at data between 2012 and 2021 (the last ten full years) and filtered only for eBird "approved" checklists. Additionally, I downloaded the [International Union for Conservation of Nature](https://www.iucnredlist.org/)'s (IUCN) [redlist data on threatened bird species](http://datazone.birdlife.org/userfiles/file/Species/Taxonomy/HBW-BirdLife_Checklist_v6b_Jul22.zip), which I then joined to the eBird dataset for later analysis.
-
-Finally, I aggregated point observations to a grid of 0.5 kilometer hexagons covering Philadelphia. This is the approach recommended by the Cornell Ornithology lab for handling the imprecision of point observations. Although they use 5 km bins in their analysis, they are considering a much larger spatial scale (the southeastern United States). Such large bins are inappropriate for an urban scale, so I opted for 0.5 kilometer hexagons based on trial and error. (In future, more rigorous versions of a project like this, it would be better to identify ideal hexagon sizes [based on a more statistically sophisticated analysis](https://www.azavea.com/blog/2020/09/04/choosing-cell-size-for-point-pattern-analysis/)). Visualizations for these aggregations are visible in the Mapping section below.
-
-```{r ebird import and clean}
+```{r clean and import}
+#| include: false
 #| cache: true
 
 ebird = read.table("C:/Users/Nissim/Desktop/Fall 2022/Floodplain Management/Final Project Data/eBird/ebd_US-PA-101_relSep-2022.txt",
@@ -272,7 +269,99 @@ mean_upc = mean(unique_per_chklst$scientific_name)
 upc_2021 = unique_per_chklst$scientific_name[unique_per_chklst$year == 2021]
 
 upc_2021_above_mean = round((upc_2021 - mean_upc) / sd_upc, digits = 2)
+
+
+## spatial
+
+ebird_sf = sf::st_as_sf(ebird_last_decade,
+                        coords = c("longitude",
+                                   "latitude"),
+                        crs = st_crs("EPSG:4326")) |>
+  st_transform(st_crs("EPSG:2272")) #NAD83/PA South (ftUS)
+
+# import phl boundaries to generatte a grid
+phl_bounds = st_read("C:/Users/Nissim/Desktop/Fall 2022/Spat Stats/phl_city_limits/City_Limits.shp") |>
+  st_transform(crs = st_crs(ebird_sf))
+
+phl_grid <- phl_bounds %>%
+  st_make_grid(st_bbox(.), square = FALSE, cellsize = 2640) %>% #currently using half mile cells
+  st_sf() %>% 
+  mutate(hex_id = row_number())
+
+phl_grid = phl_grid[phl_bounds,]
+
+ebird_sf = st_join(ebird_sf, phl_grid)
+
+
+# so I need:
+  # unique species per cell
+  # checklists per cell
+
+unique_species_per_hex = ebird_sf |>
+                  st_drop_geometry() |>
+                  aggregate(scientific_name ~ year + hex_id,
+                          function(scientific_name) length(unique(scientific_name))) |>
+                  rename(unique_species = scientific_name)
+
+checklsits_per_hex = ebird_sf |>
+                  st_drop_geometry() |>
+                  aggregate(sampling_event_identifier ~ year + hex_id,
+                          function(sampling_event_identifier) length(unique(sampling_event_identifier))) |>
+                  rename(unique_sei = sampling_event_identifier)
+
+per_hex = left_join(unique_species_per_hex, (checklsits_per_hex |> select(-year))) |>
+              mutate(unique_per_sei = unique_species / unique_sei)|>
+                    group_by(hex_id) |>
+                    summarize(avg_unique_species = mean(unique_species, na.rm = TRUE),
+                              avg_unique_per_sei = mean(unique_per_sei, na.rm = TRUE))
+
+
+phl_ebird_hex_means = left_join(phl_grid, per_hex, by = "hex_id")
+
+phl_ebird_hex_means$avg_unique_species[is.na(phl_ebird_hex_means$avg_unique_species)] = 0
+phl_ebird_hex_means$avg_unique_per_sei[is.na(phl_ebird_hex_means$avg_unique_per_sei)] = 0
+
+
+
+# now repeat the same thing with vulnerable species only
+
+vu_unique_species_per_hex = ebird_sf |>
+                  filter(x2022_iucn_red_list_category == "VU") |>
+                  st_drop_geometry() |>
+                  aggregate(scientific_name ~ year + hex_id,
+                          function(scientific_name) length(unique(scientific_name))) |>
+                  rename(unique_species = scientific_name)
+
+vu_checklsits_per_hex = ebird_sf |>
+                  filter(x2022_iucn_red_list_category == "VU") |>
+                  st_drop_geometry() |>
+                  aggregate(sampling_event_identifier ~ year + hex_id,
+                          function(sampling_event_identifier) length(unique(sampling_event_identifier))) |>
+                  rename(unique_sei = sampling_event_identifier)
+
+vu_per_hex = left_join(vu_unique_species_per_hex, (vu_checklsits_per_hex |> select(-year))) |>
+              mutate(unique_per_sei = unique_species / unique_sei)|>
+                    group_by(hex_id) |>
+                    summarize(avg_unique_species = mean(unique_species, na.rm = TRUE),
+                              avg_unique_per_sei = mean(unique_per_sei, na.rm = TRUE))
+
+
+vu_phl_ebird_hex_means = left_join(phl_grid, vu_per_hex, by = "hex_id")
+
+vu_phl_ebird_hex_means$avg_unique_species[is.na(vu_phl_ebird_hex_means$avg_unique_species)] = 0
+vu_phl_ebird_hex_means$avg_unique_per_sei[is.na(vu_phl_ebird_hex_means$avg_unique_per_sei)] = 0
 ```
+
+### Bird Biodiversity
+
+#### Wrangling
+
+A number of steps were necessary to render eBird's raw data usable. After downloading the data from the eBird website, I followed the workflow laid out in the [Cornell Ornithology Lab's guide to using eBird data](https://cornelllabofornithology.github.io/ebird-best-practices/ebird.html), with some modifications specific to this project.
+
+Based on their recommendations, I filtered out eBird checklists over 5 hours long, over 5 km in length, or with more than 10 observers. I also only looked at data between 2012 and 2021 (the last ten full years) and filtered only for eBird "approved" checklists. Additionally, I downloaded the [International Union for Conservation of Nature](https://www.iucnredlist.org/)'s (IUCN) [redlist data on threatened bird species](http://datazone.birdlife.org/userfiles/file/Species/Taxonomy/HBW-BirdLife_Checklist_v6b_Jul22.zip), which I then joined to the eBird dataset for later analysis.
+
+Finally, I aggregated point observations to a grid of 0.5 kilometer hexagons covering Philadelphia. This is the approach recommended by the Cornell Ornithology lab for handling the imprecision of point observations. Although they use 5 km bins in their analysis, they are considering a much larger spatial scale (the southeastern United States). Such large bins are inappropriate for an urban scale, so I opted for 0.5 kilometer hexagons based on trial and error. (In future, more rigorous versions of a project like this, it would be better to identify ideal hexagon sizes [based on a more statistically sophisticated analysis](https://www.azavea.com/blog/2020/09/04/choosing-cell-size-for-point-pattern-analysis/)). Visualizations for these aggregations are visible in the Mapping section below.
+
 
 #### Exploration
 
@@ -429,170 +518,7 @@ ggplot(vu_unique_per_chklst, aes(x = sampling_event_identifier, y = scientific_n
         legend.position = "bottom")
 ```
 
-### Mapping
-```{r hotspots by year}
-#| cache: true
-#| include: false
-
-ebird_sf = sf::st_as_sf(ebird_last_decade,
-                        coords = c("longitude",
-                                   "latitude"),
-                        crs = st_crs("EPSG:4326")) |>
-  st_transform(st_crs("EPSG:2272")) #NAD83/PA South (ftUS)
-
-# import phl boundaries to generatte a grid
-phl_bounds = st_read("C:/Users/Nissim/Desktop/Fall 2022/Spat Stats/phl_city_limits/City_Limits.shp") |>
-  st_transform(crs = st_crs(ebird_sf))
-
-phl_grid <- phl_bounds %>%
-  st_make_grid(st_bbox(.), square = FALSE, cellsize = 2640) %>% #currently using half mile cells
-  st_sf() %>% 
-  mutate(hex_id = row_number())
-
-phl_grid = phl_grid[phl_bounds,]
-
-ebird_sf = st_join(ebird_sf, phl_grid)
-
-
-# so I need:
-  # unique species per cell
-  # checklists per cell
-
-unique_species_per_hex = ebird_sf |>
-                  st_drop_geometry() |>
-                  aggregate(scientific_name ~ year + hex_id,
-                          function(scientific_name) length(unique(scientific_name))) |>
-                  rename(unique_species = scientific_name)
-
-checklsits_per_hex = ebird_sf |>
-                  st_drop_geometry() |>
-                  aggregate(sampling_event_identifier ~ year + hex_id,
-                          function(sampling_event_identifier) length(unique(sampling_event_identifier))) |>
-                  rename(unique_sei = sampling_event_identifier)
-
-per_hex = left_join(unique_species_per_hex, (checklsits_per_hex |> select(-year))) |>
-              mutate(unique_per_sei = unique_species / unique_sei)|>
-                    group_by(hex_id) |>
-                    summarize(avg_unique_species = mean(unique_species, na.rm = TRUE),
-                              avg_unique_per_sei = mean(unique_per_sei, na.rm = TRUE))
-
-
-phl_ebird_hex_means = left_join(phl_grid, per_hex, by = "hex_id")
-
-phl_ebird_hex_means$avg_unique_species[is.na(phl_ebird_hex_means$avg_unique_species)] = 0
-phl_ebird_hex_means$avg_unique_per_sei[is.na(phl_ebird_hex_means$avg_unique_per_sei)] = 0
-
-
-
-# now repeat the same thing with vulnerable species only
-
-vu_unique_species_per_hex = ebird_sf |>
-                  filter(x2022_iucn_red_list_category == "VU") |>
-                  st_drop_geometry() |>
-                  aggregate(scientific_name ~ year + hex_id,
-                          function(scientific_name) length(unique(scientific_name))) |>
-                  rename(unique_species = scientific_name)
-
-vu_checklsits_per_hex = ebird_sf |>
-                  filter(x2022_iucn_red_list_category == "VU") |>
-                  st_drop_geometry() |>
-                  aggregate(sampling_event_identifier ~ year + hex_id,
-                          function(sampling_event_identifier) length(unique(sampling_event_identifier))) |>
-                  rename(unique_sei = sampling_event_identifier)
-
-vu_per_hex = left_join(vu_unique_species_per_hex, (vu_checklsits_per_hex |> select(-year))) |>
-              mutate(unique_per_sei = unique_species / unique_sei)|>
-                    group_by(hex_id) |>
-                    summarize(avg_unique_species = mean(unique_species, na.rm = TRUE),
-                              avg_unique_per_sei = mean(unique_per_sei, na.rm = TRUE))
-
-
-vu_phl_ebird_hex_means = left_join(phl_grid, vu_per_hex, by = "hex_id")
-
-vu_phl_ebird_hex_means$avg_unique_species[is.na(vu_phl_ebird_hex_means$avg_unique_species)] = 0
-vu_phl_ebird_hex_means$avg_unique_per_sei[is.na(vu_phl_ebird_hex_means$avg_unique_per_sei)] = 0
-
-jenks = getJenksBreaks(phl_ebird_hex_means$avg_unique_species, 5)
-```
-
-#### Biodiversity Hotspots
-
-In order to understand the geography of bird biodiversity in
-Philadelphia, it is important to map the distribution of observations. A
-principal obstacle to mapping is that eBird observations are imprecise; they
-are reported *close* to where the bird was observed, but not always at the
-exact spot, which makes presence/absence models, or continuous distribution
-mapping such as kernel density estimates, difficult to impossible. To account
-for this, the Cornell Ornithology Lab suggests binning data in a city-wide
-grid, which is the approach taken here. Binning further reduces the issue of
-spatial bias:
-
-> Spatial bias: most participants in citizen science surveys sample near their homes (Luck et al. 2004), in easily accessible areas such as roadsides (Kadmon, Farber, and Danin 2004), or in areas and habitats of known high biodiversity (Prendergast et al. 1993). A simple method to reduce the spatial bias that we describe is to create an equal area grid over the region of interest, and sample a given number of checklists from within each grid cell.^[Strimas-Mackey and Hochachka]
-
-In the maps below, we map biodiversity by looking at the
-average number of unique species per hexagon cell per year. This is, again, not
-a perfect estimate of biodiversity. Rarefaction would be helpful, for instance,
-to avoid the issue of over/under-sampling. As a general estimate of relative
-biodiversity, however, such an approach allows us to understand hotspots and
-coldspots.
-
-Recalling from above that research suggests that
-already-vulnerable species reliant on rare and/or vulnerable coastal habitats
-will be most threatened, we can also take the same approach by looking only at
-the average number of unique *vulnerable* species observed per cell per year.
-
-Comparing the maps side by side, we can see that the general
-shape of the hotspots as similar, and the hotspots near the Delaware River and
-in South Philadelphia stand out as key points of overlap between the two maps.
-This suggests that those are especially important hotspots of bird
-biodiversity. Again, we have to be mindful of diminishing marginal returns on observations and the likelihood of undersampling in some of these areas. The best indication of true vulnerable biodiversity is probably a comparison of average unique species per hexagon and average unique species. This could, again, be improved by employing local rather than global rarefaction, but that is beyond the scope of the current project.
- 
-:::: {.columns}
-
-::: {.column width="45%"}
-###### **Avg. Unique Species**
-```{r hotspots}
-tmap_mode('view')
-
-tm_shape(phl_ebird_hex_means) + 
-                  tm_polygons(title = "Avg. Species",
-                              col = "avg_unique_species", 
-                              style = "jenks", 
-                              palette = "viridis", 
-                              alpha = 0.7, 
-                              id = "hex_id",
-                              popup.vars = c("Avg. Unique Species" = "avg_unique_species")) +
-                  tm_view(view.legend.position = c("right", "bottom"),
-            colorNA = 'transparent')
-
-```
-:::
-
-::: {.column width="10%"}
-<!-- empty column to create gap -->
-:::
-
-::: {.column width="45%"}
-###### **Avg. Unique Vulnerable Species**
-```{r vul hotspots}
-tmap_mode('view')
-
-tm_shape(vu_phl_ebird_hex_means) + 
-                  tm_polygons(title = "Avg. Species",
-                              col = "avg_unique_species", 
-                              style = "jenks", 
-                              palette = "viridis", 
-                              alpha = 0.7, 
-                              id = "hex_id",
-                              popup.vars = c("Avg. Unique Species" = "avg_unique_species")) +
-                  tm_view(view.legend.position = c("right", "bottom"),
-            colorNA = 'transparent')
-```
-:::
-
-::::
-
-#### Sea Level Rise
+### Sea Level Rise
 
 #### Wrangling
 
@@ -600,6 +526,8 @@ Below, sea level rise data were aggregated to the same
 hexagon grid as eBird observations. Each cell counts the total area of sea
 level rise under the given sea level rise scenario. This follows the Cornell
 Ornithology Lab\'s approach. 
+
+The NOAA data report projected mean highest-high water levels, meaning that they *include* current bodies of water such as the Delaware River. To calculate projected additional inundation, I subtracted the area of current MHHW levels per hexagon from the projected area per hexagon in each future scenario (e.g., current MHHW minus MHHW with 1 foot of sea level rise). This led to challenges with visualization, since the maximum projected additional inundation with 1 foot of sea level rise was 5.6%, while the maximum projected additional inundation with 7 feet of sea level rise was 93.9%. 
 
 ```{r slr import}
 #| include: false
@@ -665,72 +593,144 @@ phl_ebird_hex_means = phl_ebird_hex_means |>
                              pct_SLR_9ft = polygon_11 / hex_area * 100,
                              pct_SLR_10ft = polygon_2 / hex_area * 100)
 
-phl_ebird_hex_means$pct_SLR_0ft[is.na(phl_ebird_hex_means$pct_SLR_0ft)] = 0 #replace NA values with zero !!this is important!!
-phl_ebird_hex_means$pct_SLR_1ft[is.na(phl_ebird_hex_means$pct_SLR_1ft)] = 0 #replace NA values with zero !!this is important!!
-phl_ebird_hex_means$pct_SLR_2ft[is.na(phl_ebird_hex_means$pct_SLR_2ft)] = 0 #replace NA values with zero !!this is important!!
-phl_ebird_hex_means$pct_SLR_3ft[is.na(phl_ebird_hex_means$pct_SLR_3ft)] = 0 #replace NA values with zero !!this is important!!
-phl_ebird_hex_means$pct_SLR_7ft[is.na(phl_ebird_hex_means$pct_SLR_7ft)] = 0 #replace NA values with zero !!this is important!!
+## order here matters
 
+# first calculate % inundation excluding what is currently part of the rivers
 
-phl_ebird_hex_means = phl_ebird_hex_means |>
-                        mutate(jenks_bio_risk = case_when(
-                                                pct_SLR_1ft >= 70 & avg_unique_species >= jenks[3] ~ "Very High SLR, High Biodiversity",
-                                                pct_SLR_1ft >= 70 & avg_unique_species >= jenks[2] & avg_unique_species < jenks[3] ~ "Very High SLR, Medium Biodiversity",
-                                                 pct_SLR_1ft >= 30 & pct_SLR_1ft < 70 & avg_unique_species >= jenks[3] ~ "High SLR, High Biodiversity",
-                                                pct_SLR_1ft >= 30 & pct_SLR_1ft < 70 & avg_unique_species >= jenks[2] & avg_unique_species < jenks[3] ~ "High SLR, Medium Biodiversity",
-                                                pct_SLR_1ft >= 10 & pct_SLR_1ft < 30 & avg_unique_species >= jenks[3] ~ "Moderate SLR, High Biodiversity",
-                                                pct_SLR_1ft >= 10 & pct_SLR_1ft < 30 & avg_unique_species >= jenks[2] & avg_unique_species < jenks[3] ~ "Moderate SLR, Medium Biodiversity",
-                                                TRUE ~ "Minimal Risk"
-                                                ))
+phl_ebird_hex_means$tot_pct_SLR_1ft = phl_ebird_hex_means$pct_SLR_1ft - phl_ebird_hex_means$pct_SLR_0ft
+phl_ebird_hex_means$tot_pct_SLR_2ft = phl_ebird_hex_means$pct_SLR_2ft - phl_ebird_hex_means$pct_SLR_0ft
+phl_ebird_hex_means$tot_pct_SLR_3ft = phl_ebird_hex_means$pct_SLR_3ft - phl_ebird_hex_means$pct_SLR_0ft
+phl_ebird_hex_means$tot_pct_SLR_7ft = phl_ebird_hex_means$pct_SLR_7ft - phl_ebird_hex_means$pct_SLR_0ft
 
+# then replace 0 values with 999
 
-piv_long_SLR = phl_ebird_hex_means |>
-  select(pct_SLR_0ft,
-         pct_SLR_1ft,
-         pct_SLR_2ft,
-         pct_SLR_3ft,
-         pct_SLR_4ft,
-         pct_SLR_5ft,
-         pct_SLR_6ft,
-         pct_SLR_7ft) |>
-  pivot_longer(
-    cols = starts_with("pct_SLR_"),
-    names_to = "pct_SLR_",
-    names_prefix = "pct_SLR_"
-  )
+phl_ebird_hex_means$tot_pct_SLR_1ft[phl_ebird_hex_means$tot_pct_SLR_1ft == 0] = 999
+phl_ebird_hex_means$tot_pct_SLR_2ft[phl_ebird_hex_means$tot_pct_SLR_2ft == 0] = 999
+phl_ebird_hex_means$tot_pct_SLR_3ft[phl_ebird_hex_means$tot_pct_SLR_3ft == 0] = 999
+phl_ebird_hex_means$tot_pct_SLR_7ft[phl_ebird_hex_means$tot_pct_SLR_7ft == 0] = 999
 
-breaks = c(0, 10, 30, 70, 100) # breaks for color palette 
+# then replace NAs with 0
+
+phl_ebird_hex_means$tot_pct_SLR_1ft[is.na(phl_ebird_hex_means$tot_pct_SLR_1ft)] = 0
+phl_ebird_hex_means$tot_pct_SLR_2ft[is.na(phl_ebird_hex_means$tot_pct_SLR_2ft)] = 0
+phl_ebird_hex_means$tot_pct_SLR_3ft[is.na(phl_ebird_hex_means$tot_pct_SLR_3ft)] = 0
+phl_ebird_hex_means$tot_pct_SLR_7ft[is.na(phl_ebird_hex_means$tot_pct_SLR_7ft)] = 0
+
+# finally, replace 999 with NA
+phl_ebird_hex_means$tot_pct_SLR_1ft[phl_ebird_hex_means$tot_pct_SLR_1ft == 999] = NA
+phl_ebird_hex_means$tot_pct_SLR_2ft[phl_ebird_hex_means$tot_pct_SLR_2ft == 999] = NA
+phl_ebird_hex_means$tot_pct_SLR_3ft[phl_ebird_hex_means$tot_pct_SLR_3ft == 999] = NA
+phl_ebird_hex_means$tot_pct_SLR_7ft[phl_ebird_hex_means$tot_pct_SLR_7ft == 999] = NA
+
+breaks = c(0, 0.05, 0.1, 0.5, 1, 2, 5, 10, 25, 50, 75, 100) # breaks for color palette 
 ```
 
 #### Exploration
+```{r slr histograms}
 
-##### Mapping
-In the maps below, we explore the various possible sea level rise scenarios in Philadelphia projected by NOAA for the next 100 years, ranging from 0 ft (the current situation) to 7 ft (the worst-case scenario). The visualization breaks used here are taken from the Bird Migration Explorer's "Conservation Challenges" section, which divides the "footprint" of sea level rise into four scenarios: "low" (0 to 10%), "moderate" (11 to 30%), "high" (31 to 70%), and "very high" (71 to 100%).^[“Sea Level Rise - Conservation Challenges: Bird Migration Explorer.” Sea Level Rise - Conservation Challenges | Bird Migration Explorer. Accessed December 20, 2022. https://explorer.audubon.org/explore/conservation-challenges/1161/sea-level-rise?zoom=2&amp;category=climate-change&amp;x=0&amp;y=0&amp;layersPanel=expand. ]
+hist_1ft = ggplot(phl_ebird_hex_means, aes(x = tot_pct_SLR_1ft)) +
+              geom_histogram() +
+              labs(title = "1 Ft. Sea Level Rise",
+       subtitle = "Pct. SLR Impact per Hexagon",
+                   x = "Percent Sea Level Rise",
+                   y = "Count of Hexagons") +
+              theme(plot.title = element_text(hjust = 0.5),
+                    plot.subtitle = element_text(hjust = 0.5))
 
-As the maps indicate, even milder sea level rise scenarios will significantly impact the area along the Delaware River in the east of Philadelphia. Under the 1 foot sea level rise scenario, virtually that entire riparian area would face at least 30% inundation. With increasingly severe sea level rise, however, greater portions of South Philadelphia would be affected. This in particular would have consequences for biodiversity in places like FDR Park and John Heinz, which would narrowly escape serious inundation under the 1 foot sea level rise scenario, but would face much more substantial inundation (at least upwards of 30%) with 3 feet or more of sea level rise.
+hist_2ft = ggplot(phl_ebird_hex_means, aes(x = tot_pct_SLR_2ft)) +
+  geom_histogram() +
+  labs(title = "2 Ft. Sea Level Rise",
+       subtitle = "Pct. SLR Impact per Hexagon",
+       x = "Percent Sea Level Rise",
+       y = "Count of Hexagons") +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        axis.title.y = element_blank())
 
-Furthermore, even under the 1 ft sea level rise scenario, areas immediately adjacent to the hotspots identified above—FDR Park, John Heinz, and Pennypack on the Delaware—will be substantially affected by sea level rise. The hexagon grid cells in these maps are, after all, arbitrary measures used to account for spatial bias, but they are *not* physical constructs in the real world. The spillover effects of sea level rise on connected ecosystems, in other words, does not stop when it “runs into” these abstract boundaries. Similarly, although this project does not account for high-tide flooding, this phenomenon is intimately related to sea level rise, and NOAA’s maps indicate that many areas that would not be significantly impacted by sea level rise under the 1 foot scenario *would* be impacted by high-tide flooding, which would carry its own implications for biodiversity. ^[“NOAA Logo Sea Level Rise Viewer.” View site. Accessed December 20, 2022. https://coast.noaa.gov/slr/#/layer/slr/10/-8376235.061842223/4852224.4720263705/14/dark/192/0.8/2050/inter/midAccretion. ]
+hist_3ft = ggplot(phl_ebird_hex_means, aes(x = tot_pct_SLR_3ft)) +
+  geom_histogram() +
+  labs(title = "3 Ft. Sea Level Rise",
+       subtitle = "Pct. SLR Impact per Hexagon",
+       x = "Percent Sea Level Rise",
+       y = "Count of Hexagons") +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
 
-Here, we map 0 foot, 1 foot, 2 foot, 3 foot, and 7 foot sea level rise scenarios for the sake of efficiency. Note that NOAA does not anticipate more than 3 feet of sea level rise before the year 2080, and even that would be under their "immediate high" scenario.
+hist_4ft = ggplot(phl_ebird_hex_means, aes(x = tot_pct_SLR_7ft)) +
+  geom_histogram() +
+  labs(title = "7 Ft. Sea Level Rise",
+       subtitle = "Pct. SLR Impact per Hexagon",
+       x = "Percent Sea Level Rise",
+       y = "Count of Hexagons") +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        axis.title.y = element_blank())
 
+ggarrange(hist_1ft, hist_2ft,
+          hist_3ft, hist_4ft)
+```
+For ease of comparison, I designated fixed breaks for all four scenarios based on the distribution of percent sea level rise in all four cases: 
+
+* 0 to 0.05% 
+* 0.05 to 0.1% 
+* 0.1 to 0.5%
+* 0.5 to 1% 
+* 1 to 2% 
+* 2 to 5% 
+* 5 to 10% 
+* 10 to 25% 
+* 25 to 50% 
+* 50 to 75% 
+* 75 to 100%
+
+### Mapping
+
+#### Biodiversity Hotspots
+
+In order to understand the geography of bird biodiversity in
+Philadelphia, it is important to map the distribution of observations. A
+principal obstacle to mapping is that eBird observations are imprecise; they
+are reported *close* to where the bird was observed, but not always at the
+exact spot, which makes presence/absence models, or continuous distribution
+mapping such as kernel density estimates, difficult to impossible. To account
+for this, the Cornell Ornithology Lab suggests binning data in a city-wide
+grid, which is the approach taken here. Binning further reduces the issue of
+spatial bias:
+
+> Spatial bias: most participants in citizen science surveys sample near their homes (Luck et al. 2004), in easily accessible areas such as roadsides (Kadmon, Farber, and Danin 2004), or in areas and habitats of known high biodiversity (Prendergast et al. 1993). A simple method to reduce the spatial bias that we describe is to create an equal area grid over the region of interest, and sample a given number of checklists from within each grid cell.^[Strimas-Mackey and Hochachka]
+
+In the maps below, we map biodiversity by looking at the
+average number of unique species per hexagon cell per year. This is, again, not
+a perfect estimate of biodiversity. Rarefaction would be helpful, for instance,
+to avoid the issue of over/under-sampling. As a general estimate of relative
+biodiversity, however, such an approach allows us to understand hotspots and
+coldspots. Recalling from above that research suggests that
+already-vulnerable species reliant on rare and/or vulnerable coastal habitats
+will be most threatened, we can also take the same approach by looking only at
+the average number of unique *vulnerable* species observed per cell per year.
+
+Comparing the maps side by side, we can see that the general
+shape of the hotspots as similar, and the hotspots near the Delaware River and
+in South Philadelphia stand out as key points of overlap between the two maps.
+This suggests that those are especially important hotspots of bird
+biodiversity. Again, we have to be mindful of diminishing marginal returns on observations and the likelihood of undersampling in some of these areas. The best indication of true vulnerable biodiversity is probably a comparison of average unique species per hexagon and average unique species. This could, again, be improved by employing local rather than global rarefaction, but that is beyond the scope of the current project.
+ 
 :::: {.columns}
 
 ::: {.column width="45%"}
-###### **0 Feet of Sea Level Rise**
-```{r 0 ft}
+###### **Avg. Unique Species**
+```{r hotspots}
 tmap_mode('view')
 
-tm_shape((piv_long_SLR |> filter (pct_SLR_ == "0ft"))) +
-  tm_polygons(
-              title = "Pct. Inundation",
-              col = 'value', 
-              palette = 'viridis', 
-              style = 'fixed',
-              breaks = breaks,
-              alpha = 0.7, 
-              id = "hex_id",
-              popup.vars = c("Pct. Inundation" = "pct_SLR_")) +
-  tm_view(view.legend.position = c("right", "bottom"),
+tm_shape(phl_ebird_hex_means) + 
+                  tm_polygons(title = "Avg. Species",
+                              col = "avg_unique_species", 
+                              style = "jenks", 
+                              palette = "viridis", 
+                              alpha = 0.7, 
+                              id = "hex_id",
+                              popup.vars = c("Avg. Unique Species" = "avg_unique_species")) +
+                  tm_view(view.legend.position = c("right", "bottom"),
             colorNA = 'transparent')
 
 ```
@@ -741,181 +741,315 @@ tm_shape((piv_long_SLR |> filter (pct_SLR_ == "0ft"))) +
 :::
 
 ::: {.column width="45%"}
-###### **1 Foot of Sea Level Rise**
-```{r 1 ft}
+###### **Avg. Unique Vulnerable Species**
+```{r vul hotspots}
 tmap_mode('view')
 
-tm_shape((piv_long_SLR |> filter (pct_SLR_ == "1ft"))) +
-  tm_polygons(
-              title = "Pct. Inundation",
-              col = 'value', 
-              palette = 'viridis', 
-              style = 'fixed',
-              breaks = breaks,
-              alpha = 0.7, 
-              id = "hex_id",
-              popup.vars = c("Pct. Inundation" = "pct_SLR_")) +
-  tm_view(view.legend.position = c("right", "bottom"),
+tm_shape(vu_phl_ebird_hex_means) + 
+                  tm_polygons(title = "Avg. Species",
+                              col = "avg_unique_species", 
+                              style = "jenks", 
+                              palette = "viridis", 
+                              alpha = 0.7, 
+                              id = "hex_id",
+                              popup.vars = c("Avg. Unique Species" = "avg_unique_species")) +
+                  tm_view(view.legend.position = c("right", "bottom"),
             colorNA = 'transparent')
 ```
 :::
 
 ::::
 
+
+
+#### Sea Level Rise
+In the maps below, we explore the various possible sea level rise scenarios in Philadelphia projected by NOAA for the next 100 years, ranging from 1 ft (the most likely scenario by 2040) to 7 ft (the worst-case scenario by 2100). As mentioned above, the color breaks for the visualization are based on the distribution of data in all four scenarios.
+
+###### **1 Foot of Sea Level Rise**
+```{r 1 ft}
+tmap_mode('view')
+
+tm_shape(phl_ebird_hex_means) +
+  tm_polygons(
+              title = "Pct. Inundation",
+              col = 'tot_pct_SLR_1ft', 
+              palette = 'viridis', 
+              style = 'fixed',
+              breaks = breaks,
+              alpha = 0.7, 
+              id = "hex_id",
+              textNA = "NA",
+              popup.vars = c("Pct. Inundation" = "tot_pct_SLR_1ft")) +
+  tm_view(colorNA = 'transparent',
+          set.view = 9.5,
+          view.legend.position = c("right", "bottom"))
+```
+<br/><br/>
+As the maps indicate, sea level rise will primarily affect areas along Philadelphia’s major bodies of water: the Delaware River in the east, the Schuylkill River in the south, and Darby-Cobbs Creek in the southwest. Under the 1 foot sea level rise scenario, the areas most affected by sea level rise include Pennypack on the Delaware in the northeast, Fort Mifflin and an area east of the George C. Platt Bridge to the south, and the John Heinz National Wildlife Refuge in the southwest. As will be discussed below, these would have serious implications for bird biodiversity in Philadelphia, as these three sites are among the most biodiverse locations in the city.
+
+The 2, 3, and 7 foot scenarios generally continue the trend established in the one foot scenario, with sea level rise especially impacting south Philadelphia. Most notable for bird biodiversity in Philadelphia is that the John Heinz Wildlife refuge, home to the second most bird biodiversity in the city, would be almost completely inundated under the 3 foot scenario, which is likely to occur within the next 50 years, according to NOAA. 
 <br/><br/>
 
 :::: {.columns}
 
-::: {.column width="30%"}
+::: {.column width="32%"}
 ###### **2 Feet of Sea Level Rise**
 ```{r 2 ft}
 tmap_mode('view')
 
-tm_shape((piv_long_SLR |> filter (pct_SLR_ == "2ft"))) +
+tm_shape(phl_ebird_hex_means) +
   tm_polygons(
               title = "Pct. Inundation",
-              col = 'value', 
+              col = 'tot_pct_SLR_2ft', 
               palette = 'viridis', 
               style = 'fixed',
               breaks = breaks,
               alpha = 0.7, 
               id = "hex_id",
-              popup.vars = c("Pct. Inundation" = "pct_SLR_")) +
-  tm_view(view.legend.position = c("right", "bottom"),
-            colorNA = 'transparent',
-          set.view = 10)
+              textNA = "NA",
+              popup.vars = c("Pct. Inundation" = "tot_pct_SLR_2ft"),
+              legend.show = FALSE) +
+  tm_view(colorNA = 'transparent',
+          set.view = 9.5)
 ```
 :::
 
-::: {.column width="5%"}
+::: {.column width="2%"}
 <!-- empty column to create gap -->
 :::
 
-::: {.column width="30%"}
+::: {.column width="32%"}
 ###### **3 Feet of Sea Level Rise**
 ```{r 3 ft}
 tmap_mode('view')
 
-tm_shape((piv_long_SLR |> filter (pct_SLR_ == "3ft"))) +
+tm_shape(phl_ebird_hex_means) +
   tm_polygons(
               title = "Pct. Inundation",
-              col = 'value', 
+              col = 'tot_pct_SLR_3ft', 
               palette = 'viridis', 
               style = 'fixed',
               breaks = breaks,
               alpha = 0.7, 
               id = "hex_id",
-              popup.vars = c("Pct. Inundation" = "pct_SLR_")) +
-  tm_view(view.legend.position = c("right", "bottom"),
-            colorNA = 'transparent',
-          set.view = 10)
+              textNA = "NA",
+              popup.vars = c("Pct. Inundation" = "tot_pct_SLR_3ft"),
+              legend.show = FALSE) +
+  tm_view(colorNA = 'transparent',
+          set.view = 9.5)
 ```
 :::
 
-::: {.column width="5%"}
+::: {.column width="2%"}
 <!-- empty column to create gap -->
 :::
 
-::: {.column width="30%"}
+::: {.column width="32%"}
 ###### **7 Feet of Sea Level Rise**
 ```{r 7 ft}
 tmap_mode('view')
 
-tm_shape((piv_long_SLR |> filter (pct_SLR_ == "7ft"))) +
+tm_shape(phl_ebird_hex_means) +
   tm_polygons(
               title = "Pct. Inundation",
-              col = 'value', 
+              col = 'tot_pct_SLR_7ft', 
               palette = 'viridis', 
               style = 'fixed',
               breaks = breaks,
               alpha = 0.7, 
               id = "hex_id",
-              popup.vars = c("Pct. Inundation" = "pct_SLR_")) +
-  tm_view(view.legend.position = c("right", "bottom"),
-            colorNA = 'transparent',
-          set.view = 10)
+              textNA = "NA",
+              popup.vars = c("Pct. Inundation" = 'tot_pct_SLR_7ft'),
+              legend.show = FALSE) +
+  tm_view(colorNA = 'transparent',
+          set.view = 9.5)
 ```
 :::
 
 ::::
 
+## Findings
+
 ### Cluster Analysis
 To identify high-priority areas for conservation management, we can turn to cluster analysis. In statistics, cluster analysis helps to identify groupings
 of similar objects. In this case, we hope to identify a cluster of grid cells
 associated with both high biodiversity and high sea level rise, which could
-then be prioritized in conservation efforts.
+then be prioritized in conservation efforts. 
 
-First, we\'ll look at the distribution of both variables across
-all the cells in our analysis. This will give us some indication of what portion of Philadelphia has high rates of biodiversity and what portion will be heavily impacted by sea level rise. As this histogram indicates, a small proportion of the cells
-in the grid account for most of the biodiversity---only `r round(nrow(phl_ebird_hex_means |> filter(avg_unique_species > 50)) / nrow(phl_ebird_hex_means) *100, digits = 2)`% have observations of 50 or more unique species. Therefore, we know
-that Philadelphia\'s bird biodiversity clusters in a small number of
-neighborhoods relative to the total area of the city.
+An easy way to identify possible clusters is to visualize the data on a scatterplot. However, an initial plot does not reveal any clusters; indeed, it highlights a handful of outliers that have high biodiversity and/or face a relatively high level of potential inundation, but outliers often make cluster analysis difficult. As the marginal density plots indicate, a small proportion of the cells
+in the city-wide hexagon grid account for most of the biodiversity---only `r round(nrow(phl_ebird_hex_means |> filter(avg_unique_species > 50)) / nrow(phl_ebird_hex_means) *100, digits = 2)`% have observations of 50 or more unique species. Therefore, we know that Philadelphia\'s bird biodiversity clusters in a small number of neighborhoods relative to the total area of the city. Likewise, only `r round(nrow(phl_ebird_hex_means |> filter(tot_pct_SLR_1ft > 0)) / nrow(phl_ebird_hex_means) *100, digits = 2)`% of cells in Philadelphia will face any additional inundation under the 1 foot sea level rise scenario.
 
-```{r avg species hist}
-ggplot(phl_ebird_hex_means, aes(x = avg_unique_species)) +
-  geom_histogram() +
-  labs(title = "Avg. Unique Species",
-       subtitle = "Per Hexagon",
-       x = "Number of Unique Species",
-       y = "Count of Hexagons") +
-  theme(plot.title = element_text(hjust = 0.5),
-        plot.subtitle = element_text(hjust = 0.5))
-```
-
-Similarly, sea level rise only affects a portion of the city: only `r round(nrow(phl_ebird_hex_means |> filter(pct_SLR_1ft > 0)) / nrow(phl_ebird_hex_means) *100, digits = 2)`% of cells face any sea level rise at all, with just `r round(nrow(phl_ebird_hex_means |> filter(pct_SLR_1ft >= 30)) / nrow(phl_ebird_hex_means) *100, digits = 2)`% falling into the "high" or "very high" scenarios of 30% or greater inundation. 
-
-```{r pct slr hist}
-ggplot(phl_ebird_hex_means, aes(x = pct_SLR_1ft)) +
-  geom_histogram() +
-  labs(title = "Pct. Sea Level Rise Impact",
-       subtitle = "Per Hexagon",
-       x = "Percent Sea Level Rise",
-       y = "Count of Hexagons") +
-  theme(plot.title = element_text(hjust = 0.5),
-        plot.subtitle = element_text(hjust = 0.5))
-```
-## Findings
-
-Now, we can plot these two variables against each other to find the overlap (clusters) of high biodiversity and high sea level rise. For clustering analysis here, I considered using more statistically sophisticated methods like k-nearest neighbors, DBSCAN, or hierarchical clustering, but found that 1) the messiness of the data made it difficult to meet the requisite assumptions for some of these approaches, and 2) there are too few observations of high biodiversity-high sea level rise cells to get any kind of a cluster (since a cluster typically requires a minimum number of points or a minimum density). This highlights the fact that these hexagons are not perfect proxies for "top" hotspots because the number of hexagons is somewhat arbitrary; using 0.25km hexagons, for instance, as opposed to the current 0.5km hexagons might produce slightly different clusters. 
-
-The net result of this is that the best approach here is to simply define clusters based on qualitative cutoffs: using the Bird Migration Explorers distinctions of "low", "moderate", "high", and "very high" sea level rise, and the Jenks natural breaks algorithm for biodiversity, which minimizes variance within classes and maximizes variance between classes.^[“Jenks Natural Breaks Optimization.” Wikipedia. Wikimedia Foundation, May 23, 2022. https://en.wikipedia.org/wiki/Jenks_natural_breaks_optimization. ]. The latter, again, is not necessarily the ideal statistical approach for defining biodiversity hotspots, but is a good start for our purposes, and could be refined in future iterations of this work. In the plot below, I've defined a box of "high biodiversity, high sea level rise" based on a minimum of 30% sea level rise inundation and the top 2 clusters of biodiversity based on Jenks breaks, corresponding to a cutoff of at least `r round(jenks[3], digits = 0)` average unique species observed per year. 
-
-As we can see in this plot, only a handful of cells fall into the overlap of high biodiversity and high sea level rise (3) or very high sea level rise (2). Below, we will map these cells to identify their locations.
-
-```{r cluster plots}
-ggplot(phl_ebird_hex_means, aes(x = pct_SLR_1ft, y = avg_unique_species, col = pct_SLR_1ft, size = avg_unique_species)) +
+```{r first scatter}
+ggMarginal(ggplot(phl_ebird_hex_means, aes(x = tot_pct_SLR_1ft, y = avg_unique_species)) +
                             geom_point() +
   labs(title = "Avg. Unique Species vs. % Sea Level Rise",
        subtitle = "1 ft. Sea Level Rise Scenario",
        x = "% SLR",
-       y = "Avg. Unique Species",
-       size = "Avg. Unique Species",
-       col = "% SLR") +
+       y = "Avg. Unique Species") +
   theme(plot.title = element_text(hjust = 0.5),
-        plot.subtitle = element_text(hjust = 0.5)) +
-  annotate("rect", xmin = 30, xmax = 100, ymin = jenks[3], ymax = max(phl_ebird_hex_means$avg_unique_species),
-           alpha = .2,fill = NA, color = "#3262AB", lty = 'dashed', lwd = 0.75) +
-  annotate("rect", xmin = 70, xmax = 100, ymin = jenks[3], ymax = max(phl_ebird_hex_means$avg_unique_species),
-           alpha = .4, fill = NA, color = "#5E2C25", lwd = 0.75) +
-  annotate("text", x = 50, y = 125, label = "High Biodiversity, \n High SLR") +
-  annotate("text", x = 85, y = 125, label = "High Biodiversity, \n Very High SLR")
-
+        plot.subtitle = element_text(hjust = 0.5)), type = "density", fill = "#41a65c", alpha = 0.2, col = "#41a65c") 
 ```
 
-Based on our map, we can see that there are two areas in the city that will be heavily inundated under the 1 foot sea level rise scenario and also have high biodiversity. These roughly correspond to the Navy Yard in South Philadelphia and Glen Foerd in the Northeast. 
+Even if we filter out any hexagons with no projected sea level rise impacted and no reported bird observations, we still cannot see obvious clusters.
+
+```{r second scatter}
+ggMarginal(ggplot((phl_ebird_hex_means |> filter(tot_pct_SLR_1ft > 0 & avg_unique_species > 0)),
+                  aes(x = tot_pct_SLR_1ft, y = avg_unique_species)) +
+                            geom_point() +
+  labs(title = "Avg. Unique Species vs. % Sea Level Rise",
+       subtitle = "1 ft. Sea Level Rise Scenario",
+       x = "% SLR",
+       y = "Avg. Unique Species") +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5)), type = "density", fill = "#41a65c", alpha = 0.2, col = "#41a65c") 
+```
+
+Log transforming our filtered variables helps to normalize them somewhat, which is a prerequisite for most statistical analysis of clusters:
+```{r scatter}
+ggMarginal(ggplot((phl_ebird_hex_means |> filter(tot_pct_SLR_1ft > 0 & avg_unique_species > 0)), 
+                  aes(x = log(tot_pct_SLR_1ft), y = log(avg_unique_species))) +
+                            geom_point() +
+  labs(title = "Avg. Unique Species vs. % Sea Level Rise",
+       subtitle = "1 ft. Sea Level Rise Scenario",
+       x = "Log of % SLR",
+       y = "Log of Avg. Unique Species") +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5)), type = "density", fill = "#41a65c", alpha = 0.2, col = "#41a65c")
+```
+
+Using these filtered, normal variables, we can attempt to apply a hierarchical clustering model to see if there are any underlying clusters not immediately visible to the human eye. Hierarchical clustering has a few advantages over other clustering approaches such as k-means, namely that it is less sensitive to outliers, more tolerant of non-globular clusters, and does not require us to designate the number of clusters in advance.^[Brusilovsky, Eugene. “K-Means Clustering.” MUSA 501/CPLN 671. Lecture. November 2022.] However, even using this clustering approach with the normalized variables, the `hdbscan` function in R returns 4 clusters exclusive of precisely the data points we are interested in: the outliers responsible for most of Philadelphia's biodiveristy. Although it reutns clusters with some confidence, these are clusters with low biodiversity and/or low impacts from sea level rise.
+
+```{r hdbscan}
+for_hdbscan = phl_ebird_hex_means |> 
+                     st_drop_geometry() |> 
+                      filter(tot_pct_SLR_1ft > 0 & avg_unique_species > 0) |>
+                     select(tot_pct_SLR_1ft, avg_unique_species) |>
+                     mutate(lg_tot_pct_SLR_1ft = log(tot_pct_SLR_1ft),
+                            lg_avg_unique_species = log(avg_unique_species))|>
+                     select(lg_tot_pct_SLR_1ft,
+                            lg_avg_unique_species) |>
+                    filter(!is.na(lg_tot_pct_SLR_1ft))
+
+
+clusters = hdbscan(for_hdbscan, minPts = 4)
+                   
+for_hdbscan$clusters = as.character(clusters$cluster)
+for_hdbscan$mem_prop = clusters$membership_prob * 100
+
+for_hdbscan$clusters[for_hdbscan$clusters == 0] = "No Cluster"
+
+
+ggplot(for_hdbscan, aes(x = lg_tot_pct_SLR_1ft, 
+                        y = lg_avg_unique_species, 
+                        color = clusters, 
+                        alpha = mem_prop
+                      )) +
+                            geom_point(size = 2) +
+  labs(title = "Avg. Unique Species vs. % Sea Level Rise",
+       subtitle = "1 ft. Sea Level Rise Scenario",
+       x = "Log of % SLR",
+       y = "Log of Avg. Unique Species",
+       color = "Cluster",
+       alpha = "Clust. Probability (%)") +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5)) +
+  scale_color_brewer(palette = 'Dark2') +
+  scale_alpha(range = c(0.2, 1))
+```
+
+```{r classification}
+#| include: false
+jenks_free = classIntervals(phl_ebird_hex_means$avg_unique_species, style = 'jenks')
+
+hclust_free = classIntervals(phl_ebird_hex_means$avg_unique_species, style = 'hclust')
+
+kmeans_free = classIntervals(phl_ebird_hex_means$avg_unique_species, style = 'kmeans')
+
+results = jenks.tests(jenks_free) ## has the highest goodness of fit! 
+```
+
+It appears, then, that our best option is to combine qualitative and statistical approaches to define our own cutoffs. First, we will distinguish between cells not projected to experience any additional inundation under the 1 foot sea level rise scenario. We will define these as "Miminal Risk". Then we will apply univariate classification to the average unique species measure of bird biodiversity. For this classification, we are using Jenks breaks (also known as Fisher natural breaks), partitioned into 10 classes. This is based on maximizing the Goodness of Variance Fit (GVF), which ranges from 0 to 1, and on Sturge's Rule for selecting the number of classes.^[Harkins, Ray. “Sturge's Rule: A Method for Selecting the Number of Bins in a Histogram.” Accendo Reliability, January 9, 2022. https://accendoreliability.com/sturges-rule-method-selecting-number-bins-histogram/.] Using the `classInt` package, we find that Jenks breaks have a GVF of `r round(results[2], digits = 3)`, higher than the GVFs for either a hierarchical clustering approach or k-means. (The Jenks natural breaks approach minimizes variance within classes and maximizes variance between classes.^[“Jenks Natural Breaks Optimization.” Wikipedia. Wikimedia Foundation, May 23, 2022. https://en.wikipedia.org/wiki/Jenks_natural_breaks_optimization.]) This is not necessarily the ideal statistical approach for defining biodiversity hotspots, but is a good start for our purposes, and could be refined in future iterations of this work. We then classify the threat to biodiversity from 10 (highest) to 1 (lowest) based on these breaks:
+```{{r}}
+phl_ebird_hex_means = phl_ebird_hex_means |>
+                        mutate(jenks_bio_risk = case_when(
+                                                tot_pct_SLR_1ft >0 & avg_unique_species >= jenks_free$brks[10] ~ "10",
+                                                tot_pct_SLR_1ft > 0 & avg_unique_species < jenks_free$brks[10] & avg_unique_species >= jenks_free$brks[9] ~ "9",
+                                                 tot_pct_SLR_1ft > 0 & avg_unique_species < jenks_free$brks[9] & avg_unique_species >= jenks_free$brks[8] ~ "8",
+                                                tot_pct_SLR_1ft > 0 & avg_unique_species < jenks_free$brks[8] & avg_unique_species >= jenks_free$brks[7] ~ "7",
+                                                 tot_pct_SLR_1ft > 0 & avg_unique_species < jenks_free$brks[7] & avg_unique_species >= jenks_free$brks[6] ~ "6",
+                                                tot_pct_SLR_1ft > 0 & avg_unique_species < jenks_free$brks[6] & avg_unique_species >= jenks_free$brks[5] ~ "5",
+                                                 tot_pct_SLR_1ft > 0 & avg_unique_species < jenks_free$brks[5] & avg_unique_species >= jenks_free$brks[4] ~ "4",
+                                                tot_pct_SLR_1ft > 0 & avg_unique_species < jenks_free$brks[4] & avg_unique_species >= jenks_free$brks[3] ~ "3",
+                                                 tot_pct_SLR_1ft > 0 & avg_unique_species < jenks_free$brks[3] & avg_unique_species >= jenks_free$brks[2] ~ "2",
+                                                tot_pct_SLR_1ft > 0 & avg_unique_species < jenks_free$brks[2] & avg_unique_species >= jenks_free$brks[1] ~ "1",
+                                                TRUE ~ "Minimal Risk"
+                                                ))
+```
+
+Examining our self-defined clusters, we see that they better account for the issue of outliers, and in fact highlight the three hexagon cells which have exceptionally high biodiversity and face a threat of sea level rise:
+
+```{r qualitative clust}
+phl_ebird_hex_means = phl_ebird_hex_means |>
+                        mutate(jenks_bio_risk = case_when(
+                                                tot_pct_SLR_1ft >0 & avg_unique_species >= jenks_free$brks[10] ~ "10",
+                                                tot_pct_SLR_1ft > 0 & avg_unique_species < jenks_free$brks[10] & avg_unique_species >= jenks_free$brks[9] ~ "9",
+                                                 tot_pct_SLR_1ft > 0 & avg_unique_species < jenks_free$brks[9] & avg_unique_species >= jenks_free$brks[8] ~ "8",
+                                                tot_pct_SLR_1ft > 0 & avg_unique_species < jenks_free$brks[8] & avg_unique_species >= jenks_free$brks[7] ~ "7",
+                                                 tot_pct_SLR_1ft > 0 & avg_unique_species < jenks_free$brks[7] & avg_unique_species >= jenks_free$brks[6] ~ "6",
+                                                tot_pct_SLR_1ft > 0 & avg_unique_species < jenks_free$brks[6] & avg_unique_species >= jenks_free$brks[5] ~ "5",
+                                                 tot_pct_SLR_1ft > 0 & avg_unique_species < jenks_free$brks[5] & avg_unique_species >= jenks_free$brks[4] ~ "4",
+                                                tot_pct_SLR_1ft > 0 & avg_unique_species < jenks_free$brks[4] & avg_unique_species >= jenks_free$brks[3] ~ "3",
+                                                 tot_pct_SLR_1ft > 0 & avg_unique_species < jenks_free$brks[3] & avg_unique_species >= jenks_free$brks[2] ~ "2",
+                                                tot_pct_SLR_1ft > 0 & avg_unique_species < jenks_free$brks[2] & avg_unique_species >= jenks_free$brks[1] ~ "1",
+                                                TRUE ~ "Minimal Risk"
+                                                ))
+
+phl_ebird_hex_means$jenks_bio_risk = factor(phl_ebird_hex_means$jenks_bio_risk, levels = c("10", "9",
+                                                                                           "8", "7",
+                                                                                           "6", "5",
+                                                                                           "4", "3",
+                                                                                           "2", "1",
+                                                                                           "Minimal Risk"))
+
+ggplot(phl_ebird_hex_means, aes(x = tot_pct_SLR_1ft, 
+                        y = avg_unique_species, 
+                        color = jenks_bio_risk
+                      )) +
+                            geom_point(size = 2) +
+  labs(title = "Avg. Unique Species vs. % Sea Level Rise",
+       subtitle = "1 ft. Sea Level Rise Scenario",
+       x = "% SLR",
+       y = "Avg. Unique Species",
+       color = "Risk to Biodiversity") +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5)) +
+  scale_color_brewer(palette = "RdYlGn")
+```
+
+To make it easier to read, we can also log transform our data:
+```{r log transform clusts}
+ggplot(phl_ebird_hex_means, aes(x = log(tot_pct_SLR_1ft), 
+                        y = log(avg_unique_species), 
+                        color = jenks_bio_risk
+                      )) +
+                            geom_point(size = 2) +
+  labs(title = "Avg. Unique Species vs. % Sea Level Rise",
+       subtitle = "1 ft. Sea Level Rise Scenario",
+       x = "Log of % SLR",
+       y = "Log of Avg. Unique Species",
+       color = "Risk to Biodiversity") +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5)) +
+  scale_color_brewer(palette = "RdYlGn")
+```
+
+Based on these clusters, we can now map these data to see the spatial distribution of the threat to biodiversity in Philadelphia: 
 
 ###### **Sea Level Rise Risk to Biodiversity**
 ```{r tmap jenks clusters}
 tmap_mode('view')
 
-risk_palette = c("#E31A1C", "#FD8D3C", "#FD8D3C", "#FECC5C", "#FECC5C", "#FFFFB2")
-
-phl_ebird_hex_means$jenks_bio_risk = factor(phl_ebird_hex_means$jenks_bio_risk, levels = c("Very High SLR, High Biodiversity",
-"Very High SLR, Medium Biodiversity",
-"High SLR, High Biodiversity",
-"High SLR, Medium Biodiversity",
-"Moderate SLR, High Biodiversity",
-"Moderate SLR, Medium Biodiversity"))
+risk_palette = c("#A50026", "#D73027", "#F46D43", "#FDAE61", "#FEE08B", "#FFFFBF", "#D9EF8B", "#A6D96A", "#66BD63", "#1A9850", "#006837")
 
 tm_shape(phl_ebird_hex_means) +
   tm_polygons(title = "Risk Level",
@@ -923,19 +1057,111 @@ tm_shape(phl_ebird_hex_means) +
               palette = risk_palette, 
               textNA = "Minimal Risk",
               style = 'cat',
-              alpha = 0.8,
+              alpha = 0.7,
               id = "hex_id",
               popup.vars = c("Avg. Unique Species" = "avg_unique_species",
-                             "% SLR (1ft)" = "pct_SLR_1ft"))+
+                             "% SLR (1ft)" = "tot_pct_SLR_1ft"))+
     tm_view(view.legend.position = c("right", "bottom"),
             colorNA = 'transparent')
 ```
 
+<br/><br/>
+To better identify the outliers, we can examine only those cells which scored a 10 for highest biodiversity. This also allows us to see how they compare in terms of the relative threat of sea level rise:
+```{r high risk}
+phl_ebird_hex_means |>
+  filter(jenks_bio_risk == "10") |>
+ggplot(aes(x = tot_pct_SLR_1ft, 
+                        y = avg_unique_species,
+           label = hex_id
+                      )) +
+                            geom_point(size = 3, fill = "#A50026") +
+    geom_label_repel(size = 2.5, box.padding = 0.1, label.padding = 0.2) +
+  labs(title = "Avg. Unique Species vs. % Sea Level Rise",
+       subtitle = "1 ft. Sea Level Rise Scenario",
+       x = "% SLR",
+       y = "Avg. Unique Species",
+       color = "Cluster") +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
+```
 
+These top three cells correspond to the John Heinz National Wildlife Refuge (#137), Pennypack on the Delaware (#1319), and Bartram's Garden (#343). As the above plot indicates, John Heinz faces the highest threat of inundation, followed by Pennypack on the Delaware and then Bartram's Garden. Given that they are each also ranked in that order for biodiversity, John Heinz should be the #1 priority for conservation, followed by Pennypack on the Delaware and then Bartram's Garden. This analysis, then, effectively narrows down the city's bird biodiversity hotspots to identify those with the highest risk of impact from sea level rise in the coming two decades. These areas can be prioritized for conservation management specifically geared toward mitigating the worst impacts of sea level rise (or toward considering the possibility of managed retreat).
 
-What is surprising about these results is that they do not include John Heinz, FDR Park, or Pennypack on the Delaware. (The latter is an example of the arbitrariness of our hexagon bins, though; it is covered by two hexagons, one of which faces high sea level rise and has medium biodiversity, while the other faces moderate sea level rise and has high biodiversity. This suggests that analysis at multiple spatial scales is important to truly understand the risk of sea level rise.) Although these areas are immediately adjacent to projected sea level rise, they will more likely be impacted by flooding, which brings its own considerations.
+:::: {.columns}
 
-This analysis, then, effectively narrows down the city's bird biodiversity hotspots to identify those with the highest risk of impact from sea level rise in the coming two decades. These areas can be prioritized for conservation management specifically geared toward mitigating the worst impacts of sea level rise (or toward considering the possibility of managed retreat).
+::: {.column width="32%"}
+**John Heinz (Hex #137)**
+```{r heinz}
+tmap_mode('view')
+
+tm_shape(phl_ebird_hex_means |> filter(hex_id  == 137)) +
+  tm_polygons(title = "Risk Level",
+              col = 'jenks_bio_risk', 
+              palette = risk_palette, 
+              textNA = "Minimal Risk",
+              style = 'cat',
+              alpha = 0.2,
+              id = "hex_id",
+              popup.vars = c("Avg. Unique Species" = "avg_unique_species",
+                             "% SLR (1ft)" = "tot_pct_SLR_1ft"),
+              legend.show = FALSE)+
+    tm_view(view.legend.position = c("right", "bottom"),
+            colorNA = 'transparent')
+```
+:::
+
+::: {.column width="2%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="32%"}
+**Pennypack on the Delaware (Hex #1319)**
+```{r pennypack}
+tmap_mode('view')
+
+tm_shape(phl_ebird_hex_means |> filter(hex_id == 1319)) + 
+                  tm_polygons(title = "Risk Level",
+              col = 'jenks_bio_risk', 
+              palette = risk_palette, 
+              textNA = "Minimal Risk",
+              style = 'cat',
+              alpha = 0.2,
+              id = "hex_id",
+              popup.vars = c("Avg. Unique Species" = "avg_unique_species",
+                             "% SLR (1ft)" = "tot_pct_SLR_1ft"),
+              legend.show = FALSE)+
+    tm_view(view.legend.position = c("right", "bottom"),
+            colorNA = 'transparent')
+```
+:::
+
+::: {.column width="2%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="32%"}
+**Bartram's Garden (Hex #343)**
+```{r bartrams}
+tmap_mode('view')
+
+tm_shape(phl_ebird_hex_means |> filter(hex_id == 343)) + 
+                  tm_polygons(title = "Risk Level",
+              col = 'jenks_bio_risk', 
+              palette = risk_palette, 
+              textNA = "Minimal Risk",
+              style = 'cat',
+              alpha = 0.2,
+              id = "hex_id",
+              popup.vars = c("Avg. Unique Species" = "avg_unique_species",
+                             "% SLR (1ft)" = "tot_pct_SLR_1ft"),
+              legend.show = FALSE)+
+    tm_view(view.legend.position = c("right", "bottom"),
+            colorNA = 'transparent')
+```
+:::
+
+::::
+<br/><br/>
 
 ## Conclusions
 
